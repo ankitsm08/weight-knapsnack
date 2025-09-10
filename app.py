@@ -10,6 +10,26 @@ def index():
 
 @app.route('/knapsnack', methods=['POST'])
 def knapsnack():
+    """
+    Calculate the best combination of bottles to reach a target weight.
+
+    Args:
+        bottles (dict): Dictionary of bottle weights and counts.
+        target_weight (int): Target weight in kg.
+        bag_weight (int): Weight of the bag in kg (default: 0).
+        allow_overshoot (bool): Allow the combination to exceed the target weight (default: True).
+        overshoot_ratio (float): Multiplier to score combinations that exceed the target weight (default: 0.5).
+        bottle_penalty (int): Penalty in grams per bottle used (default: 50).
+
+    Returns:
+        JSON:
+        target_weight_kg (float): The target weight in kg.  
+        bag_weight_kg (float): The weight of the bag in kg.  
+        total_weight_kg (float): The total weight of the combination in kg.  
+        combo (dict): The combination of bottles as a dictionary.  
+        bottles_used (int): The number of bottles used.
+    
+    """
     try:
         data = request.get_json()
         

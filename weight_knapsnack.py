@@ -2,7 +2,7 @@ import json
 from itertools import product
 
 def parse_weight(input_str: str) -> float:
-    input_str = input_str.lower().strip()
+    input_str = str(input_str).lower().strip()
     if input_str.endswith("kg"):
         return float(input_str[:-2])
     elif input_str.endswith("g"):
@@ -13,8 +13,8 @@ def parse_weight(input_str: str) -> float:
         return float(input_str)
 
 
-def parse_bag_weight(input_str: str) -> float:
-    input_str = input_str.lower().strip()
+def parse_bag_weight(input_str: str) -> int:
+    input_str = str(input_str).lower().strip()
     if input_str.endswith("kg"):
         return round(float(input_str[:-2]) * 1000)
     elif input_str.endswith("g"):
@@ -149,7 +149,7 @@ if __name__ == '__main__':
     default_bag_weight = 770  # grams
     
     # weight(g) : count
-    bottles = json.load(open("bottle.json"))
+    bottles = json.load(open("bottles.json"))
 
     bottles = {
         int(float(k)): v

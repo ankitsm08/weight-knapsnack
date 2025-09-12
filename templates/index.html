@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block title %}Weight Knapsnack{% endblock %}
+
+{% block content %}
+
+<section class="center fade-in">
+  <h1>Weight Knapsnack</h1>
+  <p>Wanna exercise? Get your Bags and Bottles ready.</p>
+  <a href="{{ url_for('knapsnack') }}">
+    <button class="btn big">Try Now</button>
+  </a>
+</section>
+
+<section>
+  <h2 class="center">Features</h2>
+  <div class="card"><span class="icon">⚖️</span> Flexible input parsing (kg, g, lb) with smart conversions</div>
+  <div class="card"><span class="icon">🎒</span> Persistent bag weight & bottle data with local storage</div>
+  <div class="card"><span class="icon">🧩</span> Dynamic bottle table editor (add, edit, remove) with defaults</div>
+  <div class="card"><span class="icon">⚡</span> Optimized dynamic programming algorithm for instant results</div>
+  <div class="card"><span class="icon">🧃</span> Smart bottle combo selection with penalty & overshoot control</div>
+  <div class="card"><span class="icon">📊</span> Clean tabular output (weights, counts, diffs) up to 3 decimals</div>
+  <div class="card"><span class="icon">🌐</span> API ready for frontend/backend integration</div>
+</section>
+
+<section class="center fade-in">
+  <a href="{{ url_for('about') }}"><button class="btn">About</button></a>
+  <p>Made with 💪 and a little Indian jugaad</p>
+</section>
+
+{% endblock %}

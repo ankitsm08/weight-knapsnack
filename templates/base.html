@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Default Title{% endblock %}</title>
+    <style>
+        html,
+        body {
+            background: #000;
+            color: white;
+            /* fallback text color */
+        }
+
+        body {
+            display: none;
+            /* hidden until JS reveals it */
+        }
+    </style>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    {% block css_imports %}{% endblock %}
+</head>
+
+<body>
+    <nav>
+        <a href="https://ankitsm08.github.io">
+            <div class="logo">⚡ Ankit Sharma</div>
+        </a>
+        <button class="menu-toggle">☰</button>
+        <div class="nav-links">
+            <a href="/">Home</a>
+            <a href="/knapsnack">Knapsnack</a>
+            <a href="/about">About</a>
+        </div>
+    </nav>
+
+    {% block content %}Default Content{% endblock %}
+
+    <footer>
+        © 2025 Ankit Sharma
+    </footer>
+    <div class="halo footer-gradient" aria-hidden="true"></div>
+    <script src="{{ url_for('static', filename='style.js') }}"></script>
+    <script>
+        window.addEventListener("load", function () {
+            document.body.style.display = "block";
+            document.body.classList.add("fade-in");
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}About Knapsnack{% endblock %}
+{% block content %}
+<section class="center fade-in">
+    <h1>About Knapsnack</h1>
+    <p class="center">Made with 💪 and a little Indian jugaad</p>
+
+    <div class="card">
+        <h2>Hey there 👋</h2>
+        <p>I'm <strong>Ank</strong>, a STEM student and home workout enthusiast who got tired of guessing how much my
+            backpack full of bottles actually weighed. So, instead of buying fancy adjustable weights, I decided to make
+            my own “smart” solution.</p>
+    </div>
+
+    <div class="card">
+        <h2>What is Knapsnack?</h2>
+        <p>
+            Knapsnack is a lightweight web app that helps you calculate the <strong>best bottle combination</strong> to
+            hit your target workout weight.
+            Whether you're training with backpacks, water bottles, or whatever you can find at home.. this tool gives
+            you the most efficient way to load up without overthinking it.
+        </p>
+    </div>
+
+    <div class="card">
+        <h2>Why Knapsnack?</h2>
+        <ul>
+            <li class="card">⚡ Built for home workout lovers who don't have access to a full gym.</li>
+            <li class="card">💡 Inspired by classic Indian <em>jugaad</em>, making the best out of what you have.</li>
+            <li class="card">🎒 Because sometimes, a bag full of bottles is the only dumbbell you need.</li>
+        </ul>
+    </div>
+
+    <a href="{{ url_for('index') }}"><button class="btn">Back to Home</button></a>
+</section>
+{% endblock %}

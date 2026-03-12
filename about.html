@@ -3,90 +3,98 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="shortcut icon" href="static/favicon.ico" />
-    <title>About</title>
-    <style>
-      html,
-      body {
-        background: #000;
-        color: white;
-      }
-
-      body {
-        display: none;
-        /* hidden until JS reveals it */
-      }
-    </style>
-    <link rel="stylesheet" href="css/style.css" />
+    <link rel="icon" type="image/x-icon" href="static/favicon.ico" />
+    <link rel="stylesheet" href="css/styles.css" />
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <title>About - Weight Knapsnack</title>
   </head>
 
   <body>
     <nav>
       <a href="https://ankitsm08.github.io">
-        <div class="logo">⚡ Ankit Sharma</div>
+        <div class="logo"><i data-lucide="zap"></i> Ankit Sharma</div>
       </a>
-      <button class="menu-toggle">☰</button>
+      <button class="menu-toggle" aria-label="Toggle menu">
+        <div class="hamburger">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+      </button>
       <div class="nav-links">
         <a href="./index.html">Home</a>
         <a href="./knapsnack.html">Knapsnack</a>
-        <a href="./about.html">About</a>
+        <a href="./about.html" class="active">About</a>
       </div>
     </nav>
 
     <section class="center fade-in">
       <h1>About Knapsnack</h1>
-      <p class="center">Made with 💪 and a little Indian jugaad</p>
+      <p class="p-icon">
+        Made with <i data-lucide="hand-fist"></i> and a little Indian jugaad
+      </p>
+    </section>
 
+    <section class="center fade-in">
       <div class="card">
-        <h2>Hey there 👋</h2>
+        <h2 class="h2-icon"><i data-lucide="hand"></i> Hey there</h2>
         <p>
           I'm <strong>Ank</strong>, a STEM student and home workout enthusiast
           who got tired of guessing how much my backpack full of bottles
           actually weighed. So, instead of buying fancy adjustable weights, I
-          decided to make my own "smart" solution.
+          decided to make my own smart solution.
         </p>
       </div>
 
       <div class="card">
-        <h2>What is Knapsnack?</h2>
+        <h2 class="h2-icon">
+          <i data-lucide="help-circle"></i> What is Knapsnack?
+        </h2>
         <p>
           Knapsnack is a lightweight web app that helps you calculate the
           <strong>best bottle combination</strong> to hit your target workout
           weight. Whether you're training with backpacks, water bottles, or
-          whatever you can find at home.. this tool gives you the most efficient
+          whatever you can find at home, this tool gives you the most efficient
           way to load up without overthinking it.
         </p>
       </div>
 
       <div class="card">
-        <h2>Why Knapsnack?</h2>
-        <ul>
-          <li class="card">
-            ⚡ Built for home workout lovers who don't have access to a full
-            gym.
+        <h2 class="h2-icon"><i data-lucide="lightbulb"></i> Why Knapsnack?</h2>
+        <ul class="feature-list">
+          <li class="card card-list">
+            <i data-lucide="zap"></i> Built for home workout lovers who don't
+            have access to a full gym.
           </li>
-          <li class="card">
-            💡 Inspired by classic Indian <em>jugaad</em>, making the best out
-            of what you have.
+          <li class="card card-list">
+            <i data-lucide="lightbulb"></i> Inspired by classic Indian
+            <i>jugaad</i>, making the best out of what you have.
           </li>
-          <li class="card">
-            🎒 Because sometimes, a bag full of bottles is the only dumbbell you
-            need.
+          <li class="card card-list">
+            <i data-lucide="backpack"></i> Because sometimes, a bag full of
+            bottles is the only dumbbell you need.
           </li>
         </ul>
       </div>
-
-      <a href="./index.html"><button class="btn">Back to Home</button></a>
     </section>
 
-    <footer>© 2025 Ankit Sharma</footer>
-    <div class="halo footer-gradient" aria-hidden="true"></div>
+    <section class="center fade-in">
+      <a href="./index.html"
+        ><button class="btn">
+          <i data-lucide="house"></i> Back to Home
+        </button></a
+      >
+      <p class="mt-2 text-muted p-icon">
+        Made with <i data-lucide="hand-fist"></i> and a little Indian jugaad
+      </p>
+    </section>
+
+    <footer><p>&copy; 2025 Ankit Sharma</p></footer>
+
     <script src="js/style.js"></script>
+    <script src="js/animations.js"></script>
     <script>
-      window.addEventListener("load", function () {
-        document.body.style.display = "block";
-        document.body.classList.add("fade-in");
-      });
+      lucide.createIcons();
     </script>
   </body>
 </html>

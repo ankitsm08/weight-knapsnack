@@ -3,37 +3,26 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link
-      rel="shortcut icon"
-      href="static/favicon.ico"
-    />
+    <link rel="icon" type="image/x-icon" href="static/favicon.ico" />
+    <link rel="stylesheet" href="css/styles.css" />
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
     <title>Weight Knapsnack</title>
-    <style>
-      html,
-      body {
-        background: #000;
-        color: white;
-      }
-
-      body {
-        display: none;
-        /* hidden until JS reveals it */
-      }
-    </style>
-    <link
-      rel="stylesheet"
-      href="css/style.css"
-    />
   </head>
 
   <body>
     <nav>
       <a href="https://ankitsm08.github.io">
-        <div class="logo">⚡ Ankit Sharma</div>
+        <div class="logo"><i data-lucide="zap"></i> Ankit Sharma</div>
       </a>
-      <button class="menu-toggle">☰</button>
+      <button class="menu-toggle" aria-label="Toggle menu">
+        <div class="hamburger">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+      </button>
       <div class="nav-links">
-        <a href="./index.html">Home</a>
+        <a href="./index.html" class="active">Home</a>
         <a href="./knapsnack.html">Knapsnack</a>
         <a href="./about.html">About</a>
       </div>
@@ -42,36 +31,29 @@
     <section class="center fade-in">
       <h1>Weight Knapsnack</h1>
       <p>Wanna exercise? Get your Bags and Bottles ready.</p>
-      <a href="./knapsnack.html">
-        <button class="btn big">Try Now</button>
-      </a>
-    </section>
-
-    <section>
-      <h2 class="center">Features</h2>
-      <div class="card"><span class="icon">⚖️</span> Flexible input parsing (kg, g, lb) with smart conversions</div>
-      <div class="card"><span class="icon">🎒</span> Persistent bag weight & bottle data with local storage</div>
-      <div class="card"><span class="icon">🧩</span> Dynamic bottle table editor (add, edit, remove) with defaults</div>
-      <div class="card"><span class="icon">⚡</span> Optimized dynamic programming algorithm for instant results</div>
-      <div class="card"><span class="icon">🧃</span> Smart bottle combo selection with penalty & overshoot control</div>
-      <div class="card"><span class="icon">📊</span> Clean tabular output (weights, counts, diffs) up to 3 decimals</div>
-      <div class="card"><span class="icon">🌐</span> API ready for frontend/backend integration</div>
+      <a href="./knapsnack.html"><button class="btn big mt-2"><i data-lucide="play"></i> Try Now</button></a>
     </section>
 
     <section class="center fade-in">
-      <a href="./about.html"><button class="btn">About</button></a>
-      <p>Made with 💪 and a little Indian jugaad</p>
+      <h2 class="center">Features</h2>
+      <div class="card card-list"><i data-lucide="scale"></i> Flexible input parsing (kg, g, lb) with smart conversions</div>
+      <div class="card card-list"><i data-lucide="database"></i> Persistent bag weight and bottle data with local storage</div>
+      <div class="card card-list"><i data-lucide="pencil-line"></i> Dynamic bottle table editor (add, edit, remove) with defaults</div>
+      <div class="card card-list"><i data-lucide="zap"></i> Optimized dynamic programming algorithm for instant results</div>
+      <div class="card card-list"><i data-lucide="milk"></i> Smart bottle combo selection with penalty and overshoot control</div>
+      <div class="card card-list"><i data-lucide="bar-chart-3"></i> Clean tabular output (weights, counts, diffs) up to 3 decimals</div>
+      <div class="card card-list"><i data-lucide="globe"></i> Runs entirely in browser - no server required</div>
     </section>
 
+    <section class="center fade-in">
+      <a href="./about.html"><button class="btn"><i data-lucide="info"></i> About</button></a>
+      <p class="mt-2 text-muted p-icon">Made with <i data-lucide="hand-fist"></i> and a little Indian jugaad</p>
+    </section>
 
-    <footer>© 2025 Ankit Sharma</footer>
-    <div class="halo footer-gradient" aria-hidden="true"></div>
+    <footer><p>&copy; 2025 Ankit Sharma</p></footer>
+
     <script src="js/style.js"></script>
-    <script>
-      window.addEventListener("load", function () {
-        document.body.style.display = "block";
-        document.body.classList.add("fade-in");
-      });
-    </script>
+    <script src="js/animations.js"></script>
+    <script>lucide.createIcons();</script>
   </body>
 </html>

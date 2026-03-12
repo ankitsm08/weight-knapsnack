@@ -26,7 +26,8 @@ function parseBagWeight(inputStr) {
     return Math.round(parseFloat(inputStr.slice(0, -1)));
   else if (inputStr.endsWith("lb"))
     return Math.round(453.6 * parseFloat(inputStr.slice(0, -2)));
-  else if (inputStr === "") return 0;
+  else if (inputStr === "")
+    return 0; // default
   else return Math.round(parseFloat(inputStr));
 }
 
@@ -40,15 +41,19 @@ function parseBagWeight(inputStr) {
  */
 function best_combo_dp(bottles, target_weight, bag_weight, options = {}) {
   const allow_overshoot = options.allow_overshoot !== false;
-  const overshoot_ratio = parseFloat(options.overshoot_ratio || 0.5);
-  const bottle_penalty = parseInt(options.bottle_penalty || 50);
+  const overshoot_ratio = parseFloat(options.overshoot_ratio ?? 0.5);
+  const bottle_penalty = parseInt(options.bottle_penalty ?? 50);
 
   const required_bottle_weight = target_weight - bag_weight;
   const weights = Object.keys(bottles)
     .map(Number)
     .sort((a, b) => b - a);
 
-  // dp[w] = (score, numBottles, combo_dict)
+  // Helper function
+  const isLess = (rankA, rankB) =>
+    rankA[0] < rankB[0] || (rankA[0] === rankB[0] && rankA[1] < rankB[1]);
+
+  // dp table
   var dp = {
     0: { score: Math.abs(required_bottle_weight), numBottles: 0, combo: {} },
   };
@@ -61,23 +66,36 @@ function best_combo_dp(bottles, target_weight, bag_weight, options = {}) {
       const cur_weight = parseInt(cur_weight_str);
       const { score, numBottles, combo } = dp[cur_weight];
 
-      for (let cnt = 1; cnt <= max_count; cnt++) {
-        const new_weight = cur_weight + w * cnt;
+      // For each possible number of bottles for a given weight
+      for (let count = 1; count <= max_count; count++) {
+        const new_weight = cur_weight + w * count;
         const diff = new_weight - required_bottle_weight;
-        const new_score = Math.abs(diff) + bottle_penalty * (numBottles + cnt);
-        let new_combo = { ...combo };
-        new_combo[w] = (new_combo[w] || 0) + cnt;
 
-        if (
-          !(new_weight in new_dp) ||
-          [new_score, numBottles + cnt] <
-            [new_dp[new_weight].score, new_dp[new_weight].numBottles]
-        ) {
+        const new_score =
+          Math.abs(diff) + bottle_penalty * (numBottles + count);
+        let new_combo = { ...combo };
+        new_combo[w] = (new_combo[w] || 0) + count;
+
+        const currentRank = [new_score, numBottles + count];
+
+        if (!(new_weight in new_dp)) {
           new_dp[new_weight] = {
             score: new_score,
-            numBottles: numBottles + cnt,
+            numBottles: numBottles + count,
             combo: new_combo,
           };
+        } else {
+          const existingRank = [
+            new_dp[new_weight].score,
+            new_dp[new_weight].numBottles,
+          ];
+          if (isLess(currentRank, existingRank)) {
+            new_dp[new_weight] = {
+              score: new_score,
+              numBottles: numBottles + count,
+              combo: new_combo,
+            };
+          }
         }
       }
     }
@@ -99,15 +117,16 @@ function best_combo_dp(bottles, target_weight, bag_weight, options = {}) {
     const diff = total_weight - required_bottle_weight;
     const rank = [score, numBottles];
 
+    // Update best under & over
     if (diff <= 0) {
-      if (!bestUnder || rank < bestUnderRank) {
+      if (!bestUnder || isLess(rank, bestUnderRank)) {
         bestUnder = combo;
         bestUnderRank = rank;
         bestUnderTotal = total_weight;
       }
     }
     if (diff >= 0) {
-      if (!bestOver || rank < bestOverRank) {
+      if (!bestOver || isLess(rank, bestOverRank)) {
         bestOver = combo;
         bestOverRank = rank;
         bestOverTotal = total_weight;

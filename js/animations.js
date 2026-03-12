@@ -66,13 +66,14 @@ function scrambleText(element, targetText, duration = 800) {
 }
 
 /**
- * Create and show animation overlay
- * @param {string} titleText - Text to animate
- * @returns {Promise<void>} - Resolves when animation completes
+ * Run page transition overlay - called immediately from head
  */
-async function runPageAnimation(titleText) {
+async function runPageTransition() {
   const isMobile = window.innerWidth < 768;
-  titleText = isMobile ? titleText.replace(/ /g, "<br>") : titleText;
+  let titleText = document.title.replace(" - Weight Knapsnack", "");
+  if (isMobile) {
+    titleText = titleText.replace(/ /g, "<br>");
+  }
 
   const overlay = document.createElement("div");
   overlay.id = "animation-overlay";
@@ -81,9 +82,7 @@ async function runPageAnimation(titleText) {
       <h1 id="anim-title" class="anim-title">${titleText}</h1>
     </div>
   `;
-  document.body.appendChild(overlay);
-
-  overlay.offsetHeight;
+  document.body.insertBefore(overlay, document.body.firstChild);
 
   const titleElement = overlay.querySelector("#anim-title");
 
@@ -114,17 +113,6 @@ async function runPageAnimation(titleText) {
 }
 
 /**
- * Initialize page animations
- */
-function initPageAnimation() {
-  const titleElement = document.querySelector("h1");
-  if (!titleElement) return;
-
-  const titleText = titleElement.textContent.trim();
-  runPageAnimation(titleText);
-}
-
-/**
  * Add scroll-triggered reveal animations to elements
  */
 function initScrollAnimations() {
@@ -146,11 +134,9 @@ function initScrollAnimations() {
 }
 
 /**
- * Initialize everything when DOM is ready
+ * Initialize scroll animations when DOM is ready
  */
 function initAnimations() {
-  initPageAnimation();
-
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", initScrollAnimations);
   } else {
@@ -158,8 +144,24 @@ function initAnimations() {
   }
 }
 
-if (document.readyState === "loading") {
-  document.addEventListener("DOMContentLoaded", initAnimations);
-} else {
-  initAnimations();
+// Run page transition - use MutationObserver to catch body as soon as it's added
+function startPageTransition() {
+  if (document.body) {
+    runPageTransition();
+    return;
+  }
+  
+  const observer = new MutationObserver((mutations, obs) => {
+    if (document.body) {
+      obs.disconnect();
+      runPageTransition();
+    }
+  });
+  
+  observer.observe(document.documentElement, { childList: true });
 }
+
+startPageTransition();
+
+// Initialize scroll animations on DOM ready
+initAnimations();

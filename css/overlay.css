@@ -1,0 +1,53 @@
+#animation-overlay {
+  position: fixed;
+  inset: 0;
+  background: var(--crust);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 99999;
+  transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+#animation-overlay.slide-out {
+  transform: translateY(-100%);
+}
+
+@media (max-width: 768px) {
+  #animation-overlay.slide-out {
+    transform: translateX(100%);
+  }
+}
+
+.anim-title {
+  font-size: clamp(2rem, 8vw, 4rem);
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: #fff;
+  text-transform: uppercase;
+  font-family: "Outfit", sans-serif;
+  text-shadow: 0 0 10px rgba(180, 190, 254, 0.8), 0 0 15px rgba(180, 190, 254, 0.4);
+}
+
+@keyframes pulse-glow {
+  0%,
+  100% {
+    text-shadow:
+      0 0 10px rgba(180, 190, 254, 0.6),
+      0 0 15px rgba(180, 190, 254, 0.3);
+  }
+  50% {
+    text-shadow:
+      0 0 20px rgba(180, 190, 254, 1),
+      0 0 30px rgba(180, 190, 254, 0.5);
+  }
+}
+
+@media (max-width: 600px) {
+  .anim-title {
+    font-size: 2rem;
+    text-align: center;
+    line-height: 1.4;
+    word-break: break-word;
+  }
+}

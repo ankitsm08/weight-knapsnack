@@ -1,6 +1,7 @@
 import json
 from itertools import product
 
+
 def parse_weight(input_str: str) -> float:
     input_str = str(input_str).lower().strip()
     if input_str.endswith("kg"):
@@ -116,8 +117,8 @@ def best_combo_dp(
 
     # Find best under & over
     best_under = best_over = None
-    best_under_rank = best_over_rank = None
-    best_under_total = best_over_total = None
+    best_under_rank = best_over_rank = (2**32, 2**32)
+    best_under_total = best_over_total = 0
 
     for total_weight, (score, num_bottles, combo) in dp.items():
         diff = total_weight - required_bottle_weight
@@ -144,10 +145,9 @@ def best_combo_dp(
         return best_under, best_under_total + bag_weight
 
 
-if __name__ == '__main__':
-    
+if __name__ == "__main__":
     default_bag_weight = 770  # grams
-    
+
     # weight(g) : count
     bottles = json.load(open("bottles.json"))
 
@@ -155,7 +155,6 @@ if __name__ == '__main__':
         int(float(k)): v
         for k, v in sorted(bottles.items(), key=lambda k: k[0], reverse=True)
     }
-
 
     print("Target  Weight [kg] (e.g. 10kg / 22lb ): ", end="")
     raw_weight = input()
@@ -192,7 +191,7 @@ if __name__ == '__main__':
     print(f"Bottle  Combo: ")
     for wt, c in combo.items():
         weight = round(wt)
-        weight = f"{weight:>4} g " if weight < 1000 else f"{weight/1000:>4.2f} kg"
+        weight = f"{weight:>4} g " if weight < 1000 else f"{weight / 1000:>4.2f} kg"
         print(
             f" *  {c:>2}  bottle{'s' if c > 1 else ' '} of  {weight} =  {wt * c / 1000:>6.3f} kg"
         )

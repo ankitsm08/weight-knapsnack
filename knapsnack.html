@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="shortcut icon" href="static/favicon.ico" />
+    <title>Knapsnack Form</title>
+    <style>
+      html,
+      body {
+        background: #000;
+        color: white;
+      }
+
+      body {
+        display: none;
+        /* hidden until JS reveals it */
+      }
+    </style>
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/form-style.css" />
+  </head>
+
+  <body>
+    <nav>
+      <a href="https://ankitsm08.github.io">
+        <div class="logo">⚡ Ankit Sharma</div>
+      </a>
+      <button class="menu-toggle">☰</button>
+      <div class="nav-links">
+        <a href="./index.html">Home</a>
+        <a href="./knapsnack.html">Knapsnack</a>
+        <a href="./about.html">About</a>
+      </div>
+    </nav>
+
+    <section class="fade-in">
+      <h1 class="center">Knapsnack Calculator</h1>
+      <p class="center">
+        Enter your bottles, target weight, and bag info to find the best combo!
+      </p>
+
+      <form id="knapsnack-form">
+        <div class="card collapsible">
+          <div class="collapse-header" onclick="toggleCollapse(this)">
+            <label>Bottles (weight & count)</label>
+            <span class="collapse-arrow">▼</span>
+          </div>
+          <div class="collapse-body">
+            <table id="bottles-table">
+              <thead>
+                <tr>
+                  <th>Weight (g)</th>
+                  <th>Count</th>
+                  <th style="padding: 0 1rem">Delete</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+                    <input
+                      oninput="save_bottles()"
+                      type="number"
+                      step="1"
+                      value="1000"
+                    />
+                  </td>
+                  <td>
+                    <input
+                      oninput="save_bottles()"
+                      type="number"
+                      step="1"
+                      value="2"
+                    />
+                  </td>
+                  <td>
+                    <button
+                      type="button"
+                      onclick="removeRow(this)"
+                      class="btn btn-calm"
+                    >
+                      x
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <button
+              type="button"
+              onclick="addRow()"
+              class="btn-calm big add-bottle"
+            >
+              + Add Bottle
+            </button>
+          </div>
+        </div>
+
+        <div class="card">
+          <label for="target_weight">Target Weight (kg)</label>
+          <input
+            type="text"
+            step="0.1"
+            id="target_weight"
+            name="target_weight"
+            placeholder="e.g. 11.5 or 20lb"
+            required
+          />
+        </div>
+
+        <div class="card">
+          <label for="bag_weight">Bag Weight (g)</label>
+          <input
+            type="text"
+            step="10"
+            id="bag_weight"
+            name="bag_weight"
+            placeholder="Default: 0g"
+          />
+        </div>
+
+        <div class="card">
+          <label for="allow_overshoot">
+            <input
+              type="checkbox"
+              id="allow_overshoot"
+              name="allow_overshoot"
+              checked
+            />
+            Allow overshoot
+          </label>
+        </div>
+
+        <div class="card">
+          <label for="overshoot_ratio">Overshoot Ratio</label>
+          <input
+            type="number"
+            step="0.01"
+            id="overshoot_ratio"
+            name="overshoot_ratio"
+            placeholder="Default: 0.5"
+          />
+        </div>
+
+        <div class="card">
+          <label for="bottle_penalty">Bottle Penalty</label>
+          <input
+            type="number"
+            step="1"
+            id="bottle_penalty"
+            name="bottle_penalty"
+            placeholder="Default: 50"
+          />
+        </div>
+
+        <button type="submit" class="btn big center wide">Calculate</button>
+      </form>
+
+      <div id="result" style="margin-top: 30px"></div>
+    </section>
+
+    <script src="js/knapsnack.js"></script>
+    <script src="js/form.js"></script>
+
+    <footer>© 2025 Ankit Sharma</footer>
+    <div class="halo footer-gradient" aria-hidden="true"></div>
+    <script src="js/style.js"></script>
+    <script>
+      window.addEventListener("load", function () {
+        document.body.style.display = "block";
+        document.body.classList.add("fade-in");
+      });
+    </script>
+  </body>
+</html>

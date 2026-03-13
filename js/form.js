@@ -10,7 +10,19 @@ const form = document.getElementById("knapsnack-form");
 const resultDiv = document.getElementById("result");
 
 /** @type {HTMLInputElement|null} */
+const targetWeightInput = document.getElementById("target_weight");
+
+/** @type {HTMLInputElement|null} */
 const bagWeightInput = document.getElementById("bag_weight");
+
+/** @type {HTMLInputElement|null} */
+const allowOvershootInput = document.getElementById("allow_overshoot");
+
+/** @type {HTMLInputElement|null} */
+const overshootRatioInput = document.getElementById("overshoot_ratio");
+
+/** @type {HTMLInputElement|null} */
+const bottlePenaltyInput = document.getElementById("bottle_penalty");
 
 /**
  * Add a new bottle row to the table
@@ -88,10 +100,36 @@ function collapseIfTooManyBottles() {
   }
 }
 
-// Initialize bag weight persistence
+// Initialize persistence for inputs
+if (targetWeightInput) {
+  targetWeightInput.addEventListener("input", () => {
+    localStorage.setItem("knapsnack_target_weight", targetWeightInput.value);
+  });
+}
 if (bagWeightInput) {
   bagWeightInput.addEventListener("input", () => {
     localStorage.setItem("knapsnack_bag_weight", bagWeightInput.value);
+  });
+}
+if (allowOvershootInput) {
+  allowOvershootInput.addEventListener("input", () => {
+    localStorage.setItem(
+      "knapsnack_allow_overshoot",
+      allowOvershootInput.checked,
+    );
+  });
+}
+if (overshootRatioInput) {
+  overshootRatioInput.addEventListener("input", () => {
+    localStorage.setItem(
+      "knapsnack_overshoot_ratio",
+      overshootRatioInput.value,
+    );
+  });
+}
+if (bottlePenaltyInput) {
+  bottlePenaltyInput.addEventListener("input", () => {
+    localStorage.setItem("knapsnack_bottle_penalty", bottlePenaltyInput.value);
   });
 }
 
@@ -211,7 +249,11 @@ if (form) {
 // Restore saved data on page load
 window.addEventListener("DOMContentLoaded", () => {
   const saved = JSON.parse(localStorage.getItem("knapsnack_bottles") || "{}");
+  const savedTargetWeight = localStorage.getItem("knapsnack_target_weight");
   const savedBagWeight = localStorage.getItem("knapsnack_bag_weight");
+  const savedAllowOvershoot = localStorage.getItem("knapsnack_allow_overshoot");
+  const savedOvershootRatio = localStorage.getItem("knapsnack_overshoot_ratio");
+  const savedBottlePenalty = localStorage.getItem("knapsnack_bottle_penalty");
 
   const tbody = document.querySelector("#bottles-table tbody");
   if (!tbody) return;
@@ -233,8 +275,20 @@ window.addEventListener("DOMContentLoaded", () => {
     addRow(2000, 3);
   }
 
+  if (savedTargetWeight && targetWeightInput) {
+    targetWeightInput.value = savedTargetWeight;
+  }
   if (savedBagWeight && bagWeightInput) {
     bagWeightInput.value = savedBagWeight;
+  }
+  if (savedAllowOvershoot && allowOvershootInput) {
+    allowOvershootInput.checked = savedAllowOvershoot.toLowerCase() === "true";
+  }
+  if (savedOvershootRatio && overshootRatioInput) {
+    overshootRatioInput.value = savedOvershootRatio;
+  }
+  if (savedBottlePenalty && bottlePenaltyInput) {
+    bottlePenaltyInput.value = savedBottlePenalty;
   }
   collapseIfTooManyBottles();
 });

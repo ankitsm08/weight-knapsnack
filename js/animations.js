@@ -65,9 +65,7 @@ function scrambleText(element, targetText, duration = 800) {
   });
 }
 
-/**
- * Run page transition overlay - called immediately from head
- */
+// Run page transition overlay - called immediately from head
 async function runPageTransition() {
   const isMobile = window.innerWidth < 768;
   let titleText = document.title.replace(" - Weight Knapsnack", "");
@@ -99,9 +97,10 @@ async function runPageTransition() {
   }
   titleElement.innerHTML = scrambled;
 
+  const timeFactor = Math.sqrt(titleText.length);
   await new Promise((r) => setTimeout(r, 150));
-  await scrambleText(titleElement, titleText, 800);
-  await new Promise((r) => setTimeout(r, 500));
+  await scrambleText(titleElement, titleText, parseInt(timeFactor * 133));
+  await new Promise((r) => setTimeout(r, parseInt(timeFactor * 100)));
 
   overlay.classList.add("slide-out");
 
@@ -112,9 +111,7 @@ async function runPageTransition() {
   overlay.remove();
 }
 
-/**
- * Add scroll-triggered reveal animations to elements
- */
+// Add scroll-triggered reveal animations to elements
 function initScrollAnimations() {
   const observer = new IntersectionObserver(
     (entries) => {
@@ -133,9 +130,7 @@ function initScrollAnimations() {
   });
 }
 
-/**
- * Initialize scroll animations when DOM is ready
- */
+// Initialize scroll animations when DOM is ready
 function initAnimations() {
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", initScrollAnimations);
@@ -150,14 +145,14 @@ function startPageTransition() {
     runPageTransition();
     return;
   }
-  
+
   const observer = new MutationObserver((mutations, obs) => {
     if (document.body) {
       obs.disconnect();
       runPageTransition();
     }
   });
-  
+
   observer.observe(document.documentElement, { childList: true });
 }
 

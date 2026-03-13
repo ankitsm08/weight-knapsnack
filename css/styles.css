@@ -287,6 +287,8 @@ nav .nav-links a.active {
   width: 100%;
   height: 2px;
   background: var(--text);
+  background-color: var(--text);
+  border: 1px solid var(--text);
   border-radius: 2px;
   transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
@@ -354,6 +356,7 @@ section.center {
   justify-content: center;
   gap: 0.5rem;
   padding: 0.6rem 1.25rem;
+  margin: 1rem 0;
   font-family: "Outfit", sans-serif;
   font-size: 0.95rem;
   font-weight: 500;
@@ -379,7 +382,7 @@ section.center {
 
 .btn.center {
   display: flex;
-  margin: 1.5rem auto 0;
+  margin: 1.5rem auto;
   width: 100%;
   max-width: 300px;
 }
@@ -393,7 +396,8 @@ section.center {
   border-radius: 4px;
   transition:
     color 0.2s ease,
-    background 0.2s ease;
+    background 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 .btn-icon:hover {
@@ -410,13 +414,15 @@ section.center {
   border-radius: 6px;
   cursor: pointer;
   transition:
+    color 0.2s ease,
     background 0.2s ease,
-    color 0.2s ease;
+    box-shadow 0.2s ease;
 }
 
 .btn-small:hover {
-  background: var(--surface2);
   color: var(--text);
+  background: var(--surface2);
+  box-shadow: var(--glow-sapphire);
 }
 
 /* ====== FORMS ====== */
@@ -436,6 +442,7 @@ form {
 
 .form-row-3 > .card {
   flex: 1;
+  justify-content: center;
 }
 
 .card-checkbox {
@@ -448,6 +455,7 @@ form {
   align-items: center;
   gap: 0.5rem;
   margin: 0;
+  height: 100%;
   cursor: pointer;
 }
 
@@ -729,7 +737,7 @@ ul.feature-list li i[data-lucide] {
   flex-shrink: 0;
 }
 
-/* ====== MOBILE RESPONSIVE ====== */
+/* ====== MOBILE RESPONSIVENESS ====== */
 @media (max-width: 768px) {
   nav {
     padding: 0.75rem 1rem;
@@ -744,7 +752,7 @@ ul.feature-list li i[data-lucide] {
     right: 0;
     flex-direction: column;
     background: var(--surface0);
-    padding: 0;
+    padding: 1rem;
     gap: 0;
     border-bottom: 1px solid var(--surface1);
     max-height: 0;
@@ -757,7 +765,6 @@ ul.feature-list li i[data-lucide] {
   nav .nav-links.active {
     max-height: 300px;
     opacity: 1;
-    padding: 1rem;
   }
   nav .nav-links a {
     padding: 0.75rem 0.5rem;

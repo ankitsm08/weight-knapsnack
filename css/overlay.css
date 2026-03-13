@@ -1,7 +1,7 @@
 #animation-overlay {
   position: fixed;
   inset: 0;
-  background: var(--crust);
+  background: var(--mantle);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -26,7 +26,9 @@
   color: #fff;
   text-transform: uppercase;
   font-family: "Outfit", sans-serif;
-  text-shadow: 0 0 10px rgba(180, 190, 254, 0.8), 0 0 15px rgba(180, 190, 254, 0.4);
+  text-shadow:
+    0 0 10px rgba(180, 190, 254, 0.8),
+    0 0 15px rgba(180, 190, 254, 0.4);
 }
 
 @keyframes pulse-glow {

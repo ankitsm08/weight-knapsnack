@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="css/overlay.css" />
     <script src="js/animations.js"></script>
     <link rel="stylesheet" href="css/styles.css" />
-    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <script src="https://unpkg.com/lucide@0.575.0/dist/umd/lucide.min.js"></script>
     <title>Knapsnack Calculator - Weight Knapsnack</title>
   </head>
 
@@ -39,7 +39,12 @@
       <form id="knapsnack-form">
         <!-- Bottles table - always collapsed with hint -->
         <div class="card collapsible closed">
-          <div class="collapse-header" onclick="toggleCollapse(this)">
+          <div
+            class="collapse-header"
+            role="button"
+            tabindex="0"
+            aria-expanded="false"
+          >
             <label><i data-lucide="milk"></i> Bottles (weight & count) </label>
             <span class="collapse-arrow"
               ><i data-lucide="chevron-down"></i
@@ -54,30 +59,26 @@
                   <th></th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody id="bottles-tbody">
                 <tr>
                   <td>
                     <input
-                      oninput="save_bottles()"
                       type="number"
                       step="1"
                       value="1000"
+                      class="bottle-weight"
                     />
                   </td>
                   <td>
                     <input
-                      oninput="save_bottles()"
                       type="number"
                       step="1"
                       value="2"
+                      class="bottle-count"
                     />
                   </td>
                   <td>
-                    <button
-                      type="button"
-                      onclick="removeRow(this)"
-                      class="btn-icon"
-                    >
+                    <button type="button" class="btn-icon btn-remove-row">
                       <i data-lucide="x"></i>
                     </button>
                   </td>
@@ -86,7 +87,7 @@
             </table>
             <button
               type="button"
-              onclick="addRow()"
+              id="add-bottle-btn"
               class="btn btn-small center add-bottle"
             >
               <i data-lucide="plus"></i> Add Bottle
@@ -170,7 +171,9 @@
       <div id="result"></div>
     </section>
 
-    <footer><p>&copy; 2025 Ankit Sharma</p></footer>
+    <footer>
+      <p>&copy; <span id="year"></span> Ankit Sharma</p>
+    </footer>
 
     <script src="js/knapsnack.js"></script>
     <script src="js/form.js"></script>

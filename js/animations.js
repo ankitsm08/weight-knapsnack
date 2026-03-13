@@ -1,12 +1,20 @@
 /**
- * Animation utilities for page transitions and text effects
- * Text scramble animation + page reveal (runs every time)
+ * Animation utilities
  */
 
 /**
  * Generate a random character for scramble effect
  * @returns {string} - Random character
  */
+const SCRAMBLE_INITIAL_DELAY = 150;
+const SCRAMBLE_DURATION_FACTOR = 133;
+const SCRAMBLE_HOLD_FACTOR = 100;
+const MIN_TITLE_LENGTH = 1;
+
+function easeOutQuad(t) {
+  return 1 - (1 - t) * (1 - t);
+}
+
 function getRandomChar() {
   const chars =
     "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
@@ -33,6 +41,10 @@ function scrambleText(element, targetText, duration = 800) {
 
   return new Promise((resolve) => {
     const displayText = () => {
+      const progress = iterations / maxIterations;
+      const easedProgress = easeOutQuad(progress);
+      const revealedChars = Math.floor(easedProgress * totalChars);
+
       let result = "";
       let charIdx = 0;
       for (let i = 0; i < chars.length; i++) {
@@ -41,7 +53,7 @@ function scrambleText(element, targetText, duration = 800) {
           result += chunk;
         } else {
           for (let j = 0; j < chunk.length; j++) {
-            if (charIdx < iterations / 3) {
+            if (charIdx < revealedChars) {
               result += chunk[j];
             } else {
               result += getRandomChar();
@@ -97,10 +109,16 @@ async function runPageTransition() {
   }
   titleElement.innerHTML = scrambled;
 
-  const timeFactor = Math.sqrt(titleText.length);
-  await new Promise((r) => setTimeout(r, 150));
-  await scrambleText(titleElement, titleText, parseInt(timeFactor * 133));
-  await new Promise((r) => setTimeout(r, parseInt(timeFactor * 100)));
+  const timeFactor = Math.sqrt(Math.max(titleText.length, MIN_TITLE_LENGTH));
+  await new Promise((r) => setTimeout(r, SCRAMBLE_INITIAL_DELAY));
+  await scrambleText(
+    titleElement,
+    titleText,
+    parseInt(timeFactor * SCRAMBLE_DURATION_FACTOR),
+  );
+  await new Promise((r) =>
+    setTimeout(r, parseInt(timeFactor * SCRAMBLE_HOLD_FACTOR)),
+  );
 
   overlay.classList.add("slide-out");
 

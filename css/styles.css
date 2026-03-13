@@ -287,7 +287,6 @@ nav .nav-links a.active {
   width: 100%;
   height: 2px;
   background: var(--text);
-  background-color: var(--text);
   border: 1px solid var(--text);
   border-radius: 2px;
   transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
@@ -373,6 +372,17 @@ section.center {
 .btn:hover {
   background: var(--blue);
   box-shadow: var(--glow-lavender);
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background: var(--surface1);
+}
+
+.btn:disabled:hover {
+  background: var(--surface1);
+  box-shadow: none;
 }
 
 .btn.big {
@@ -546,15 +556,18 @@ td input {
 .collapsible .collapse-body {
   max-height: 0;
   overflow: hidden;
-  transition: max-height 0.3s ease;
+  transition: max-height 0.3s ease-out;
 }
 
 .collapsible.closed .collapse-body {
   max-height: 0;
 }
+
+/*
 .collapsible:not(.closed) .collapse-body {
-  max-height: 500px;
+  max-height set by JS dynamically
 }
+*/
 
 .collapsible .collapse-header {
   display: flex;
@@ -597,6 +610,7 @@ span.collapse-arrow {
 /* ====== RESULT DISPLAY ====== */
 #result {
   margin-top: 1.5rem;
+  scroll-margin-top: var(--nav-height, 70px);
 }
 
 .result-cards {

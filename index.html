@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="css/overlay.css" />
     <script src="js/animations.js"></script>
     <link rel="stylesheet" href="css/styles.css" />
-    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <script src="https://unpkg.com/lucide@0.575.0/dist/umd/lucide.min.js"></script>
     <title>Weight Knapsnack</title>
   </head>
 
@@ -33,28 +33,61 @@
     <section class="center fade-in">
       <h1>Weight Knapsnack</h1>
       <p>Wanna exercise? Get your Bags and Bottles ready.</p>
-      <a href="./knapsnack.html"><button class="btn big mt-2"><i data-lucide="play"></i> Try Now</button></a>
+      <a href="./knapsnack.html"
+        ><button class="btn big mt-2">
+          <i data-lucide="play"></i> Try Now
+        </button></a
+      >
     </section>
 
     <section class="center fade-in">
       <h2 class="center">Features</h2>
-      <div class="card card-list"><i data-lucide="scale"></i> Flexible input parsing (kg, g, lb) with smart conversions</div>
-      <div class="card card-list"><i data-lucide="database"></i> Persistent bag weight and bottle data with local storage</div>
-      <div class="card card-list"><i data-lucide="pencil-line"></i> Dynamic bottle table editor (add, edit, remove) with defaults</div>
-      <div class="card card-list"><i data-lucide="zap"></i> Optimized dynamic programming algorithm for instant results</div>
-      <div class="card card-list"><i data-lucide="milk"></i> Smart bottle combo selection with penalty and overshoot control</div>
-      <div class="card card-list"><i data-lucide="bar-chart-3"></i> Clean tabular output (weights, counts, diffs) up to 3 decimals</div>
-      <div class="card card-list"><i data-lucide="globe"></i> Runs entirely in browser - no server required</div>
+      <div class="card card-list">
+        <i data-lucide="scale"></i> Flexible input parsing (kg, g, lb) with
+        smart conversions
+      </div>
+      <div class="card card-list">
+        <i data-lucide="database"></i> Persistent bag weight and bottle data
+        with local storage
+      </div>
+      <div class="card card-list">
+        <i data-lucide="pencil-line"></i> Dynamic bottle table editor (add,
+        edit, remove) with defaults
+      </div>
+      <div class="card card-list">
+        <i data-lucide="zap"></i> Optimized dynamic programming algorithm for
+        instant results
+      </div>
+      <div class="card card-list">
+        <i data-lucide="milk"></i> Smart bottle combo selection with penalty and
+        overshoot control
+      </div>
+      <div class="card card-list">
+        <i data-lucide="bar-chart-3"></i> Clean tabular output (weights, counts,
+        diffs) up to 3 decimals
+      </div>
+      <div class="card card-list">
+        <i data-lucide="globe"></i> Runs entirely in browser - no server
+        required
+      </div>
     </section>
 
     <section class="center fade-in">
-      <a href="./about.html"><button class="btn"><i data-lucide="info"></i> About</button></a>
-      <p class="mt-2 text-muted p-icon">Made with <i data-lucide="hand-fist"></i> and a little Indian jugaad</p>
+      <a href="./about.html"
+        ><button class="btn"><i data-lucide="info"></i> About</button></a
+      >
+      <p class="mt-2 text-muted p-icon">
+        Made with <i data-lucide="hand-fist"></i> and a little Indian jugaad
+      </p>
     </section>
 
-    <footer><p>&copy; 2025 Ankit Sharma</p></footer>
+    <footer>
+      <p>&copy; <span id="year"></span> Ankit Sharma</p>
+    </footer>
 
     <script src="js/style.js"></script>
-    <script>lucide.createIcons();</script>
+    <script>
+      lucide.createIcons();
+    </script>
   </body>
 </html>

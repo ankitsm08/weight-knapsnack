@@ -3,6 +3,122 @@
  * Manages bottle table, form submission, and result display
  */
 
+function getStepForPlus(value) {
+  if (value < 360) return 10;
+  if (value < 800) return 20;
+  if (value < 2000) return 50;
+  return 100;
+}
+
+function getStepForMinus(value) {
+  if (value <= 360) return 10;
+  if (value <= 800) return 20;
+  if (value <= 2000) return 50;
+  return 100;
+}
+
+function getStepForInput(input, delta = 0) {
+  if (input.classList.contains("bottle-weight")) {
+    const val = parseFloat(input.value) || 0;
+    if (delta < 0) return getStepForMinus(val);
+    return getStepForPlus(val);
+  }
+  if (input.id === "target_weight") return 0.5;
+  if (input.id === "bag_weight") return 50;
+  if (input.classList.contains("bottle-count")) return 1;
+  return parseFloat(input.step) || 1;
+}
+
+function wrapNumberInput(input) {
+  if (input.dataset.wrapped === "true") return;
+
+  const wrapper = document.createElement("div");
+  wrapper.className = "number-input-wrapper";
+
+  const buttons = document.createElement("div");
+  buttons.className = "number-input-buttons";
+
+  const minusBtn = document.createElement("button");
+  minusBtn.type = "button";
+  minusBtn.className = "number-input-btn minus";
+  minusBtn.innerHTML = '<i data-lucide="minus"></i>';
+
+  const plusBtn = document.createElement("button");
+  plusBtn.type = "button";
+  plusBtn.className = "number-input-btn plus";
+  plusBtn.innerHTML = '<i data-lucide="plus"></i>';
+
+  buttons.appendChild(minusBtn);
+  buttons.appendChild(plusBtn);
+
+  input.parentNode.insertBefore(wrapper, input);
+  wrapper.appendChild(input);
+  wrapper.appendChild(buttons);
+
+  input.dataset.wrapped = "true";
+
+  const updateValue = (delta) => {
+    const step = getStepForInput(input, delta);
+    const min = input.classList.contains("bottle-count") ? 1 : 0;
+    let val = parseFloat(input.value) || 0;
+    val += delta * step;
+    val = Math.max(min, val);
+
+    if (input.id === "overshoot_ratio") {
+      val = Math.round(val * 100) / 100;
+    } else if (input.id === "target_weight") {
+      val = Math.round(val * 100) / 100;
+    }
+
+    input.value = val;
+    input.dispatchEvent(new Event("input", { bubbles: true }));
+  };
+
+  plusBtn.addEventListener("click", (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (input.dataset.clicking) return;
+    input.dataset.clicking = "true";
+    updateValue(1);
+    setTimeout(() => delete input.dataset.clicking, 50);
+  });
+  minusBtn.addEventListener("click", (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (input.dataset.clicking) return;
+    input.dataset.clicking = "true";
+    updateValue(-1);
+    setTimeout(() => delete input.dataset.clicking, 50);
+  });
+
+  input.addEventListener("input", () => {
+    if (input.classList.contains("bottle-weight")) {
+      input.step = getStepForInput(input);
+    }
+  });
+
+  if (input.classList.contains("bottle-weight")) {
+    input.step = getStepForInput(input);
+  }
+
+  if (window.lucide) lucide.createIcons();
+}
+
+function wrapNumberInputsInTable() {
+  document
+    .querySelectorAll(
+      "#bottles-table .bottle-weight, #bottles-table .bottle-count",
+    )
+    .forEach(wrapNumberInput);
+}
+
+function wrapMainInputs() {
+  if (targetWeightInput) wrapNumberInput(targetWeightInput);
+  if (bagWeightInput) wrapNumberInput(bagWeightInput);
+  if (overshootRatioInput) wrapNumberInput(overshootRatioInput);
+  if (bottlePenaltyInput) wrapNumberInput(bottlePenaltyInput);
+}
+
 /**
  * Display error message in the result section
  * @param {string} message - The error message to display
@@ -179,6 +295,11 @@ function addRow(weight = "", count = "") {
   tbody.appendChild(row);
   save_bottles();
   updateCollapsibleHeight();
+
+  const weightInput = row.querySelector(".bottle-weight");
+  const countInput = row.querySelector(".bottle-count");
+  if (weightInput) wrapNumberInput(weightInput);
+  if (countInput) wrapNumberInput(countInput);
 
   if (window.lucide) lucide.createIcons();
 }
@@ -425,6 +546,10 @@ window.addEventListener("DOMContentLoaded", () => {
         <td><button type="button" class="btn-icon btn-remove-row"><i data-lucide="x"></i></button></td>
       `;
       tbody.appendChild(row);
+      const weightInput = row.querySelector(".bottle-weight");
+      const countInput = row.querySelector(".bottle-count");
+      if (weightInput) wrapNumberInput(weightInput);
+      if (countInput) wrapNumberInput(countInput);
     });
     if (window.lucide) lucide.createIcons();
   }
@@ -445,4 +570,6 @@ window.addEventListener("DOMContentLoaded", () => {
     bottlePenaltyInput.value = savedBottlePenalty;
   }
   collapseIfTooManyBottles();
+
+  wrapMainInputs();
 });

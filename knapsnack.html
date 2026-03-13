@@ -30,9 +30,9 @@
       </div>
     </nav>
 
-    <section class="fade-in">
-      <h1 class="center">Knapsnack Calculator</h1>
-      <p class="center">
+    <section class="center fade-in">
+      <h1>Knapsnack Calculator</h1>
+      <p>
         Enter your bottles, target weight, and bag info to find the best combo!
       </p>
 
@@ -50,7 +50,7 @@
               ><i data-lucide="chevron-down"></i
             ></span>
           </div>
-          <div class="collapse-body">
+          <div class="collapse-body bottle-table">
             <table id="bottles-table">
               <thead>
                 <tr>
@@ -103,7 +103,7 @@
             >
             <input
               type="text"
-              step="0.1"
+              step="0.5"
               id="target_weight"
               name="target_weight"
               placeholder="e.g. 11.5 or 20lb"
@@ -116,7 +116,7 @@
             >
             <input
               type="text"
-              step="10"
+              step="50"
               id="bag_weight"
               name="bag_weight"
               placeholder="Default: 0g"
@@ -143,7 +143,7 @@
             >
             <input
               type="number"
-              step="0.01"
+              step="0.1"
               id="overshoot_ratio"
               name="overshoot_ratio"
               placeholder="0.5"
@@ -155,7 +155,7 @@
             >
             <input
               type="number"
-              step="1"
+              step="10"
               id="bottle_penalty"
               name="bottle_penalty"
               placeholder="50"

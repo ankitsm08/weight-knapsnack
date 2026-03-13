@@ -33,27 +33,37 @@ body {
 
 /* ====== CATPPUCCIN MOCHA PALETTE ====== */
 :root {
-  --base: #1e1e2e;
-  --mantle: #181825;
-  --crust: #11111b;
+  /* Base */
+  --rosewater: #f5e0dc;
+  --flamingo: #f2cdcd;
+  --pink: #f5c2e7;
+  --mauve: #cba6f7;
+  --red: #f38ba8;
+  --maroon: #eba0ac;
+  --peach: #fab387;
+  --yellow: #f9e2af;
+  --green: #a6e3a1;
+  --teal: #94e2d5;
+  --sky: #89dceb;
+  --sapphire: #74c7ec;
+  --blue: #89b4fa;
+  --lavender: #b4befe;
+
+  /* Neutrals */
   --text: #cdd6f4;
   --subtext1: #bac2de;
   --subtext0: #a6adc8;
-  --surface0: #313244;
-  --surface1: #45475a;
-  --surface2: #585b70;
+  --overlay2: #9399b2;
+  --overlay1: #7f849c;
   --overlay0: #6c7086;
-  --lavender: #b4befe;
-  --blue: #89b4fa;
-  --sapphire: #74c7ec;
-  --teal: #94e2d5;
-  --green: #a6e3a1;
-  --yellow: #f9e2af;
-  --peach: #fab387;
-  --red: #f38ba8;
-  --mauve: #cba6f7;
-  --pink: #f5c2e7;
+  --surface2: #585b70;
+  --surface1: #45475a;
+  --surface0: #313244;
+  --base: #1e1e2e;
+  --mantle: #181825;
+  --crust: #11111b;
 
+  /* Semantic */
   --more: var(--teal);
   --less: var(--peach);
   --success: var(--green);
@@ -62,6 +72,7 @@ body {
   --info: var(--blue);
   --accent: var(--lavender);
 
+  /* Glows */
   --glow-lavender: 0 0 15px rgba(180, 190, 254, 0.3);
   --glow-sapphire: 0 0 15px rgba(116, 199, 236, 0.3);
   --glow-green: 0 0 15px rgba(166, 227, 161, 0.3);
@@ -320,6 +331,9 @@ section.center {
 
 /* ====== CARDS ====== */
 .card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
   background: var(--surface0);
   border: 1px solid var(--surface1);
   border-radius: 10px;
@@ -332,6 +346,7 @@ section.center {
 
 .card-list {
   display: flex;
+  flex-direction: row;
   align-items: center;
   gap: 0.5rem;
 }
@@ -416,8 +431,8 @@ section.center {
 }
 
 .btn-small {
-  background: var(--surface1);
-  color: var(--subtext1);
+  background: var(--lavender);
+  color: var(--base);
   border: none;
   padding: 0.4rem 0.75rem;
   font-size: 0.85rem;
@@ -430,8 +445,8 @@ section.center {
 }
 
 .btn-small:hover {
-  color: var(--text);
-  background: var(--surface2);
+  color: var(--crust);
+  background: var(--sky);
   box-shadow: var(--glow-sapphire);
 }
 
@@ -443,7 +458,6 @@ form {
 .form-row {
   display: flex;
   gap: 0.75rem;
-  margin-bottom: 0.75rem;
 }
 
 .form-row > .card {
@@ -479,6 +493,7 @@ input[type="number"],
 input[type="email"],
 textarea,
 select {
+  text-align: center;
   width: 100%;
   padding: 0.5rem 0.75rem;
   font-family: "Outfit", sans-serif;
@@ -490,7 +505,6 @@ select {
   transition:
     border-color 0.2s ease,
     box-shadow 0.2s ease;
-  margin-top: 0.35rem;
 }
 
 input:focus {
@@ -505,7 +519,9 @@ input::placeholder {
 
 label {
   display: flex;
+  justify-content: center;
   align-items: center;
+  width: 100%;
   gap: 0.35rem;
   font-weight: 500;
   color: var(--subtext1);
@@ -523,6 +539,104 @@ input[type="checkbox"] {
   accent-color: var(--lavender);
   cursor: pointer;
   margin: 0;
+}
+
+/* ====== NUMBER INPUT WITH CUSTOM BUTTONS ====== */
+.number-input-wrapper {
+  position: relative;
+  display: inline-flex;
+  align-items: stretch;
+  width: 100%;
+}
+
+.number-input-wrapper input[type="number"],
+.number-input-wrapper input[type="text"] {
+  -moz-appearance: textfield;
+  padding-left: 0.75rem;
+  padding-right: 3.5rem;
+  border-radius: 6px;
+}
+
+.number-input-wrapper input[type="number"]::-webkit-outer-spin-button,
+.number-input-wrapper input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.number-input-buttons {
+  position: absolute;
+  right: 6px;
+  top: 6px;
+  bottom: 6px;
+  gap: 6px;
+  display: flex;
+  flex-direction: row;
+  border-radius: 6px 6px 6px 6px;
+  overflow: hidden;
+}
+
+.number-input-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  border-radius: 6px 6px 6px 6px;
+  border: none;
+  cursor: pointer;
+  transition: background 0.15s ease;
+  padding: 0;
+}
+
+.number-input-btn.plus {
+  background: transparent;
+  color: var(--subtext1);
+}
+
+.number-input-btn.plus:hover {
+  background: var(--teal);
+  color: var(--surface0);
+}
+
+.number-input-btn.minus {
+  background: transparent;
+  color: var(--subtext1);
+}
+
+.number-input-btn.minus:hover {
+  background: var(--flamingo);
+  color: var(--surface0);
+}
+
+.number-input-btn i[data-lucide] {
+  width: 14px;
+  height: 14px;
+}
+
+/* Table cells need special handling */
+td .number-input-wrapper {
+  width: 100%;
+}
+
+td .number-input-wrapper input[type="number"],
+td .number-input-wrapper input[type="text"] {
+  padding-left: 0.5rem;
+  padding-right: 2.75rem;
+}
+
+td .number-input-buttons {
+  right: 6px;
+  top: 6px;
+  bottom: 6px;
+  gap: 6px;
+}
+
+td .number-input-btn {
+  width: 24px;
+}
+
+td .number-input-btn i[data-lucide] {
+  width: 12px;
+  height: 12px;
 }
 
 /* ====== TABLES ====== */
@@ -553,6 +667,12 @@ td input {
 }
 
 /* ====== COLLAPSIBLE ====== */
+.card.collapsible {
+  padding-top: 0;
+  padding-bottom: 0;
+  gap: 0;
+}
+
 .collapsible .collapse-body {
   max-height: 0;
   overflow: hidden;
@@ -575,6 +695,8 @@ td input {
   align-items: center;
   cursor: pointer;
   user-select: none;
+  padding: 1rem 1.25rem;
+  margin: 0 -1.25rem;
 }
 
 .collapsible .collapse-header label {
@@ -605,6 +727,31 @@ span.collapse-arrow {
 .add-bottle {
   display: flex;
   align-items: center;
+}
+
+.bottle-table h3 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.bottle-table table {
+  table-layout: auto;
+  width: 100%;
+}
+
+.bottle-table th,
+.bottle-table td {
+  text-align: center;
+}
+
+.bottle-table th:nth-child(3),
+.bottle-table td:nth-child(3) {
+  width: 1%;
+  white-space: nowrap;
+  padding-left: 0.25rem;
+  padding-right: 0.25rem;
 }
 
 /* ====== RESULT DISPLAY ====== */
@@ -677,7 +824,7 @@ span.collapse-arrow {
 .combo-table tr.total-row {
   background: var(--surface1);
   font-weight: 600;
-  font-size: 1rem;
+  font-size: 1.1rem;
 }
 
 /* ====== RESULT ANIMATIONS ====== */
@@ -844,6 +991,7 @@ ul.feature-list li i[data-lucide] {
   }
 
   .form-row {
+    gap: 0;
     flex-direction: column;
   }
   .form-row-3 {
@@ -871,5 +1019,19 @@ ul.feature-list li i[data-lucide] {
 
   i {
     display: contents;
+  }
+
+  td {
+    padding: 0.2rem;
+  }
+
+  td .number-input-wrapper input[type="number"],
+  td .number-input-wrapper input[type="text"] {
+    padding-left: 1rem;
+  }
+
+  input.bottle-weight,
+  input.bottle-count {
+    text-align: start;
   }
 }

@@ -184,7 +184,7 @@ function renderResult(data) {
     weightDiff === 0 ? "success" : weightDiff > 0 ? "more" : "less";
 
   return `
-<h2 class="center h2-icon"><i data-lucide="check-circle" class="text-success"></i> &nbsp; Results</h2>
+<h2 class="center h2-icon"><i data-lucide="check-circle" class="text-success"></i> Results</h2>
 <div class="result-cards">
     <div class="card result-card">
         <h4><i data-lucide="target"></i> Target</h4>

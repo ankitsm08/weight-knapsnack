@@ -740,7 +740,6 @@ td .number-input-btn i[data-lucide] {
 table {
   width: 100%;
   border-collapse: collapse;
-  margin-bottom: 0.75rem;
 }
 
 th,
@@ -751,7 +750,7 @@ td {
 }
 
 th {
-  font-size: 0.75rem;
+  font-size: 0.85rem;
   font-weight: 600;
   color: var(--overlay0);
   text-transform: uppercase;
@@ -860,8 +859,7 @@ span.collapse-arrow {
 .result-cards {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 0.75rem;
-  margin-bottom: 1.5rem;
+  column-gap: 0.75rem;
 }
 
 .result-card {
@@ -870,7 +868,7 @@ span.collapse-arrow {
 }
 
 .result-card h4 {
-  font-size: 0.7rem;
+  font-size: 1rem;
   color: var(--overlay0);
   margin-bottom: 0.25rem;
   text-transform: uppercase;
@@ -920,6 +918,7 @@ span.collapse-arrow {
 
 .combo-table tr.total-row {
   background: var(--surface1);
+  border-radius: 2rem;
   font-weight: 600;
   font-size: 1.1rem;
 }
@@ -930,7 +929,9 @@ span.collapse-arrow {
   transform: translateY(15px);
   transition:
     opacity 0.4s ease,
-    transform 0.4s ease;
+    transform 0.4s ease,
+    border-color 0.3s ease,
+    box-shadow 0.3s ease;
 }
 
 .result-cards.show,
@@ -944,7 +945,9 @@ span.collapse-arrow {
   transform: translateY(15px);
   transition:
     opacity 0.4s ease 0.15s,
-    transform 0.4s ease 0.15s;
+    transform 0.4s ease 0.15s,
+    border-color 0.3s ease,
+    box-shadow 0.3s ease;
 }
 
 .combo-table.show,

@@ -267,21 +267,6 @@ function updateCollapsibleHeight() {
   }
 }
 
-function updateCollapsibleHeight() {
-  const table = document.getElementById("bottles-table");
-  if (!table) return;
-
-  const collapsible = table.closest(".card.collapsible");
-  if (!collapsible) return;
-
-  const collapseBody = collapsible.querySelector(".collapse-body");
-  if (!collapseBody) return;
-
-  if (!collapsible.classList.contains("closed")) {
-    collapseBody.style.maxHeight = collapseBody.scrollHeight + "px";
-  }
-}
-
 function addRow(weight = "", count = "") {
   const tbody = document.querySelector("#bottles-table tbody");
   if (!tbody) return;
@@ -344,9 +329,19 @@ function collapseIfTooManyBottles() {
   const table = document.getElementById("bottles-table");
   if (!table) return;
 
-  const collapsible = table.closest(".collapsible");
-  if (table.rows.length > 6 && collapsible) {
+  const collapsible = table.closest(".card.collapsible");
+  if (!collapsible) return;
+
+  const collapseHeader = collapsible.querySelector(".collapse-header");
+  if (!collapseHeader) return;
+
+  const collapseBody = collapsible.querySelector(".collapse-body");
+  if (!collapseBody) return;
+
+  if (table.rows.length > 3 && !collapsible.classList.contains("closed")) {
     collapsible.classList.add("closed");
+    collapseHeader.ariaExpanded = "false";
+    collapseBody.style.maxHeight = "0px";
   }
 }
 
@@ -420,7 +415,6 @@ if (form) {
     disableSubmitButton();
 
     const bottles = save_bottles();
-    collapseIfTooManyBottles();
 
     const formData = new FormData(form);
 
@@ -483,25 +477,26 @@ if (form) {
           resultDiv.innerHTML = `<p class="text-error"><i data-lucide="circle-x"></i> Error: ${data.error}</p>`;
           enableSubmitButton();
         } else {
+          collapseIfTooManyBottles();
           resultDiv.innerHTML = renderResult(data);
 
           if (window.lucide) lucide.createIcons();
 
           requestAnimationFrame(() => {
-            const resultCards = resultDiv.querySelector(".result-cards");
-            const comboTable = resultDiv.querySelector(".combo-table");
-
-            if (resultCards) resultCards.classList.add("show");
-            if (comboTable) comboTable.classList.add("show");
-
-            // Scroll after animation completes to show results at top
+            // Scroll while animation completes to show results at top
             setTimeout(() => {
+              const resultCards = resultDiv.querySelector(".result-cards");
+              const comboTable = resultDiv.querySelector(".combo-table");
+
+              if (resultCards) resultCards.classList.add("show");
+              if (comboTable) comboTable.classList.add("show");
+
               resultDiv.scrollIntoView({
                 behavior: "smooth",
                 block: "start",
               });
               enableSubmitButton();
-            }, 400);
+            }, 300);
           });
         }
       }, 50);
@@ -572,4 +567,119 @@ window.addEventListener("DOMContentLoaded", () => {
   collapseIfTooManyBottles();
 
   wrapMainInputs();
+
+  // ====== TOOLTIP FUNCTIONALITY ======
+  (function () {
+    const tooltip = document.createElement("div");
+    tooltip.className = "tooltip";
+    tooltip.innerHTML =
+      '<button class="tooltip-close" aria-label="Close"><i data-lucide="x"></i></button><span class="tooltip-text"></span>';
+    document.body.appendChild(tooltip);
+
+    const tooltipOverlay = document.createElement("div");
+    tooltipOverlay.className = "tooltip-overlay";
+    document.body.appendChild(tooltipOverlay);
+
+    const tooltipText = tooltip.querySelector(".tooltip-text");
+    const tooltipClose = tooltip.querySelector(".tooltip-close");
+
+    let currentIcon = null;
+    const isMobile = () => window.innerWidth <= 768;
+
+    function showTooltip(icon) {
+      const text = icon.getAttribute("data-tooltip");
+      if (!text) return;
+
+      tooltipText.innerHTML = text;
+      currentIcon = icon;
+
+      if (isMobile()) {
+        // Mobile: centered popup
+        tooltip.style.position = "fixed";
+        tooltip.style.left = "50%";
+        tooltip.style.top = "50%";
+        tooltip.style.transform = "translate(-50%, -50%)";
+        tooltip.style.width = "calc(100vw - 48px)";
+        tooltip.style.maxWidth = "400px";
+        tooltipClose.style.display = "block";
+        tooltipOverlay.classList.add("visible");
+        lucide.createIcons({ rootEl: tooltipClose });
+      } else {
+        // Desktop: position near icon
+        const rect = icon.getBoundingClientRect();
+
+        let left = rect.left + rect.width / 2;
+        let top = rect.top - 16;
+
+        // Account for tooltip dimensions (approximate since not rendered yet)
+        const estimatedWidth = Math.min(
+          320,
+          parseInt(getComputedStyle(tooltip).maxWidth) || 320,
+        );
+        const estimatedHeight = 80;
+
+        const halfWidth = estimatedWidth / 2;
+        if (left - halfWidth < 16) {
+          left = halfWidth + 16;
+        } else if (left + halfWidth > window.innerWidth - 16) {
+          left = window.innerWidth - halfWidth - 16;
+        }
+
+        const showBelow = top - estimatedHeight < 16;
+        if (showBelow) {
+          top = rect.bottom + 16;
+        }
+
+        tooltip.style.position = "fixed";
+        tooltip.style.left = left + "px";
+        tooltip.style.top = top + "px";
+        tooltip.style.transform = showBelow
+          ? "translate(-50%, 0)"
+          : "translate(-50%, -100%)";
+        tooltip.style.width = "max-content";
+        tooltip.style.maxWidth = "320px";
+        tooltipClose.style.display = "none";
+      }
+
+      tooltip.classList.add("visible");
+    }
+
+    function hideTooltip() {
+      tooltip.classList.remove("visible");
+      tooltipOverlay.classList.remove("visible");
+      currentIcon = null;
+    }
+
+    // Event listeners - hover for desktop, click for mobile
+    document.querySelectorAll(".info-icon").forEach((icon) => {
+      if (isMobile()) {
+        icon.addEventListener("click", (e) => {
+          e.stopPropagation();
+          if (currentIcon === icon) {
+            hideTooltip();
+          } else {
+            showTooltip(icon);
+          }
+        });
+      } else {
+        icon.addEventListener("mouseenter", () => showTooltip(icon));
+        icon.addEventListener("mouseleave", () => hideTooltip());
+        icon.addEventListener("focus", () => showTooltip(icon));
+        icon.addEventListener("blur", () => hideTooltip());
+      }
+    });
+
+    tooltipClose.addEventListener("click", (e) => {
+      e.stopPropagation();
+      hideTooltip();
+    });
+    tooltipOverlay.addEventListener("click", hideTooltip);
+
+    // Handle resize
+    window.addEventListener("resize", () => {
+      if (currentIcon && isMobile()) {
+        showTooltip(currentIcon);
+      }
+    });
+  })();
 });

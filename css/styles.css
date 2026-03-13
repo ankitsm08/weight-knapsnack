@@ -415,7 +415,7 @@ section.center {
 .btn-icon {
   background: transparent;
   border: none;
-  color: var(--overlay0);
+  color: var(--overlay2);
   cursor: pointer;
   padding: 0.25rem;
   border-radius: 4px;
@@ -533,6 +533,102 @@ label i[data-lucide] {
   color: var(--sapphire);
 }
 
+/* ====== INFO ICON TOOLTIP ====== */
+.info-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 1.2rem;
+  margin-left: 0.25rem;
+  color: var(--overlay0);
+  cursor: help;
+  position: relative;
+  vertical-align: middle;
+}
+
+.info-icon i[data-lucide] {
+  width: 1rem;
+  height: 1rem;
+}
+
+.tooltip {
+  position: fixed;
+  background: var(--surface1);
+  color: var(--text);
+  padding: 0.75rem 1rem;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 400;
+  max-width: calc(100vw - 32px);
+  text-align: left;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  line-height: 1.5;
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity 0.2s ease,
+    visibility 0.2s ease;
+  pointer-events: none;
+}
+
+.tooltip.visible {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.tooltip-text {
+  display: block;
+}
+
+.tooltip-close {
+  display: none;
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  margin-right: 4px;
+  background: transparent;
+  border: none;
+  color: var(--overlay0);
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  line-height: 1;
+}
+
+.tooltip-close:hover {
+  color: var(--text);
+  background: var(--surface0);
+}
+
+/* Add padding-right to text only when close button is visible (mobile) */
+.tooltip:has(.tooltip-close[style*="block"]) .tooltip-text {
+  padding-right: 1.5rem;
+}
+
+.tooltip-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0);
+  z-index: 999;
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    background 0.3s ease,
+    opacity 0.3s ease,
+    visibility 0.3s ease;
+  pointer-events: none;
+}
+
+.tooltip-overlay.visible {
+  background: rgba(0, 0, 0, 0.6);
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
 input[type="checkbox"] {
   width: 1rem;
   height: 1rem;
@@ -551,6 +647,7 @@ input[type="checkbox"] {
 
 .number-input-wrapper input[type="number"],
 .number-input-wrapper input[type="text"] {
+  appearance: textfield;
   -moz-appearance: textfield;
   padding-left: 0.75rem;
   padding-right: 3.5rem;
@@ -589,22 +686,22 @@ input[type="checkbox"] {
 
 .number-input-btn.plus {
   background: transparent;
-  color: var(--subtext1);
+  color: var(--subtext0);
 }
 
 .number-input-btn.plus:hover {
-  background: var(--teal);
-  color: var(--surface0);
+  background: rgba(148, 226, 213, 0.1);
+  color: var(--teal);
 }
 
 .number-input-btn.minus {
   background: transparent;
-  color: var(--subtext1);
+  color: var(--subtext0);
 }
 
 .number-input-btn.minus:hover {
-  background: var(--flamingo);
-  color: var(--surface0);
+  background: rgba(242, 205, 205, 0.1);
+  color: var(--flamingo);
 }
 
 .number-input-btn i[data-lucide] {

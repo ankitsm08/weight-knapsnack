@@ -2,7 +2,9 @@
 
 A client-side web app that calculates the best bottle combination to hit your target workout weight. Perfect for home workout enthusiasts using weighted backpacks.
 
-<img src="assets\img\showcase.webp" alt="screenshot" width="90%" style="display: block; margin-left: auto; margin-right: auto;"/>
+<p align="center">
+    <img src="assets/img/showcase.webp" alt="screenshot" width="90%"/>
+</p>
 
 ## Features
 
@@ -13,6 +15,7 @@ A client-side web app that calculates the best bottle combination to hit your ta
 - Clean tabular output up to 3 decimals
 - **Runs entirely in-browser**, no server required
 - Lightweight UI built with vanilla HTML/CSS/JS... No bulky frameworks!
+- **Offline Android app**, packaged with lean Tauri
 
 ## Algorithm
 
@@ -25,12 +28,36 @@ Uses **dynamic programming** to find the optimal bottle combination:
 
 The DP table tracks `(score, bottle_count)` for each achievable weight, ensuring you get the mathematically optimal combo every time.
 
-## Usage
+## Usage and Downloads
 
-Open `index.html` in your browser, or serve locally:
+The web app is available at [ankitsm08.github.io/weight-knapsnack/](https://ankitsm08.github.io/weight-knapsnack/).
+
+Downloadable `apk` file is available in the **Releases** page.
+
+## Local Development
+
+This project uses `just` as a command runner for development and compilation.
+
+### Prerequisites
+
+- Node.js & `pnpm`
+- Rust and `cargo-tauri` CLI installed (`cargo install tauri-cli`)
+- Android Studio (to manage Android SDKs, Tools and NDKs)
+
+Run the `just` command from the root directory:
 
 ```bash
-npx serve ./web/
+just --list
+```
+
+This will list all available tasks, including `dev` and `build`.
+
+### Running the Web Version
+
+Otherwise, you may simply open `./web/index.html` in your browser. Or serve it locally using:
+
+```bash
+pnpx serve ./web/
 ```
 
 ## Tech Stack
@@ -38,6 +65,7 @@ npx serve ./web/
 - Vanilla HTML, CSS, JavaScript
 - No dependencies, no frameworks
 - LocalStorage for persistence
+- Tauri for packaging apk for Android
 - Legacy Flask backend in `/python` (deprecated)
 
 ## License

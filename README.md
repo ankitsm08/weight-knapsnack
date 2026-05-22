@@ -30,7 +30,7 @@ The DP table tracks `(score, bottle_count)` for each achievable weight, ensuring
 Open `index.html` in your browser, or serve locally:
 
 ```bash
-npx serve .
+npx serve ./web/
 ```
 
 ## Tech Stack
@@ -42,4 +42,4 @@ npx serve .
 
 ## License
 
-MIT
+MIT License

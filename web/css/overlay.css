@@ -6,7 +6,8 @@
   align-items: center;
   justify-content: center;
   z-index: 99999;
-  transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform;
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 #animation-overlay.slide-out {
@@ -29,20 +30,6 @@
   text-shadow:
     0 0 10px rgba(180, 190, 254, 0.8),
     0 0 15px rgba(180, 190, 254, 0.4);
-}
-
-@keyframes pulse-glow {
-  0%,
-  100% {
-    text-shadow:
-      0 0 10px rgba(180, 190, 254, 0.6),
-      0 0 15px rgba(180, 190, 254, 0.3);
-  }
-  50% {
-    text-shadow:
-      0 0 20px rgba(180, 190, 254, 1),
-      0 0 30px rgba(180, 190, 254, 0.5);
-  }
 }
 
 @media (max-width: 600px) {

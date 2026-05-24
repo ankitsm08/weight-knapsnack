@@ -97,21 +97,30 @@ function toggleCollapse(el) {
   if (!card) return;
 
   const collapseBody = card.querySelector(".collapse-body");
+  if (!collapseBody) return;
+
   const isClosed = card.classList.contains("closed");
 
   if (isClosed) {
-    // Opening: set max-height to actual content height
     card.classList.remove("closed");
-    if (collapseBody) {
-      collapseBody.style.maxHeight = collapseBody.scrollHeight + "px";
-    }
+    collapseBody.style.height = "0";
+    void collapseBody.offsetHeight;
+    collapseBody.style.height = collapseBody.scrollHeight + "px";
+
+    const onEnd = () => {
+      collapseBody.style.height = "auto";
+      collapseBody.removeEventListener("transitionend", onEnd);
+    };
+    collapseBody.addEventListener("transitionend", onEnd);
     el.setAttribute("aria-expanded", "true");
   } else {
-    // Closing: set max-height to 0
-    card.classList.add("closed");
-    if (collapseBody) {
-      collapseBody.style.maxHeight = "0";
-    }
-    el.setAttribute("aria-expanded", "false");
+    collapseBody.style.height = collapseBody.scrollHeight + "px";
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        collapseBody.style.height = "0px";
+        card.classList.add("closed");
+        el.setAttribute("aria-expanded", "false");
+      });
+    });
   }
 }

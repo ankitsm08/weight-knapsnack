@@ -6,9 +6,9 @@
  * Generate a random character for scramble effect
  * @returns {string} - Random character
  */
-const SCRAMBLE_INITIAL_DELAY = 150;
-const SCRAMBLE_DURATION_FACTOR = 133;
-const SCRAMBLE_HOLD_FACTOR = 100;
+const SCRAMBLE_INITIAL_DELAY = 50;
+const SCRAMBLE_DURATION_FACTOR = 60;
+const SCRAMBLE_HOLD_FACTOR = 40;
 const MIN_TITLE_LENGTH = 1;
 
 function easeOutQuad(t) {

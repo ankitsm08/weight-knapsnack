@@ -104,14 +104,6 @@ function wrapNumberInput(input) {
   if (window.lucide) lucide.createIcons();
 }
 
-function wrapNumberInputsInTable() {
-  document
-    .querySelectorAll(
-      "#bottles-table .bottle-weight, #bottles-table .bottle-count",
-    )
-    .forEach(wrapNumberInput);
-}
-
 function wrapMainInputs() {
   if (targetWeightInput) wrapNumberInput(targetWeightInput);
   if (bagWeightInput) wrapNumberInput(bagWeightInput);
@@ -251,22 +243,6 @@ function disableSubmitButton() {
   if (submitBtn) submitBtn.disabled = true;
 }
 
-function updateCollapsibleHeight() {
-  const table = document.getElementById("bottles-table");
-  if (!table) return;
-
-  const collapsible = table.closest(".card.collapsible");
-  if (!collapsible) return;
-
-  const collapseBody = collapsible.querySelector(".collapse-body");
-  if (!collapseBody) return;
-
-  // Only update if not closed (open)
-  if (!collapsible.classList.contains("closed")) {
-    collapseBody.style.maxHeight = collapseBody.scrollHeight + "px";
-  }
-}
-
 function addRow(weight = "", count = "") {
   const tbody = document.querySelector("#bottles-table tbody");
   if (!tbody) return;
@@ -279,7 +255,6 @@ function addRow(weight = "", count = "") {
     `;
   tbody.appendChild(row);
   save_bottles();
-  updateCollapsibleHeight();
 
   const weightInput = row.querySelector(".bottle-weight");
   const countInput = row.querySelector(".bottle-count");
@@ -303,7 +278,6 @@ function removeRow(btn) {
   if (row) {
     row.remove();
     save_bottles();
-    updateCollapsibleHeight();
   }
 }
 
@@ -332,16 +306,21 @@ function collapseIfTooManyBottles() {
   const collapsible = table.closest(".card.collapsible");
   if (!collapsible) return;
 
-  const collapseHeader = collapsible.querySelector(".collapse-header");
-  if (!collapseHeader) return;
-
   const collapseBody = collapsible.querySelector(".collapse-body");
   if (!collapseBody) return;
 
+  const collapseHeader = collapsible.querySelector(".collapse-header");
+  if (!collapseHeader) return;
+
   if (table.rows.length > 3 && !collapsible.classList.contains("closed")) {
-    collapsible.classList.add("closed");
-    collapseHeader.ariaExpanded = "false";
-    collapseBody.style.maxHeight = "0px";
+    collapseBody.style.height = collapseBody.scrollHeight + "px";
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        collapseBody.style.height = "0px";
+        collapsible.classList.add("closed");
+        collapseHeader.ariaExpanded = "false";
+      });
+    });
   }
 }
 
@@ -389,7 +368,6 @@ if (bottlesTable) {
       e.target.classList.contains("bottle-count")
     ) {
       save_bottles();
-      updateCollapsibleHeight();
     }
   });
 
@@ -473,32 +451,27 @@ if (form) {
           bottles_used: Object.values(result.combo).reduce((a, b) => a + b, 0),
         };
 
-        if (data.error) {
-          resultDiv.innerHTML = `<p class="text-error"><i data-lucide="circle-x"></i> Error: ${data.error}</p>`;
-          enableSubmitButton();
-        } else {
-          collapseIfTooManyBottles();
-          resultDiv.innerHTML = renderResult(data);
+        collapseIfTooManyBottles();
+        resultDiv.innerHTML = renderResult(data);
 
-          if (window.lucide) lucide.createIcons();
+        if (window.lucide) lucide.createIcons();
 
-          requestAnimationFrame(() => {
-            // Scroll while animation completes to show results at top
-            setTimeout(() => {
-              const resultCards = resultDiv.querySelector(".result-cards");
-              const comboTable = resultDiv.querySelector(".combo-table");
+        requestAnimationFrame(() => {
+          // Scroll while animation completes to show results at top
+          setTimeout(() => {
+            const resultCards = resultDiv.querySelector(".result-cards");
+            const comboTable = resultDiv.querySelector(".combo-table");
 
-              if (resultCards) resultCards.classList.add("show");
-              if (comboTable) comboTable.classList.add("show");
+            if (resultCards) resultCards.classList.add("show");
+            if (comboTable) comboTable.classList.add("show");
 
-              resultDiv.scrollIntoView({
-                behavior: "smooth",
-                block: "start",
-              });
-              enableSubmitButton();
-            }, 300);
-          });
-        }
+            resultDiv.scrollIntoView({
+              behavior: "smooth",
+              block: "start",
+            });
+            enableSubmitButton();
+          }, 300);
+        });
       }, 50);
     });
   });
@@ -654,6 +627,7 @@ window.addEventListener("DOMContentLoaded", () => {
     document.querySelectorAll(".info-icon").forEach((icon) => {
       if (isMobile()) {
         icon.addEventListener("click", (e) => {
+          e.preventDefault();
           e.stopPropagation();
           if (currentIcon === icon) {
             hideTooltip();
@@ -662,6 +636,9 @@ window.addEventListener("DOMContentLoaded", () => {
           }
         });
       } else {
+        icon.addEventListener("click", (e) => {
+          e.preventDefault();
+        });
         icon.addEventListener("mouseenter", () => showTooltip(icon));
         icon.addEventListener("mouseleave", () => hideTooltip());
         icon.addEventListener("focus", () => showTooltip(icon));

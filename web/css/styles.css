@@ -223,6 +223,8 @@ nav {
   justify-content: space-between;
   align-items: center;
   padding: 0.75rem 1.5rem;
+  /* Injected by MainActivity.kt → HTML → CSS var. Falls back to 0px on desktop. */
+  padding-top: calc(0.75rem + var(--safe-area-inset-top, 0px));
   background: rgba(30, 30, 46, 0.95);
   backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--surface0);
@@ -1002,6 +1004,8 @@ ul.feature-list li i[data-lucide] {
 @media (max-width: 768px) {
   nav {
     padding: 0.75rem 1rem;
+    /* Same safe-area fix as desktop nav */
+    padding-top: calc(0.75rem + var(--safe-area-inset-top, 0px));
   }
   nav .logo {
     font-size: 1rem;
@@ -1019,13 +1023,18 @@ ul.feature-list li i[data-lucide] {
     max-height: 0;
     overflow: hidden;
     opacity: 0;
+    pointer-events: none;
+    visibility: hidden;
     transition:
       max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1),
-      opacity 0.3s ease;
+      opacity 0.3s ease,
+      visibility 0.3s ease;
   }
   nav .nav-links.active {
     max-height: 300px;
     opacity: 1;
+    pointer-events: auto;
+    visibility: visible;
   }
   nav .nav-links a {
     padding: 0.75rem 0.5rem;

@@ -2,7 +2,17 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <!-- Android only: reads status bar height from Java bridge, sets as CSS var -->
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        if (window.SafeAreaBridge) {
+          document.documentElement.style.setProperty(
+            '--safe-area-inset-top', SafeAreaBridge.getStatusBarHeight() + 'px'
+          );
+        }
+      });
+    </script>
     <link rel="icon" type="image/x-icon" href="static/favicon.png" />
     <link rel="stylesheet" href="css/overlay.css" />
     <script src="js/animations.js"></script>

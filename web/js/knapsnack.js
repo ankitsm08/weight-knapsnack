@@ -4,7 +4,7 @@
  * @returns {number} weight in kg
  */
 function parseWeight(inputStr) {
-  inputStr = inputStr.toString().toUpperCase().trim();
+  inputStr = inputStr.toString().toLowerCase().trim();
   if (inputStr.endsWith("kg")) return parseFloat(inputStr.slice(0, -2));
   else if (inputStr.endsWith("g"))
     return parseFloat(inputStr.slice(0, -1)) / 1000;
@@ -19,7 +19,7 @@ function parseWeight(inputStr) {
  * @returns {number} weight in grams
  */
 function parseBagWeight(inputStr) {
-  inputStr = inputStr.toString().toUpperCase().trim();
+  inputStr = inputStr.toString().toLowerCase().trim();
   if (inputStr.endsWith("kg"))
     return Math.round(parseFloat(inputStr.slice(0, -2)) * 1000);
   else if (inputStr.endsWith("g"))

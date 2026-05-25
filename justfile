@@ -17,6 +17,8 @@ export JAVA_HOME := java_home
 export NDK_HOME := ndk_home
 export PATH := java_home + "/bin:" + env("PATH")
 
+app_version := `jq -r '.version' src-tauri/tauri.conf.json`
+
 default:
     @just --list
 
@@ -26,7 +28,7 @@ doctor:
     @echo "SDK:  {{ sdk_home }}"
     @echo "JDK:  {{ java_home }}"
     @echo "NDK:  {{ ndk_home }}"
-    @pnpx --version
+    @pnpm --version
     @cargo --version
     @java -version 
     @adb --version
@@ -54,6 +56,22 @@ build-apk:
 # Builds the universal app
 build-apk-universal:
     cargo tauri android build --apk
+
+# Prepares the release files
+prepare-release:
+    just build-apk
+    just build-apk-universal
+    rm -rf ./release/*
+    mkdir -p ./release
+
+    cp ./src-tauri/gen/android/app/build/outputs/apk/arm/release/app-arm-release.apk \
+       ./release/weight-knapsnack-v{{ app_version }}-armeabi-v7a.apk
+
+    cp ./src-tauri/gen/android/app/build/outputs/apk/arm64/release/app-arm64-release.apk \
+       ./release/weight-knapsnack-v{{ app_version }}-arm64-v8a.apk
+
+    cp ./src-tauri/gen/android/app/build/outputs/apk/universal/release/app-universal-release.apk \
+       ./release/weight-knapsnack-v{{ app_version }}-universal.apk
 
 # Cleans the build directory
 clean:

@@ -1,7 +1,13 @@
 /* == Weight Knapsnack - Catppuccin Mocha == */
 
 /* == FONTS == */
-@import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Outfit:wght@300;400;500;600;700&display=swap");
+@font-face {
+  font-family: "Outfit";
+  font-style: normal;
+  font-weight: 300 700;
+  src: url("../fonts/outfit-latin.woff2") format("woff2");
+  font-display: swap;
+}
 
 /* == CSS RESET == */
 *,

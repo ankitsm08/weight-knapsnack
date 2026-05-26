@@ -2,22 +2,50 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
+    <meta
+      name="description"
+      content="About Weight Knapsnack - a free, open-source tool by @ankitsm08 for finding the optimal weighted bottle combination for your workout."
+    />
+    <meta property="og:title" content="About - Weight Knapsnack" />
+    <meta
+      property="og:description"
+      content="Learn about Weight Knapsnack - a free tool to find the right bottle weights for training."
+    />
+    <meta property="og:type" content="website" />
+    <meta
+      property="og:url"
+      content="https://ankitsm08.github.io/weight-knapsnack/about.html"
+    />
+    <link
+      rel="canonical"
+      href="https://ankitsm08.github.io/weight-knapsnack/about.html"
+    />
     <!-- Android only: reads status bar height from Java bridge, sets as CSS var -->
     <script>
-      document.addEventListener('DOMContentLoaded', function () {
+      document.addEventListener("DOMContentLoaded", function () {
         if (window.SafeAreaBridge) {
           document.documentElement.style.setProperty(
-            '--safe-area-inset-top', SafeAreaBridge.getStatusBarHeight() + 'px'
+            "--safe-area-inset-top",
+            SafeAreaBridge.getStatusBarHeight() + "px",
           );
         }
       });
     </script>
     <link rel="icon" type="image/x-icon" href="static/favicon.png" />
+    <link
+      rel="preload"
+      href="fonts/outfit-latin.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
     <link rel="stylesheet" href="css/overlay.css" />
-    <script src="js/animations.js"></script>
     <link rel="stylesheet" href="css/styles.css" />
-    <script src="https://unpkg.com/lucide@0.575.0/dist/umd/lucide.min.js"></script>
+    <script src="js/animations.js"></script>
     <title>About - Weight Knapsnack</title>
   </head>
 
@@ -40,74 +68,76 @@
       </div>
     </nav>
 
-    <section class="center fade-in">
-      <h1>About Knapsnack</h1>
-      <p class="p-icon">
-        Made with <i data-lucide="hand-fist"></i> and a little Indian jugaad
-      </p>
-    </section>
-
-    <section class="center fade-in">
-      <div class="card">
-        <h2 class="h2-icon"><i data-lucide="hand"></i> Hey there</h2>
-        <p>
-          I'm <strong>Ank</strong>, a STEM student and home workout enthusiast
-          who got tired of guessing how much my backpack full of bottles
-          actually weighed. So, instead of buying fancy adjustable weights, I
-          decided to make my own smart solution.
+    <main>
+      <section class="center fade-in">
+        <h1>About Knapsnack</h1>
+        <p class="p-icon">
+          Made with <i data-lucide="hand-fist"></i> and a little Indian jugaad
         </p>
-      </div>
+      </section>
 
-      <div class="card">
-        <h2 class="h2-icon">
-          <i data-lucide="help-circle"></i> What is Knapsnack?
-        </h2>
-        <p>
-          Knapsnack is a lightweight web app that helps you calculate the
-          <strong>best bottle combination</strong> to hit your target workout
-          weight. Whether you're training with backpacks, water bottles, or
-          whatever you can find at home, this tool gives you the most efficient
-          way to load up without overthinking it.
+      <section class="center fade-in">
+        <div class="card">
+          <h2 class="h2-icon"><i data-lucide="hand"></i> Hey there</h2>
+          <p>
+            I'm <strong>Ank</strong>, a STEM student and home workout enthusiast
+            who got tired of guessing how much my backpack full of bottles
+            actually weighed. So, instead of buying fancy adjustable weights, I
+            decided to make my own smart solution.
+          </p>
+        </div>
+
+        <div class="card">
+          <h2 class="h2-icon">
+            <i data-lucide="help-circle"></i> What is Knapsnack?
+          </h2>
+          <p>
+            Knapsnack is a lightweight web app that helps you calculate the
+            <strong>best bottle combination</strong> to hit your target workout
+            weight. Whether you're training with backpacks, water bottles, or
+            whatever you can find at home, this tool gives you the most
+            efficient way to load up without overthinking it.
+          </p>
+        </div>
+
+        <div class="card">
+          <h2 class="h2-icon">
+            <i data-lucide="lightbulb"></i> Why Knapsnack?
+          </h2>
+          <ul class="feature-list">
+            <li class="card card-list">
+              <i data-lucide="zap"></i> Built for home workout lovers who don't
+              have access to a full gym.
+            </li>
+            <li class="card card-list">
+              <i data-lucide="lightbulb"></i> Inspired by classic Indian
+              <i>jugaad</i>, making the best out of what you have.
+            </li>
+            <li class="card card-list">
+              <i data-lucide="backpack"></i> Because sometimes, a bag full of
+              bottles is the only dumbbell you need.
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="center fade-in">
+        <a href="./index.html"
+          ><button class="btn">
+            <i data-lucide="house"></i> Back to Home
+          </button></a
+        >
+        <p class="mt-2 text-muted p-icon">
+          Made with <i data-lucide="hand-fist"></i> and a little Indian jugaad
         </p>
-      </div>
-
-      <div class="card">
-        <h2 class="h2-icon"><i data-lucide="lightbulb"></i> Why Knapsnack?</h2>
-        <ul class="feature-list">
-          <li class="card card-list">
-            <i data-lucide="zap"></i> Built for home workout lovers who don't
-            have access to a full gym.
-          </li>
-          <li class="card card-list">
-            <i data-lucide="lightbulb"></i> Inspired by classic Indian
-            <i>jugaad</i>, making the best out of what you have.
-          </li>
-          <li class="card card-list">
-            <i data-lucide="backpack"></i> Because sometimes, a bag full of
-            bottles is the only dumbbell you need.
-          </li>
-        </ul>
-      </div>
-    </section>
-
-    <section class="center fade-in">
-      <a href="./index.html"
-        ><button class="btn">
-          <i data-lucide="house"></i> Back to Home
-        </button></a
-      >
-      <p class="mt-2 text-muted p-icon">
-        Made with <i data-lucide="hand-fist"></i> and a little Indian jugaad
-      </p>
-    </section>
+      </section>
+    </main>
 
     <footer>
       <p>&copy; <span id="year"></span> Ankit Sharma</p>
     </footer>
 
-    <script src="js/style.js"></script>
-    <script>
-      lucide.createIcons();
-    </script>
+    <script src="js/style.js" defer></script>
+    <script src="js/vendor/lucide.min.js" defer onload="lucide.createIcons()"></script>
   </body>
 </html>

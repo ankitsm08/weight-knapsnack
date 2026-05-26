@@ -2,22 +2,53 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
+    <meta
+      name="description"
+      content="Weight Knapsnack Calculator - use dynamic programming to find the optimal combination of weighted bottles that best matches your target workout weight."
+    />
+    <meta
+      property="og:title"
+      content="Knapsnack Calculator - Weight Knapsnack"
+    />
+    <meta
+      property="og:description"
+      content="Calculate the optimal weighted bottle setup for your target weight with Knapsnack Calculator."
+    />
+    <meta property="og:type" content="website" />
+    <meta
+      property="og:url"
+      content="https://ankitsm08.github.io/weight-knapsnack/knapsnack.html"
+    />
+    <link
+      rel="canonical"
+      href="https://ankitsm08.github.io/weight-knapsnack/knapsnack.html"
+    />
     <!-- Android only: reads status bar height from Java bridge, sets as CSS var -->
     <script>
-      document.addEventListener('DOMContentLoaded', function () {
+      document.addEventListener("DOMContentLoaded", function () {
         if (window.SafeAreaBridge) {
           document.documentElement.style.setProperty(
-            '--safe-area-inset-top', SafeAreaBridge.getStatusBarHeight() + 'px'
+            "--safe-area-inset-top",
+            SafeAreaBridge.getStatusBarHeight() + "px",
           );
         }
       });
     </script>
     <link rel="icon" type="image/x-icon" href="static/favicon.png" />
+    <link
+      rel="preload"
+      href="fonts/outfit-latin.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
     <link rel="stylesheet" href="css/overlay.css" />
-    <script src="js/animations.js"></script>
     <link rel="stylesheet" href="css/styles.css" />
-    <script src="https://unpkg.com/lucide@0.575.0/dist/umd/lucide.min.js"></script>
+    <script src="js/animations.js"></script>
     <title>Knapsnack Calculator - Weight Knapsnack</title>
   </head>
 
@@ -40,162 +71,165 @@
       </div>
     </nav>
 
-    <section class="center fade-in">
-      <h1>Knapsnack Calculator</h1>
-      <p>
-        Enter your bottles, target weight, and bag info to find the best combo!
-      </p>
+    <main>
+      <section class="center fade-in">
+        <h1>Knapsnack Calculator</h1>
+        <p>
+          Enter your bottles, target weight, and bag info to find the best
+          combo!
+        </p>
 
-      <form id="knapsnack-form">
-        <!-- Bottles table - always collapsed with hint -->
-        <div class="card collapsible closed">
-          <div
-            class="collapse-header"
-            role="button"
-            tabindex="0"
-            aria-expanded="false"
-          >
-            <label><i data-lucide="milk"></i> Bottles (weight & count) </label>
-            <span class="collapse-arrow"
-              ><i data-lucide="chevron-down"></i
-            ></span>
-          </div>
-          <div class="collapse-body bottle-table">
-            <table id="bottles-table">
-              <thead>
-                <tr>
-                  <th>Weight (g)</th>
-                  <th>Count</th>
-                  <th></th>
-                </tr>
-              </thead>
-              <tbody></tbody>
-            </table>
-            <button
-              type="button"
-              id="add-bottle-btn"
-              class="btn btn-small center add-bottle"
+        <form id="knapsnack-form">
+          <!-- Bottles table - always collapsed with hint -->
+          <div class="card collapsible closed">
+            <div
+              class="collapse-header"
+              role="button"
+              tabindex="0"
+              aria-expanded="false"
             >
-              <i data-lucide="plus"></i> Add Bottle
-            </button>
-          </div>
-        </div>
-
-        <!-- Row 1: Target Weight + Bag Weight -->
-        <div class="form-row">
-          <div class="card">
-            <label for="target_weight"
-              ><i data-lucide="target"></i> Target Weight (kg)
-              <span
-                class="info-icon"
-                tabindex="0"
-                data-tooltip="How much total weight do you want your backpack to be?"
-                ><i data-lucide="info"></i
+              <label
+                ><i data-lucide="milk"></i> Bottles (weight & count)
+              </label>
+              <span class="collapse-arrow"
+                ><i data-lucide="chevron-down"></i
               ></span>
-            </label>
-            <input
-              type="text"
-              step="0.5"
-              id="target_weight"
-              name="target_weight"
-              placeholder="e.g. 11.5 or 20lb"
-              required
-            />
+            </div>
+            <div class="collapse-body bottle-table">
+              <table id="bottles-table">
+                <thead>
+                  <tr>
+                    <th>Weight (g)</th>
+                    <th>Count</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+              <button
+                type="button"
+                id="add-bottle-btn"
+                class="btn btn-small center add-bottle"
+              >
+                <i data-lucide="plus"></i> Add Bottle
+              </button>
+            </div>
           </div>
-          <div class="card">
-            <label for="bag_weight"
-              ><i data-lucide="backpack"></i> Bag Weight (g)
-              <span
-                class="info-icon"
-                tabindex="0"
-                data-tooltip="Weight of your empty backpack. <br> (optional - leave 0) <br> if you only want bottle weights)"
-                ><i data-lucide="info"></i
-              ></span>
-            </label>
-            <input
-              type="text"
-              step="50"
-              id="bag_weight"
-              name="bag_weight"
-              placeholder="Default: 0g"
-            />
-          </div>
-        </div>
 
-        <!-- Row 2: Overshoot + Ratio + Penalty -->
-        <div class="form-row form-row-3">
-          <div class="card card-checkbox">
-            <label for="allow_overshoot">
+          <!-- Row 1: Target Weight + Bag Weight -->
+          <div class="form-row">
+            <div class="card">
+              <label for="target_weight"
+                ><i data-lucide="target"></i> Target Weight (kg)
+                <span
+                  class="info-icon"
+                  tabindex="0"
+                  data-tooltip="How much total weight do you want your backpack to be?"
+                  ><i data-lucide="info"></i
+                ></span>
+              </label>
               <input
-                type="checkbox"
-                id="allow_overshoot"
-                name="allow_overshoot"
-                checked
+                type="text"
+                step="0.5"
+                id="target_weight"
+                name="target_weight"
+                placeholder="e.g. 11.5 or 20lb"
+                required
               />
-              <i data-lucide="trending-up"></i> Allow overshoot
-              <span
-                class="info-icon"
-                tabindex="0"
-                data-tooltip="Allow the final weight be slightly more than your target. <br> (default - checked)"
-                ><i data-lucide="info"></i
-              ></span>
-            </label>
+            </div>
+            <div class="card">
+              <label for="bag_weight"
+                ><i data-lucide="backpack"></i> Bag Weight (g)
+                <span
+                  class="info-icon"
+                  tabindex="0"
+                  data-tooltip="Weight of your empty backpack. <br> (optional - leave 0) <br> if you only want bottle weights)"
+                  ><i data-lucide="info"></i
+                ></span>
+              </label>
+              <input
+                type="text"
+                step="50"
+                id="bag_weight"
+                name="bag_weight"
+                placeholder="Default: 0g"
+              />
+            </div>
           </div>
-          <div class="card">
-            <label for="overshoot_ratio"
-              ><i data-lucide="sliders"></i> Ratio
-              <span
-                class="info-icon"
-                tabindex="0"
-                data-tooltip="How much extra weight is okay? <br> Lower = stricter, <br> Higher = more flexible. <br> (range - 0 to 1.0, default - 0.5)"
-                ><i data-lucide="info"></i
-              ></span>
-            </label>
-            <input
-              type="number"
-              step="0.1"
-              id="overshoot_ratio"
-              name="overshoot_ratio"
-              placeholder="0.5"
-            />
-          </div>
-          <div class="card">
-            <label for="bottle_penalty"
-              ><i data-lucide="minus-circle"></i> Penalty
-              <span
-                class="info-icon"
-                tabindex="0"
-                data-tooltip="Prefer fewer bottles? <br> Higher = prefer fewer bottles <br> (default - 50)"
-                ><i data-lucide="info"></i
-              ></span>
-            </label>
-            <input
-              type="number"
-              step="10"
-              id="bottle_penalty"
-              name="bottle_penalty"
-              placeholder="50"
-            />
-          </div>
-        </div>
 
-        <button type="submit" class="btn big center">
-          <i data-lucide="calculator"></i> Calculate
-        </button>
-      </form>
+          <!-- Row 2: Overshoot + Ratio + Penalty -->
+          <div class="form-row form-row-3">
+            <div class="card card-checkbox">
+              <label for="allow_overshoot">
+                <input
+                  type="checkbox"
+                  id="allow_overshoot"
+                  name="allow_overshoot"
+                  checked
+                />
+                <i data-lucide="trending-up"></i> Allow overshoot
+                <span
+                  class="info-icon"
+                  tabindex="0"
+                  data-tooltip="Allow the final weight be slightly more than your target. <br> (default - checked)"
+                  ><i data-lucide="info"></i
+                ></span>
+              </label>
+            </div>
+            <div class="card">
+              <label for="overshoot_ratio"
+                ><i data-lucide="sliders"></i> Ratio
+                <span
+                  class="info-icon"
+                  tabindex="0"
+                  data-tooltip="How much extra weight is okay? <br> Lower = stricter, <br> Higher = more flexible. <br> (range - 0 to 1.0, default - 0.5)"
+                  ><i data-lucide="info"></i
+                ></span>
+              </label>
+              <input
+                type="number"
+                step="0.1"
+                id="overshoot_ratio"
+                name="overshoot_ratio"
+                placeholder="0.5"
+              />
+            </div>
+            <div class="card">
+              <label for="bottle_penalty"
+                ><i data-lucide="minus-circle"></i> Penalty
+                <span
+                  class="info-icon"
+                  tabindex="0"
+                  data-tooltip="Prefer fewer bottles? <br> Higher = prefer fewer bottles <br> (default - 50)"
+                  ><i data-lucide="info"></i
+                ></span>
+              </label>
+              <input
+                type="number"
+                step="10"
+                id="bottle_penalty"
+                name="bottle_penalty"
+                placeholder="50"
+              />
+            </div>
+          </div>
 
-      <div id="result"></div>
-    </section>
+          <button type="submit" class="btn big center">
+            <i data-lucide="calculator"></i> Calculate
+          </button>
+        </form>
+
+        <div id="result"></div>
+      </section>
+    </main>
 
     <footer>
       <p>&copy; <span id="year"></span> Ankit Sharma</p>
     </footer>
 
-    <script src="js/knapsnack.js"></script>
-    <script src="js/form.js"></script>
-    <script src="js/style.js"></script>
-    <script>
-      lucide.createIcons();
-    </script>
+    <script src="js/knapsnack.js" defer></script>
+    <script src="js/form.js" defer></script>
+    <script src="js/style.js" defer></script>
+    <script src="js/vendor/lucide.min.js" defer onload="lucide.createIcons()"></script>
   </body>
 </html>

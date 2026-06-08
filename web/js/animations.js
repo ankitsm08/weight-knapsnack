@@ -80,7 +80,10 @@ function scrambleText(element, targetText, duration = 800) {
 // Run page transition overlay - called immediately from head
 async function runPageTransition() {
   const isMobile = window.innerWidth < 768;
-  let titleText = document.title.replace(" - Weight Knapsnack", "");
+  const suffix = " - Weight Knapsnack";
+  let titleText = document.title.endsWith(suffix)
+    ? document.title.slice(0, -suffix.length)
+    : document.title;
   if (isMobile) {
     titleText = titleText.replace(/ /g, "<br>");
   }

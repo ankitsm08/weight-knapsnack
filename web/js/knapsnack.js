@@ -34,15 +34,15 @@ function parseBagWeight(inputStr) {
 /**
  * Dynamic programming solution for knapsack
  * @param {Object.<string, number>} bottles - {weightInGrams: count}
- * @param {number} targetWeight - target weight in GRAMS
- * @param {number} bagWeight - bag weight in GRAMS
+ * @param {number} target_weight - target weight in GRAMS
+ * @param {number} bag_weight - bag weight in GRAMS
  * @param {Object} options - {allow_overshoot, overshoot_ratio, bottle_penalty}
  * @returns {{combo: Object.<number, number>, total: number}}
  */
 function best_combo_dp(bottles, target_weight, bag_weight, options = {}) {
   const allow_overshoot = options.allow_overshoot !== false;
   const overshoot_ratio = parseFloat(options.overshoot_ratio ?? 0.5);
-  const bottle_penalty = parseInt(options.bottle_penalty ?? 50);
+  const bottle_penalty = parseInt(options.bottle_penalty ?? 50, 10);
 
   const required_bottle_weight = target_weight - bag_weight;
   const weights = Object.keys(bottles)
@@ -54,7 +54,7 @@ function best_combo_dp(bottles, target_weight, bag_weight, options = {}) {
     rankA[0] < rankB[0] || (rankA[0] === rankB[0] && rankA[1] < rankB[1]);
 
   // dp table
-  var dp = {
+  let dp = {
     0: { score: Math.abs(required_bottle_weight), numBottles: 0, combo: {} },
   };
 
@@ -63,7 +63,7 @@ function best_combo_dp(bottles, target_weight, bag_weight, options = {}) {
     let new_dp = { ...dp };
 
     for (const cur_weight_str in dp) {
-      const cur_weight = parseInt(cur_weight_str);
+      const cur_weight = parseInt(cur_weight_str, 10);
       const { score, numBottles, combo } = dp[cur_weight];
 
       // For each possible number of bottles for a given weight
@@ -111,7 +111,7 @@ function best_combo_dp(bottles, target_weight, bag_weight, options = {}) {
   let bestOverTotal = 0;
 
   for (const total_weight_str in dp) {
-    const total_weight = parseInt(total_weight_str);
+    const total_weight = parseInt(total_weight_str, 10);
     const { score, numBottles, combo } = dp[total_weight];
 
     const diff = total_weight - required_bottle_weight;

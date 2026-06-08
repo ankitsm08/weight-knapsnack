@@ -28,7 +28,8 @@ function initScrollMargin() {
 }
 
 function initCollapsibles() {
-  document.querySelectorAll(".collapse-header").forEach((header) => {
+  document.querySelectorAll(".collapse-header:not([data-init])").forEach((header) => {
+    header.setAttribute("data-init", "true");
     header.addEventListener("click", () => {
       toggleCollapse(header);
     });

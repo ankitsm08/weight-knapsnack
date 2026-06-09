@@ -22,23 +22,22 @@
     />
     <meta
       name="description"
-      content="Weight Knapsnack - find the optimal combination of weighted bottles for your workout."
+      content="Weight Knapsnack Settings - customize theme, units, and manage your data."
     />
-    <meta property="og:title" content="Weight Knapsnack" />
+    <meta property="og:title" content="Settings - Weight Knapsnack" />
     <meta
       property="og:description"
-      content="Find the best weighted bottle combination for your workout with Weight Knapsnack."
+      content="Customize your Weight Knapsnack experience with theme and data settings."
     />
     <meta property="og:type" content="website" />
     <meta
       property="og:url"
-      content="https://ankitsm08.github.io/weight-knapsnack/"
+      content="https://ankitsm08.github.io/weight-knapsnack/settings.html"
     />
     <link
       rel="canonical"
-      href="https://ankitsm08.github.io/weight-knapsnack/"
+      href="https://ankitsm08.github.io/weight-knapsnack/settings.html"
     />
-    <!-- Android only: reads status bar height from Java bridge, sets as CSS var -->
     <script>
       document.addEventListener("DOMContentLoaded", function () {
         if (window.SafeAreaBridge) {
@@ -61,7 +60,7 @@
     <link rel="stylesheet" href="css/theme.css" />
     <link rel="stylesheet" href="css/styles.css" />
     <script src="js/animations.js"></script>
-    <title>Weight Knapsnack</title>
+    <title>Settings - Weight Knapsnack</title>
   </head>
 
   <body>
@@ -81,36 +80,52 @@
         </div>
       </button>
       <div class="nav-links">
-        <a href="./index.html" class="active">Home</a>
+        <a href="./index.html">Home</a>
         <a href="./knapsnack.html">Knapsnack</a>
-        <a href="./settings.html">Settings</a>
+        <a href="./settings.html" class="active">Settings</a>
         <a href="./about.html">About</a>
       </div>
     </nav>
 
     <main>
       <section class="center">
-        <h1>Weight Knapsnack</h1>
-        <p>Find the optimal bottle combo for your target workout weight.</p>
-      </section>
+        <h1>Settings</h1>
 
-      <section class="center">
-        <div class="dashboard-grid">
-          <a href="./knapsnack.html" class="card dashboard-card">
-            <i data-lucide="calculator"></i>
-            <h3>Calculator</h3>
-            <p>Find the optimal bottle combo for your target weight</p>
-          </a>
-          <a href="./settings.html" class="card dashboard-card">
-            <i data-lucide="settings"></i>
-            <h3>Settings</h3>
-            <p>Theme, units, and data management</p>
-          </a>
-          <a href="./about.html" class="card dashboard-card">
-            <i data-lucide="info"></i>
-            <h3>About</h3>
-            <p>Project info, motivation, and tech stack</p>
-          </a>
+        <div class="card">
+          <h2 class="h2-icon"><i data-lucide="palette"></i> Theme</h2>
+          <div class="theme-toggle">
+            <button id="oled-mode-btn" class="oled-toggle" aria-pressed="false">
+              <i data-lucide="droplet"></i> OLED
+            </button>
+            <button
+              class="theme-btn"
+              data-theme-value="dark"
+              aria-label="Dark mode"
+            >
+              <i data-lucide="moon"></i>
+            </button>
+            <button
+              class="theme-btn"
+              data-theme-value="light"
+              aria-label="Light mode"
+            >
+              <i data-lucide="sun"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2 class="h2-icon"><i data-lucide="ruler"></i> Units</h2>
+          <p class="text-muted">
+            Per-field unit preferences for target weight and bag weight.
+          </p>
+        </div>
+
+        <div class="card">
+          <h2 class="h2-icon">
+            <i data-lucide="database"></i> Data Management
+          </h2>
+          <p class="text-muted">Export, import, and reset all your data.</p>
         </div>
       </section>
     </main>
@@ -121,6 +136,7 @@
 
     <script src="js/storage.js" defer></script>
     <script src="js/ui.js" defer></script>
+    <script src="js/settings.js" defer></script>
     <script src="js/style.js" defer></script>
     <script
       src="js/vendor/lucide.min.js"

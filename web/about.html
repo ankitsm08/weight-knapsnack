@@ -1,6 +1,20 @@
 <!doctype html>
 <html lang="en">
   <head>
+    <!-- Prevent theme flash: apply stored theme before any CSS loads -->
+    <script>
+      (function () {
+        try {
+          var s = JSON.parse(
+            localStorage.getItem("knapsnack_settings") || "{}",
+          );
+          var theme = s.theme || "dark";
+          document.documentElement.setAttribute("data-theme", theme);
+          if (s.oledMode)
+            document.documentElement.setAttribute("data-oled", "true");
+        } catch (e) {}
+      })();
+    </script>
     <meta charset="UTF-8" />
     <meta
       name="viewport"
@@ -44,6 +58,7 @@
       crossorigin="anonymous"
     />
     <link rel="stylesheet" href="css/overlay.css" />
+    <link rel="stylesheet" href="css/theme.css" />
     <link rel="stylesheet" href="css/styles.css" />
     <script src="js/animations.js"></script>
     <title>About - Weight Knapsnack</title>
@@ -54,7 +69,11 @@
       <a href="https://ankitsm08.github.io">
         <div class="logo"><i data-lucide="zap"></i> Ankit Sharma</div>
       </a>
-      <button class="menu-toggle" aria-label="Toggle menu">
+      <button
+        class="menu-toggle"
+        aria-label="Toggle menu"
+        aria-expanded="false"
+      >
         <div class="hamburger">
           <span></span>
           <span></span>
@@ -64,6 +83,7 @@
       <div class="nav-links">
         <a href="./index.html">Home</a>
         <a href="./knapsnack.html">Knapsnack</a>
+        <a href="./settings.html">Settings</a>
         <a href="./about.html" class="active">About</a>
       </div>
     </nav>
@@ -122,6 +142,62 @@
       </section>
 
       <section class="center fade-in">
+        <h2 class="center">Features</h2>
+        <div class="card card-list">
+          <i data-lucide="scale"></i> Flexible input parsing (kg, g, lb) with
+          smart conversions
+        </div>
+        <div class="card card-list">
+          <i data-lucide="database"></i> Persistent bag weight and bottle data
+          with local storage
+        </div>
+        <div class="card card-list">
+          <i data-lucide="pencil-line"></i> Dynamic bottle table editor (add,
+          edit, remove) with defaults
+        </div>
+        <div class="card card-list">
+          <i data-lucide="zap"></i> Optimized dynamic programming algorithm for
+          instant results
+        </div>
+        <div class="card card-list">
+          <i data-lucide="milk"></i> Smart bottle combo selection with penalty
+          and overshoot control
+        </div>
+        <div class="card card-list">
+          <i data-lucide="bar-chart-3"></i> Clean tabular output (weights,
+          counts, diffs) up to 3 decimals
+        </div>
+        <div class="card card-list">
+          <i data-lucide="globe"></i> Runs entirely in browser - no server
+          required
+        </div>
+      </section>
+
+      <section class="center fade-in">
+        <div class="card">
+          <h2 class="h2-icon"><i data-lucide="code"></i> Tech Stack</h2>
+          <ul class="feature-list">
+            <li class="card card-list">
+              <i data-lucide="file-code"></i> Vanilla HTML/CSS/JS, no
+              frameworks, no build step
+            </li>
+            <li class="card card-list">
+              <i data-lucide="palette"></i> Catppuccin theme system with
+              dark/light/OLED modes
+            </li>
+            <li class="card card-list">
+              <i data-lucide="smartphone"></i> Wrapped in Tauri 2 for offline
+              Android APK
+            </li>
+            <li class="card card-list">
+              <i data-lucide="zap"></i> Dynamic programming algorithm for
+              optimal combos
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="center fade-in">
         <a href="./index.html"
           ><button class="btn">
             <i data-lucide="house"></i> Back to Home
@@ -140,6 +216,10 @@
     <script src="js/storage.js" defer></script>
     <script src="js/ui.js" defer></script>
     <script src="js/style.js" defer></script>
-    <script src="js/vendor/lucide.min.js" defer onload="lucide.createIcons()"></script>
+    <script
+      src="js/vendor/lucide.min.js"
+      defer
+      onload="(self.requestIdleCallback || setTimeout)(lucide.createIcons)"
+    ></script>
   </body>
 </html>

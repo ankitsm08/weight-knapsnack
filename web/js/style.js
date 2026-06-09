@@ -28,18 +28,20 @@ function initScrollMargin() {
 }
 
 function initCollapsibles() {
-  document.querySelectorAll(".collapse-header:not([data-init])").forEach((header) => {
-    header.setAttribute("data-init", "true");
-    header.addEventListener("click", () => {
-      toggleCollapse(header);
-    });
-    header.addEventListener("keydown", (e) => {
-      if (e.key === "Enter" || e.key === " ") {
-        e.preventDefault();
+  document
+    .querySelectorAll(".collapse-header:not([data-init])")
+    .forEach((header) => {
+      header.setAttribute("data-init", "true");
+      header.addEventListener("click", () => {
         toggleCollapse(header);
-      }
+      });
+      header.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          toggleCollapse(header);
+        }
+      });
     });
-  });
 }
 
 function initMobileMenu() {

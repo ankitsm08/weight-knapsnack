@@ -24,12 +24,12 @@
   font-size: clamp(2rem, 8vw, 4rem);
   font-weight: 700;
   letter-spacing: 0.05em;
-  color: #fff;
+  color: var(--text);
   text-transform: uppercase;
   font-family: "Outfit", sans-serif;
   text-shadow:
-    0 0 10px rgba(180, 190, 254, 0.8),
-    0 0 15px rgba(180, 190, 254, 0.4);
+    0 0 2px var(--lavender),
+    0 0 8px var(--lavender);
 }
 
 @media (max-width: 600px) {

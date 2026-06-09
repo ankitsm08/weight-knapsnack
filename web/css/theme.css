@@ -1,0 +1,141 @@
+/* == WEIGHT KNAPSNACK THEME SYSTEM == */
+
+/* Dark theme - Catppuccin Mocha (default) */
+:root {
+  --rosewater: #f5e0dc;
+  --flamingo: #f2cdcd;
+  --pink: #f5c2e7;
+  --mauve: #cba6f7;
+  --red: #f38ba8;
+  --maroon: #eba0ac;
+  --peach: #fab387;
+  --yellow: #f9e2af;
+  --green: #a6e3a1;
+  --teal: #94e2d5;
+  --sky: #89dceb;
+  --sapphire: #74c7ec;
+  --blue: #89b4fa;
+  --lavender: #b4befe;
+
+  --text: #cdd6f4;
+  --subtext1: #bac2de;
+  --subtext0: #a6adc8;
+  --overlay2: #9399b2;
+  --overlay1: #7f849c;
+  --overlay0: #6c7086;
+  --surface2: #585b70;
+  --surface1: #45475a;
+  --surface0: #313244;
+  --base: #1e1e2e;
+  --mantle: #181825;
+  --crust: #11111b;
+
+  --more: var(--teal);
+  --less: var(--peach);
+  --success: var(--green);
+  --error: var(--red);
+  --warning: var(--yellow);
+  --info: var(--blue);
+  --accent: var(--lavender);
+  --accent-text: var(--crust);
+  --accent-hover: var(--blue);
+  --card-border: var(--surface1);
+
+  --glow-lavender: 0 0 15px rgba(180, 190, 254, 0.3);
+  --glow-sapphire: 0 0 15px rgba(116, 199, 236, 0.3);
+
+  --nav-bg: rgba(30, 30, 46, 0.95);
+  --bg-glow-1: radial-gradient(
+    ellipse at 20% 20%,
+    rgba(116, 199, 236, 0.12) 0%,
+    transparent 50%
+  );
+  --bg-glow-2: radial-gradient(
+    ellipse at 80% 80%,
+    rgba(203, 166, 247, 0.12) 0%,
+    transparent 50%
+  );
+  --bg-glow-3: radial-gradient(
+    ellipse at 50% 50%,
+    rgba(166, 227, 161, 0.06) 0%,
+    transparent 60%
+  );
+  --bg-grid:
+    linear-gradient(rgba(180, 190, 254, 0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(180, 190, 254, 0.02) 1px, transparent 1px);
+}
+
+/* Light theme - Catppuccin Latte */
+[data-theme="light"] {
+  --rosewater: #dc8a78;
+  --flamingo: #dd7878;
+  --pink: #ea76cb;
+  --mauve: #8839ef;
+  --red: #d20f39;
+  --maroon: #e64553;
+  --peach: #fe640b;
+  --yellow: #df8e1d;
+  --green: #40a02b;
+  --teal: #179299;
+  --sky: #04a5e5;
+  --sapphire: #209fb5;
+  --blue: #1e66f5;
+  --lavender: #7287fd;
+
+  --text: #4c4f69;
+  --subtext1: #5c5f77;
+  --subtext0: #5c5f77;
+  --overlay2: #6c6f85;
+  --overlay1: #7c7f93;
+  --overlay0: #8c8fa1;
+  --surface2: #acb0be;
+  --surface1: #bcc0cc;
+  --surface0: #ccd0da;
+  --base: #eff1f5;
+  --mantle: #e6e9ef;
+  --crust: #dce0e8;
+
+  --accent: var(--lavender);
+  --accent-text: #1e1e2e;
+  --accent-hover: var(--blue);
+  --card-border: var(--surface2);
+
+  --glow-lavender: 0 0 15px rgba(114, 135, 253, 0.35);
+  --glow-sapphire: 0 0 15px rgba(32, 159, 181, 0.35);
+
+  --nav-bg: rgba(239, 241, 245, 0.95);
+  --bg-glow-1: radial-gradient(
+    ellipse at 20% 20%,
+    rgba(32, 159, 181, 0.15) 0%,
+    transparent 50%
+  );
+  --bg-glow-2: radial-gradient(
+    ellipse at 80% 80%,
+    rgba(136, 57, 239, 0.12) 0%,
+    transparent 50%
+  );
+  --bg-glow-3: radial-gradient(
+    ellipse at 50% 50%,
+    rgba(64, 160, 43, 0.08) 0%,
+    transparent 60%
+  );
+  --bg-grid:
+    linear-gradient(rgba(76, 79, 105, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(76, 79, 105, 0.06) 1px, transparent 1px);
+}
+
+/* OLED mode - true black backgrounds, dark mode only */
+[data-theme="dark"][data-oled="true"] {
+  --base: #000000;
+  --mantle: #000000;
+  --crust: #000000;
+  --surface0: #030303;
+  --surface1: #050505;
+  --surface2: #080808;
+
+  --nav-bg: rgba(0, 0, 0, 0.95);
+  --bg-glow-1: none;
+  --bg-glow-2: none;
+  --bg-glow-3: none;
+  --bg-grid: none;
+}

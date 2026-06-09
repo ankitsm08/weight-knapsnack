@@ -9,6 +9,10 @@
     <priority>1.0</priority>
   </url>
   <url>
+    <loc>https://ankitsm08.github.io/weight-knapsnack/settings.html</loc>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://ankitsm08.github.io/weight-knapsnack/about.html</loc>
     <priority>0.5</priority>
   </url>

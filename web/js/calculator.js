@@ -46,8 +46,7 @@ document.addEventListener("DOMContentLoaded", () => {
   function showLoading() {
     if (!resultDiv) return;
     resultDiv.innerHTML = `
-<h2 class="center h2-icon"><i data-lucide="loader" class="text-info" style="animation: spin 1s linear infinite;"></i> &nbsp; Calculating...</h2>
-<style>@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }</style>
+<h2 class="center h2-icon"><i data-lucide="loader" class="text-info spin"></i> &nbsp; Calculating...</h2>
     `;
     UI.renderIcons();
     resultDiv.classList.add("show");
@@ -243,7 +242,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
       if (isNaN(targetWeight) || targetWeight <= 0) {
         enableSubmitButton();
-        showError("Please enter a valid target weight (e.g., 10, 10.5, or 20lb)");
+        showError(
+          "Please enter a valid target weight (e.g., 10, 10.5, or 20lb)",
+        );
         return;
       }
       if (isNaN(bagWeight) || bagWeight < 0) {
@@ -259,10 +260,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const allowOvershoot = formData.get("allow_overshoot") === "on";
       const overshootRatio = parseFloat(formData.get("overshoot_ratio") || 0.5);
-      const bottlePenalty = parseInt(
-        formData.get("bottle_penalty") || 50,
-        10,
-      );
+      const bottlePenalty = parseInt(formData.get("bottle_penalty") || 50, 10);
 
       if (isNaN(overshootRatio) || overshootRatio < 0 || overshootRatio > 1) {
         enableSubmitButton();
@@ -379,8 +377,7 @@ document.addEventListener("DOMContentLoaded", () => {
     bagWeightInput.value = savedBagWeight;
   }
   if (savedAllowOvershoot && allowOvershootInput) {
-    allowOvershootInput.checked =
-      savedAllowOvershoot.toLowerCase() === "true";
+    allowOvershootInput.checked = savedAllowOvershoot.toLowerCase() === "true";
   }
   if (savedOvershootRatio && overshootRatioInput) {
     overshootRatioInput.value = savedOvershootRatio;

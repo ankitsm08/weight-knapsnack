@@ -12,6 +12,8 @@
           document.documentElement.setAttribute("data-theme", theme);
           if (s.oledMode)
             document.documentElement.setAttribute("data-oled", "true");
+          if (window.SafeAreaBridge)
+            SafeAreaBridge.setStatusBarStyle(theme === "light");
         } catch (e) {}
       })();
     </script>

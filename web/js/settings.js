@@ -23,6 +23,8 @@ document.addEventListener("DOMContentLoaded", () => {
     btn.addEventListener("click", () => {
       const theme = btn.dataset.themeValue;
       document.documentElement.setAttribute("data-theme", theme);
+      if (window.SafeAreaBridge)
+        SafeAreaBridge.setStatusBarStyle(theme === "light");
       settings.theme = theme;
       Storage.setSettings(settings);
       themeButtons.forEach((b) => b.classList.remove("active"));

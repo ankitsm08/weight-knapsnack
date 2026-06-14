@@ -53,6 +53,14 @@ icon:
 build-apk:
     cargo tauri android build --apk --target armv7 --target aarch64 --split-per-abi
 
+# Builds the app for armv7
+build-apk-armv7:
+    cargo tauri android build --apk --target armv7 --split-per-abi
+
+# Builds the app for aarch64
+build-apk-aarch64:
+    cargo tauri android build --apk --target aarch64 --split-per-abi
+
 # Builds the universal app
 build-apk-universal:
     cargo tauri android build --apk

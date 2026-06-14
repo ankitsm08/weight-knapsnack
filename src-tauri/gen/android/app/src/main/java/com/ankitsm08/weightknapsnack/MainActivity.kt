@@ -9,12 +9,13 @@
 
 package com.ankitsm08.weightknapsnack
 
-import android.content.Context
-import android.graphics.Color
+import android.app.Activity
 import android.os.Bundle
 import android.webkit.JavascriptInterface
 import android.webkit.WebView
 import androidx.activity.enableEdgeToEdge
+import androidx.core.view.WindowCompat
+import java.lang.ref.WeakReference
 
 class MainActivity : TauriActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
@@ -27,23 +28,44 @@ class MainActivity : TauriActivity() {
   override fun onWebViewCreate(webView: WebView) {
     super.onWebViewCreate(webView)
 
-    // Expose a Java object to JS so the HTML pages can read the status bar height.
+    // Expose a Java object to JS so the HTML pages can read the status bar height
+    // and toggle system bar icon style on theme change.
     // addJavascriptInterface is a standard WebView API (since API 17).
     // Tauri also uses it for its own IPC, but multiple interfaces coexist fine.
     // webView.context is the Application context, not the Activity, so no leak risk.
-    webView.addJavascriptInterface(SafeAreaBridge(webView.context), "SafeAreaBridge")
+    webView.addJavascriptInterface(SafeAreaBridge(webView.context, this), "SafeAreaBridge")
   }
 }
 
-// Called from JS as: window.SafeAreaBridge.getStatusBarHeight()
-// Returns the status bar height in CSS pixels (~24 on most phones).
+// Called from JS as:
+//   window.SafeAreaBridge.getStatusBarHeight()
+//   window.SafeAreaBridge.setStatusBarStyle(lightTheme)
 
-class SafeAreaBridge(private val context: Context) {
+class SafeAreaBridge(
+  private val context: android.content.Context,
+  activity: Activity
+) {
+  private val activityRef = WeakReference(activity)
+
   @JavascriptInterface
   fun getStatusBarHeight(): Int {
     val id = context.resources.getIdentifier("status_bar_height", "dimen", "android")
     val px = if (id > 0) context.resources.getDimensionPixelSize(id) else 0
     val density = context.resources.displayMetrics.density
     return (px / density).toInt()
+  }
+
+  /** Toggle status bar + nav bar icons between light and dark.
+   *  lightTheme=true  -> dark icons  (for light backgrounds)
+   *  lightTheme=false -> light icons (for dark backgrounds).
+   *  Runs on UI thread, so @JavascriptInterface runs on a JS thread. */
+  @JavascriptInterface
+  fun setStatusBarStyle(lightTheme: Boolean) {
+    val activity = activityRef.get() ?: return
+    activity.runOnUiThread {
+      val ctrl = WindowCompat.getInsetsController(activity.window, activity.window.decorView)
+      ctrl.isAppearanceLightStatusBars = lightTheme
+      ctrl.isAppearanceLightNavigationBars = lightTheme
+    }
   }
 }

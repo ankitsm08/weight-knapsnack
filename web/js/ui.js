@@ -39,7 +39,9 @@ const UI = {
       return delta < 0 ? this.getStepForMinus(val) : this.getStepForPlus(val);
     }
     if (input.id === "target_weight") return 0.5;
-    if (input.id === "bag_weight") return 50;
+    if (input.id === "bag_weight" || input.id === "defaults_bag_weight") return 50;
+    if (input.id === "defaults_overshoot_ratio") return 0.1;
+    if (input.id === "defaults_bottle_penalty") return 10;
     if (input.classList.contains("bottle-count")) return 1;
     return parseFloat(input.step) || 1;
   },
@@ -155,7 +157,7 @@ const UI = {
       const text = icon.getAttribute("data-tooltip");
       if (!text) return;
 
-      tooltipText.innerHTML = text;
+      tooltipText.textContent = text.replace(/<br\s*\/?>/gi, "\n");
       currentIcon = icon;
 
       if (isMobile()) {
@@ -243,5 +245,186 @@ const UI = {
         showTooltip(currentIcon);
       }
     });
+  },
+
+  // -- Modal system --
+
+  _modalOverlay: null,
+
+  /**
+   * @param {Object} opts
+   * @param {string} opts.title
+   * @param {string} opts.body
+   * @param {string} [opts.confirmText]
+   * @param {string} [opts.cancelText]
+   * @param {boolean} [opts.danger]
+   * @param {function} [opts.onConfirm]
+   * @param {function} [opts.onCancel]
+   */
+  showModal(opts) {
+    this.closeModal();
+
+    const overlay = document.createElement("div");
+    overlay.className = "modal-overlay";
+    overlay.id = "modal-overlay";
+
+    overlay.innerHTML = `
+<div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+  <h3 id="modal-title">${opts.title}</h3>
+  <div class="modal-body">${opts.body}</div>
+  <div class="modal-actions">
+    <button type="button" class="btn" data-modal-cancel>${opts.cancelText || "Cancel"}</button>
+    <button type="button" class="btn ${opts.danger ? "btn-danger" : "btn-primary"}" data-modal-confirm>${opts.confirmText || "Confirm"}</button>
+  </div>
+</div>`;
+
+    document.body.appendChild(overlay);
+    this._modalOverlay = overlay;
+
+    requestAnimationFrame(() => overlay.classList.add("visible"));
+
+    const close = () => {
+      this.closeModal();
+      if (opts.onCancel) opts.onCancel();
+    };
+
+    overlay.querySelector("[data-modal-cancel]").addEventListener("click", close);
+    overlay.querySelector("[data-modal-confirm]").addEventListener("click", () => {
+      try {
+        if (opts.onConfirm) opts.onConfirm();
+      } finally {
+        this.closeModal();
+      }
+    });
+    overlay.addEventListener("click", (e) => {
+      if (e.target === overlay) close();
+    });
+
+    document.addEventListener("keydown", this._modalKeyHandler = (e) => {
+      if (e.key === "Escape") close();
+    });
+
+    const firstBtn = overlay.querySelector("[data-modal-confirm], [data-modal-cancel]");
+    if (firstBtn) firstBtn.focus();
+  },
+
+  /** Close the current modal */
+  closeModal() {
+    if (this._modalOverlay) {
+      this._modalOverlay.remove();
+      this._modalOverlay = null;
+    }
+    if (this._modalKeyHandler) {
+      document.removeEventListener("keydown", this._modalKeyHandler);
+      this._modalKeyHandler = null;
+    }
+  },
+
+  /**
+   * Promise-based confirm dialog
+   * @param {Object} opts
+   * @param {string} opts.message
+   * @param {string} [opts.confirmText]
+   * @param {string} [opts.cancelText]
+   * @param {boolean} [opts.danger]
+   * @returns {Promise<boolean>}
+   */
+  showConfirm(opts) {
+    return new Promise((resolve) => {
+      this.showModal({
+        title: opts.title || "Confirm",
+        body: `<p>${opts.message}</p>`,
+        confirmText: opts.confirmText,
+        cancelText: opts.cancelText,
+        danger: opts.danger,
+        onConfirm: () => resolve(true),
+        onCancel: () => resolve(false),
+      });
+    });
+  },
+
+  // -- Toast --
+
+  _toastContainer: null,
+
+  /**
+   * @param {Object} opts
+   * @param {string} opts.message
+   * @param {'success'|'error'|'info'|'warning'} [opts.type]
+   * @param {number} [opts.duration]
+   */
+  showToast(opts) {
+    if (!this._toastContainer) {
+      this._toastContainer = document.createElement("div");
+      this._toastContainer.className = "toast-container";
+      document.body.appendChild(this._toastContainer);
+    }
+
+    const toast = document.createElement("div");
+    toast.className = `toast toast-${opts.type || "info"}`;
+    toast.textContent = opts.message;
+    this._toastContainer.appendChild(toast);
+
+    requestAnimationFrame(() => toast.classList.add("visible"));
+
+    setTimeout(() => {
+      toast.classList.remove("visible");
+      setTimeout(() => toast.remove(), 300);
+    }, opts.duration || 3000);
+  },
+
+  // -- Bottle table helpers --
+
+  /**
+   * Add a row to a bottle table
+   * @param {HTMLTableElement} tbody
+   * @param {number|string} [weight]
+   * @param {number|string} [count]
+   * @returns {HTMLTableRowElement}
+   */
+  addTableRow(tbody, weight, count) {
+    const row = document.createElement("tr");
+    row.innerHTML = `
+<td><input type="number" step="1" value="${weight ?? ""}" class="bottle-weight" inputmode="numeric"></td>
+<td><input type="number" step="1" value="${count ?? ""}" class="bottle-count" inputmode="numeric"></td>
+<td><button type="button" class="btn-icon btn-remove-row" aria-label="Remove"><i data-lucide="x"></i></button></td>`;
+    tbody.appendChild(row);
+    this.wrapNumberInput(row.querySelector(".bottle-weight"));
+    this.wrapNumberInput(row.querySelector(".bottle-count"));
+    this.renderIcons();
+    return row;
+  },
+
+  /**
+   * Remove a row from a bottle table
+   * @param {HTMLElement} btn
+   * @param {HTMLTableElement} tbody
+   */
+  removeTableRow(btn, tbody) {
+    if (tbody.rows.length <= 1) {
+      this.showToast({ message: "At least one bottle entry is required", type: "warning" });
+      return;
+    }
+    const row = btn.closest("tr");
+    if (row) row.remove();
+  },
+
+  /**
+   * Read bottle table data into BottleMap format
+   * @param {HTMLTableElement} tbody
+   * @returns {Object<string, {count: number, excluded: boolean}>}
+   */
+  readTableData(tbody) {
+    const bottles = {};
+    tbody.querySelectorAll("tr").forEach((row) => {
+      const cells = row.querySelectorAll("input");
+      const w = parseInt(cells[0]?.value, 10);
+      const c = parseInt(cells[1]?.value, 10);
+      if (w > 0 && c > 0) {
+        if (bottles[w]) bottles[w].count += c;
+        else bottles[w] = { count: c, excluded: false };
+      }
+    });
+    return bottles;
   },
 };

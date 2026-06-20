@@ -1,21 +1,21 @@
 /**
  * Calculator page controller
- * Form handling, bottle table CRUD, DP invocation, result display.
- * Depends on: Storage, UI, parseWeight, parseBagWeight, best_combo_dp
+ * Form handling, profile integration, DP invocation, result display, history.
  */
 
 document.addEventListener("DOMContentLoaded", () => {
   const form = document.getElementById("knapsnack-form");
   const resultDiv = document.getElementById("result");
+  const historySection = document.getElementById("history-section");
+  const profileSelect = document.getElementById("profile-select");
   const targetWeightInput = document.getElementById("target_weight");
   const bagWeightInput = document.getElementById("bag_weight");
   const allowOvershootInput = document.getElementById("allow_overshoot");
   const overshootRatioInput = document.getElementById("overshoot_ratio");
   const bottlePenaltyInput = document.getElementById("bottle_penalty");
-  const bottlesTable = document.getElementById("bottles-table");
-  const addBottleBtn = document.getElementById("add-bottle-btn");
 
   let isCalculating = false;
+  let currentBottles = {};
 
   function enableSubmitButton() {
     isCalculating = false;
@@ -24,6 +24,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function disableSubmitButton() {
+    isCalculating = true;
     const btn = form?.querySelector('button[type="submit"]');
     if (btn) btn.disabled = true;
   }
@@ -34,8 +35,7 @@ document.addEventListener("DOMContentLoaded", () => {
 <h2 class="center h2-icon"><i data-lucide="circle-x" class="text-error"></i> &nbsp; Error</h2>
 <div class="card result-card" style="text-align: left;">
     <p class="text-error" style="margin: 0;">${message}</p>
-</div>
-    `;
+</div>`;
     UI.renderIcons();
     resultDiv.classList.add("show");
     setTimeout(() => {
@@ -46,8 +46,7 @@ document.addEventListener("DOMContentLoaded", () => {
   function showLoading() {
     if (!resultDiv) return;
     resultDiv.innerHTML = `
-<h2 class="center h2-icon"><i data-lucide="loader" class="text-info spin"></i> &nbsp; Calculating...</h2>
-    `;
+<h2 class="center h2-icon"><i data-lucide="loader" class="text-info spin"></i> &nbsp; Calculating...</h2>`;
     UI.renderIcons();
     resultDiv.classList.add("show");
   }
@@ -104,127 +103,163 @@ document.addEventListener("DOMContentLoaded", () => {
         </thead>
         <tbody>${comboRows}</tbody>
     </table>
-</div>
-    `;
+</div>`;
   }
 
-  function addRow(weight = "", count = "") {
-    const tbody = document.querySelector("#bottles-table tbody");
-    if (!tbody) return;
+  function initProfileSelector() {
+    const profiles = Storage.getProfiles();
+    profileSelect.innerHTML = "";
 
-    const row = document.createElement("tr");
-    row.innerHTML = `
-        <td><input type="number" step="1" value="${weight}" class="bottle-weight"></td>
-        <td><input type="number" step="1" value="${count}" class="bottle-count"></td>
-        <td><button type="button" class="btn-icon btn-remove-row"><i data-lucide="x"></i></button></td>
-    `;
-    tbody.appendChild(row);
-    saveTableToStorage();
+    for (const p of profiles.items) {
+      const opt = document.createElement("option");
+      opt.value = p.id;
+      opt.textContent = p.name;
+      opt.selected = p.id === profiles.currentProfileId;
+      profileSelect.appendChild(opt);
+    }
 
-    const weightInput = row.querySelector(".bottle-weight");
-    const countInput = row.querySelector(".bottle-count");
-    if (weightInput) UI.wrapNumberInput(weightInput);
-    if (countInput) UI.wrapNumberInput(countInput);
+    // Preserve manual target/bag when switching profiles
+    let savedTarget = "";
+    let savedBag = "";
 
-    UI.renderIcons();
+    profileSelect.addEventListener("change", () => {
+      savedTarget = targetWeightInput?.value || "";
+      savedBag = bagWeightInput?.value || "";
+      loadProfile(profileSelect.value, savedTarget, savedBag);
+    });
   }
 
-  function removeRow(btn) {
-    const table = document.getElementById("bottles-table");
-    if (!table) return;
-    const tbody = table.querySelector("tbody");
-    if (!tbody || tbody.rows.length <= 1) {
-      alert("At least one bottle entry is required!");
+  function loadProfile(profileId, preserveTarget, preserveBag) {
+    Storage.setCurrentProfileId(profileId);
+    const profile = Storage.getCurrentProfile();
+    if (!profile) return;
+
+    currentBottles = Storage.flattenBottleMap(profile.bottles);
+
+    if (targetWeightInput)
+      targetWeightInput.value = preserveTarget ?? targetWeightInput.value ?? "";
+    if (allowOvershootInput)
+      allowOvershootInput.checked = profile.defaults.allowOvershoot;
+    if (bagWeightInput)
+      bagWeightInput.placeholder = profile.defaults.bagWeight
+        ? `${profile.defaults.bagWeight}`
+        : "0g";
+    if (bagWeightInput)
+      bagWeightInput.value = preserveBag ?? bagWeightInput.value ?? "";
+    if (overshootRatioInput)
+      overshootRatioInput.placeholder = `${profile.defaults.overshootRatio ?? 0.5}`;
+    if (bottlePenaltyInput)
+      bottlePenaltyInput.placeholder = `${profile.defaults.bottlePenalty ?? 50}`;
+
+    // Update profile-select to match
+    if (profileSelect) profileSelect.value = profileId;
+  }
+
+  function renderHistory() {
+    if (!historySection) return;
+    const history = Storage.getHistory();
+    const header = historySection.querySelector(".collapse-header");
+    let label = header?.querySelector("label");
+    if (label) label.textContent = `Calculation History (${history.length})`;
+
+    // Clear history button
+    let clearBtn = header?.querySelector(".history-clear-btn");
+    if (history.length > 0) {
+      if (!clearBtn) {
+        clearBtn = document.createElement("button");
+        clearBtn.className = "history-clear-btn";
+        clearBtn.textContent = "Clear";
+        clearBtn.addEventListener("click", (e) => {
+          e.stopPropagation();
+          Storage.saveHistory([]);
+          renderHistory();
+        });
+        const arrow = header?.querySelector(".collapse-arrow");
+        header?.insertBefore(clearBtn, arrow);
+      }
+    } else if (clearBtn) {
+      clearBtn.remove();
+    }
+
+    const body = historySection.querySelector(".collapse-body");
+    if (!body) return;
+
+    if (history.length === 0) {
+      body.innerHTML = '<p class="history-empty">No calculations yet</p>';
       return;
     }
-    const row = btn.closest("tr");
-    if (row) {
-      row.remove();
-      saveTableToStorage();
-    }
-  }
 
-  function saveTableToStorage() {
-    const bottles = {};
-    document.querySelectorAll("#bottles-table tbody tr").forEach((row) => {
-      const w = parseInt(row.cells[0]?.querySelector("input")?.value, 10);
-      const c = parseInt(row.cells[1]?.querySelector("input")?.value, 10);
-      if (w > 0 && c > 0) {
-        bottles[w] = c;
-      }
-    });
-    Storage.setBottles(bottles);
-    return bottles;
-  }
+    body.innerHTML = history
+      .slice()
+      .reverse()
+      .slice(0, 20)
+      .map((entry) => {
+        const diff = entry.result.total - entry.inputs.targetWeight * 1000;
+        const diffG = Math.round(diff);
+        const diffClass = diffG === 0 ? "match" : diffG > 0 ? "over" : "under";
+        const diffText =
+          diffG === 0 ? "0 g" : `${diffG > 0 ? "+" : ""}${diffG} g`;
 
-  function collapseIfTooManyBottles() {
-    const table = document.getElementById("bottles-table");
-    if (!table) return;
-    const collapsible = table.closest(".card.collapsible");
-    if (!collapsible) return;
-    const collapseBody = collapsible.querySelector(".collapse-body");
-    const collapseHeader = collapsible.querySelector(".collapse-header");
-    if (!collapseBody || !collapseHeader) return;
+        return `<div class="history-entry" data-index="${history.indexOf(entry)}">
+  <span class="history-time">${formatRelativeTime(entry.timestamp)}</span>
+  <span class="history-target">${entry.inputs.targetWeight} kg</span>
+  <span class="history-diff ${diffClass}">${diffText}</span>
+</div>`;
+      })
+      .join("");
 
-    if (table.rows.length > 3 && !collapsible.classList.contains("closed")) {
-      collapseBody.style.height = collapseBody.scrollHeight + "px";
-      requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-          collapseBody.style.height = "0px";
-          collapsible.classList.add("closed");
-          collapseHeader.ariaExpanded = "false";
-        });
+    // Click handler to re-load an entry
+    body.querySelectorAll(".history-entry").forEach((el) => {
+      el.addEventListener("click", () => {
+        const entry = history[el.dataset.index];
+        if (!entry) return;
+
+        if (profileSelect) profileSelect.value = entry.profileId;
+        loadProfile(
+          entry.profileId,
+          entry.inputs.targetWeight,
+          entry.inputs.bagWeight,
+        );
+
+        // Override non-default fields from the entry
+        if (overshootRatioInput)
+          overshootRatioInput.value = entry.inputs.overshootRatio;
+        if (bottlePenaltyInput)
+          bottlePenaltyInput.value = entry.inputs.bottlePenalty;
+        if (allowOvershootInput)
+          allowOvershootInput.checked = entry.inputs.allowOvershoot;
+
+        form?.requestSubmit();
       });
-    }
-  }
-
-  // -- Persistence: save form fields on input --
-  if (targetWeightInput) {
-    targetWeightInput.addEventListener("input", () => {
-      Storage.setTargetWeight(targetWeightInput.value);
-    });
-  }
-  if (bagWeightInput) {
-    bagWeightInput.addEventListener("input", () => {
-      Storage.setBagWeight(bagWeightInput.value);
-    });
-  }
-  if (allowOvershootInput) {
-    allowOvershootInput.addEventListener("input", () => {
-      Storage.setAllowOvershoot(allowOvershootInput.checked);
-    });
-  }
-  if (overshootRatioInput) {
-    overshootRatioInput.addEventListener("input", () => {
-      Storage.setOvershootRatio(overshootRatioInput.value);
-    });
-  }
-  if (bottlePenaltyInput) {
-    bottlePenaltyInput.addEventListener("input", () => {
-      Storage.setBottlePenalty(bottlePenaltyInput.value);
     });
   }
 
-  // -- Bottle table event delegation --
-  if (bottlesTable) {
-    bottlesTable.addEventListener("input", (e) => {
-      if (
-        e.target.classList.contains("bottle-weight") ||
-        e.target.classList.contains("bottle-count")
-      ) {
-        saveTableToStorage();
-      }
+  function addHistoryEntry(targetWeight, bagWeight, result, options) {
+    const profile = Storage.getCurrentProfile();
+    const history = Storage.getHistory();
+    history.push({
+      timestamp: Date.now(),
+      profileId: profile?.id || "",
+      inputs: {
+        targetWeight,
+        bagWeight,
+        overshootRatio: options.overshoot_ratio,
+        bottlePenalty: options.bottle_penalty,
+        allowOvershoot: options.allow_overshoot,
+        maxBottles: null,
+        maxBottlesHard: true,
+      },
+      result: {
+        combo: result.combo,
+        total: result.total,
+      },
     });
-
-    bottlesTable.addEventListener("click", (e) => {
-      const btn = e.target.closest(".btn-remove-row");
-      if (btn) removeRow(btn);
-    });
+    Storage.saveHistory(history);
+    renderHistory();
   }
 
-  if (addBottleBtn) {
-    addBottleBtn.addEventListener("click", () => addRow());
-  }
+  // -- Profile selector --
+  if (profileSelect) initProfileSelector();
 
   // -- Form submission --
   if (form) {
@@ -234,11 +269,15 @@ document.addEventListener("DOMContentLoaded", () => {
       isCalculating = true;
       disableSubmitButton();
 
-      const bottles = saveTableToStorage();
       const formData = new FormData(form);
       const targetWeight = parseWeight(formData.get("target_weight"));
       const targetWeightGrams = targetWeight * 1000;
-      const bagWeight = parseBagWeight(formData.get("bag_weight") || "0");
+
+      const profile = Storage.getCurrentProfile();
+      const rawBag = formData.get("bag_weight");
+      const bagWeight = parseBagWeight(
+        rawBag && rawBag.trim() ? rawBag : profile?.defaults?.bagWeight || "0",
+      );
 
       if (isNaN(targetWeight) || targetWeight <= 0) {
         enableSubmitButton();
@@ -252,15 +291,31 @@ document.addEventListener("DOMContentLoaded", () => {
         showError("Please enter a valid bag weight (e.g., 500 or 1kg)");
         return;
       }
-      if (Object.keys(bottles).length === 0) {
+      if (!profile) {
         enableSubmitButton();
-        showError("Please add at least one bottle to the table");
+        showError("No profile selected. Select or create a profile first.");
+        return;
+      }
+      if (Object.keys(currentBottles).length === 0) {
+        enableSubmitButton();
+        showError("No bottles available. Add bottles in your profile.");
         return;
       }
 
       const allowOvershoot = formData.get("allow_overshoot") === "on";
-      const overshootRatio = parseFloat(formData.get("overshoot_ratio") || 0.5);
-      const bottlePenalty = parseInt(formData.get("bottle_penalty") || 50, 10);
+      const rawRatio = formData.get("overshoot_ratio");
+      const overshootRatio = parseFloat(
+        rawRatio && rawRatio.trim()
+          ? rawRatio
+          : (profile.defaults.overshootRatio ?? 0.5),
+      );
+      const rawPenalty = formData.get("bottle_penalty");
+      const bottlePenalty = parseInt(
+        rawPenalty && rawPenalty.trim()
+          ? rawPenalty
+          : (profile.defaults.bottlePenalty ?? 50),
+        10,
+      );
 
       if (isNaN(overshootRatio) || overshootRatio < 0 || overshootRatio > 1) {
         enableSubmitButton();
@@ -279,7 +334,7 @@ document.addEventListener("DOMContentLoaded", () => {
         setTimeout(() => {
           try {
             const result = best_combo_dp(
-              bottles,
+              currentBottles,
               targetWeightGrams,
               bagWeight,
               {
@@ -300,9 +355,14 @@ document.addEventListener("DOMContentLoaded", () => {
               ),
             };
 
-            collapseIfTooManyBottles();
             resultDiv.innerHTML = renderResult(data);
             UI.renderIcons();
+
+            addHistoryEntry(targetWeight, bagWeight, result, {
+              allow_overshoot: allowOvershoot,
+              overshoot_ratio: overshootRatio,
+              bottle_penalty: bottlePenalty,
+            });
 
             requestAnimationFrame(() => {
               setTimeout(() => {
@@ -327,71 +387,37 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // -- Restore saved data --
-  const saved = Storage.getBottles();
-  const tbody = document.querySelector("#bottles-table tbody");
-  if (!tbody) return;
-
-  tbody.innerHTML = "";
-
-  if (Object.keys(saved).length > 0) {
-    for (const [w, c] of Object.entries(saved)) {
-      addRow(w, c);
-    }
-    collapseIfTooManyBottles();
+  // -- Load current profile on init --
+  const profile = Storage.getCurrentProfile();
+  if (profile) {
+    loadProfile(profile.id);
   } else {
-    const defaults = [
-      [220, 2],
-      [330, 4],
-      [500, 3],
-      [750, 3],
-      [1000, 4],
-      [2000, 3],
-    ];
-    defaults.forEach(([w, c]) => {
-      const row = document.createElement("tr");
-      row.innerHTML = `
-        <td><input type="number" step="1" value="${w}" class="bottle-weight"></td>
-        <td><input type="number" step="1" value="${c}" class="bottle-count"></td>
-        <td><button type="button" class="btn-icon btn-remove-row"><i data-lucide="x"></i></button></td>
-      `;
-      tbody.appendChild(row);
-      const weightInput = row.querySelector(".bottle-weight");
-      const countInput = row.querySelector(".bottle-count");
-      if (weightInput) UI.wrapNumberInput(weightInput);
-      if (countInput) UI.wrapNumberInput(countInput);
-    });
-    UI.renderIcons();
+    showError("No profile found. Create one on the Profiles page.");
+    if (profileSelect) {
+      profileSelect.innerHTML = '<option value="">No profiles</option>';
+    }
   }
 
-  const savedTargetWeight = Storage.getTargetWeight();
-  const savedBagWeight = Storage.getBagWeight();
-  const savedAllowOvershoot = Storage.getAllowOvershoot();
-  const savedOvershootRatio = Storage.getOvershootRatio();
-  const savedBottlePenalty = Storage.getBottlePenalty();
-
-  if (savedTargetWeight && targetWeightInput) {
-    targetWeightInput.value = savedTargetWeight;
-  }
-  if (savedBagWeight && bagWeightInput) {
-    bagWeightInput.value = savedBagWeight;
-  }
-  if (savedAllowOvershoot && allowOvershootInput) {
-    allowOvershootInput.checked = savedAllowOvershoot.toLowerCase() === "true";
-  }
-  if (savedOvershootRatio && overshootRatioInput) {
-    overshootRatioInput.value = savedOvershootRatio;
-  }
-  if (savedBottlePenalty && bottlePenaltyInput) {
-    bottlePenaltyInput.value = savedBottlePenalty;
-  }
-
-  collapseIfTooManyBottles();
-
+  // -- Wrap number inputs --
   if (targetWeightInput) UI.wrapNumberInput(targetWeightInput);
   if (bagWeightInput) UI.wrapNumberInput(bagWeightInput);
   if (overshootRatioInput) UI.wrapNumberInput(overshootRatioInput);
   if (bottlePenaltyInput) UI.wrapNumberInput(bottlePenaltyInput);
 
+  // -- Render history --
+  renderHistory();
+
   UI.initTooltips();
+  function formatRelativeTime(timestamp) {
+    const diff = Date.now() - timestamp;
+    const seconds = Math.floor(diff / 1000);
+    if (seconds < 60) return "just now";
+    const minutes = Math.floor(seconds / 60);
+    if (minutes < 60) return `${minutes}m ago`;
+    const hours = Math.floor(minutes / 60);
+    if (hours < 24) return `${hours}h ago`;
+    const days = Math.floor(hours / 24);
+    if (days < 30) return `${days}d ago`;
+    return new Date(timestamp).toLocaleDateString();
+  }
 });

@@ -46,4 +46,24 @@ document.addEventListener("DOMContentLoaded", () => {
       Storage.setSettings(settings);
     });
   }
+
+  // -- Unit toggles --
+  const unitCycles = {
+    targetWeight: ["kg", "lb"],
+    bagWeight: ["g", "kg", "lb"],
+    bottleWeight: ["g", "kg", "lb"],
+  };
+  settings.units = settings.units || {};
+  document.querySelectorAll(".unit-toggle").forEach((btn) => {
+    const field = btn.dataset.field;
+    btn.textContent = settings.units[field] || unitCycles[field][0];
+    btn.addEventListener("click", () => {
+      const cycle = unitCycles[field];
+      const idx = cycle.indexOf(btn.textContent);
+      const next = cycle[(idx + 1) % cycle.length];
+      btn.textContent = next;
+      settings.units[field] = next;
+      Storage.setSettings(settings);
+    });
+  });
 });

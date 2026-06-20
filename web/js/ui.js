@@ -35,8 +35,12 @@ const UI = {
    */
   getStepForInput(input, delta = 0) {
     if (input.classList.contains("bottle-weight")) {
-      const val = parseFloat(input.value) || 0;
-      return delta < 0 ? this.getStepForMinus(val) : this.getStepForPlus(val);
+      const settings = Storage.getSettings();
+      const bwU = (settings.units || {}).bottleWeight || "g";
+      const gPerBw = bwU === "kg" ? 1000 : bwU === "lb" ? 453.6 : 1;
+      const valG = (parseFloat(input.value) || 0) * gPerBw;
+      const stepG = delta < 0 ? this.getStepForMinus(valG) : this.getStepForPlus(valG);
+      return parseFloat((stepG / gPerBw).toFixed(2));
     }
     if (input.id === "target_weight") return 0.5;
     if (input.id === "bag_weight" || input.id === "defaults_bag_weight") return 50;
@@ -418,7 +422,7 @@ const UI = {
     const bottles = {};
     tbody.querySelectorAll("tr").forEach((row) => {
       const cells = row.querySelectorAll("input");
-      const w = parseInt(cells[0]?.value, 10);
+      const w = parseFloat(cells[0]?.value);
       const c = parseInt(cells[1]?.value, 10);
       if (w > 0 && c > 0) {
         if (bottles[w]) bottles[w].count += c;

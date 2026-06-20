@@ -102,9 +102,39 @@
 
         <div class="card">
           <h2 class="h2-icon"><i data-lucide="ruler"></i> Units</h2>
-          <p class="text-muted">
-            Per-field unit preferences for target weight and bag weight.
-          </p>
+          <div class="units-grid">
+            <div class="units-row">
+              <span>Target Weight</span>
+              <button
+                class="unit-toggle"
+                data-field="targetWeight"
+                aria-label="Toggle target weight unit"
+              >
+                kg
+              </button>
+            </div>
+            <div class="units-row">
+              <span>Bag Weight</span>
+              <button
+                class="unit-toggle"
+                data-field="bagWeight"
+                aria-label="Toggle bag weight unit"
+              >
+                g
+              </button>
+            </div>
+            <div class="units-row">
+              <span>Bottle Weight</span>
+              <button
+                class="unit-toggle"
+                data-field="bottleWeight"
+                aria-label="Toggle bottle weight unit"
+              >
+                g
+              </button>
+            </div>
+          </div>
+          <p class="text-muted">Per-field unit preferences</p>
         </div>
 
         <div class="card">

@@ -5,14 +5,15 @@
  * @param {string} inputStr - The string to parse
  * @returns {number} weight in kg
  */
-function parseWeight(inputStr) {
+function parseWeight(inputStr, defaultUnit) {
   inputStr = inputStr.toString().toLowerCase().trim();
   var m = inputStr.match(/^([\d]+(?:\.[\d]+)?)\s*(kg|g|lb)?$/);
   if (!m) return NaN;
   var val = parseFloat(m[1]);
-  if (m[2] === "kg") return val;
-  if (m[2] === "g") return val / 1000;
-  if (m[2] === "lb") return val * 0.4536;
+  var unit = m[2] || (defaultUnit || "").toLowerCase() || "kg";
+  if (unit === "kg") return val;
+  if (unit === "g") return val / 1000;
+  if (unit === "lb") return val * 0.4536;
   return val;
 }
 
@@ -23,15 +24,16 @@ function parseWeight(inputStr) {
  * @param {string} inputStr - The string to parse
  * @returns {number} weight in grams
  */
-function parseBagWeight(inputStr) {
+function parseBagWeight(inputStr, defaultUnit) {
   inputStr = inputStr.toString().toLowerCase().trim();
   if (inputStr === "") return 0;
   var m = inputStr.match(/^([\d]+(?:\.[\d]+)?)\s*(kg|g|lb)?$/);
   if (!m) return NaN;
   var val = parseFloat(m[1]);
-  if (m[2] === "kg") return Math.round(val * 1000);
-  if (m[2] === "g") return Math.round(val);
-  if (m[2] === "lb") return Math.round(453.6 * val);
+  var unit = m[2] || (defaultUnit || "").toLowerCase() || "g";
+  if (unit === "kg") return Math.round(val * 1000);
+  if (unit === "g") return Math.round(val);
+  if (unit === "lb") return Math.round(453.6 * val);
   return Math.round(val);
 }
 

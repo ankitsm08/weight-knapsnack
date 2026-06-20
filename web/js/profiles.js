@@ -100,14 +100,17 @@ function handleCreateProfile() {
 function createProfile(name) {
   const profiles = Storage.getProfiles();
   const id = Storage._generateId();
+  const bwUnit = (Storage.getSettings().units || {}).bottleWeight || "g";
+  const factor = bwUnit === "kg" ? 0.001 : bwUnit === "lb" ? 1 / 453.6 : 1;
+  const bottles = {};
+  for (const [w, c] of [[220, 2], [330, 4], [500, 3], [750, 3], [1000, 4], [2000, 3]]) {
+    const stored = parseFloat((w * factor).toFixed(3));
+    if (stored > 0) bottles[String(stored)] = { count: c, excluded: false };
+  }
   profiles.items.push({
     id,
     name,
-    bottles: {
-      330: { count: 3, excluded: false },
-      750: { count: 4, excluded: false },
-      1000: { count: 5, excluded: false },
-    },
+    bottles,
     defaults: {
       bagWeight: "",
       overshootRatio: 0.5,
@@ -209,6 +212,7 @@ function duplicateProfile(sourceId, newName) {
 
 function renderProfileContent(profile) {
   const container = document.getElementById("profile-content");
+  const bwUnit = (Storage.getSettings().units || {}).bottleWeight || "g";
 
   container.innerHTML = `
 <div class="card">
@@ -225,7 +229,7 @@ function renderProfileContent(profile) {
   <h3 class="h3-icon"><i data-lucide="settings"></i> Defaults </h3>
   <div class="defaults-grid">
     <div class="card card-compact">
-      <label for="defaults_bag_weight"><i data-lucide="backpack"></i> Bag Weight <span class="unit-label">(g)</span></label>
+      <label for="defaults_bag_weight"><i data-lucide="backpack"></i> Bag Weight <span class="unit-label">(${(Storage.getSettings().units || {}).bagWeight || "g"})</span></label>
       <input type="text" id="defaults_bag_weight" value="${escapeHtml(profile.defaults.bagWeight)}" placeholder="0g">
     </div>
     <div class="card card-compact">
@@ -250,7 +254,7 @@ function renderProfileContent(profile) {
   <div class="bottle-table">
     <table id="profiles-bottles-table">
       <thead>
-        <tr><th>Weight (g)</th><th>Count</th><th></th></tr>
+        <tr><th>Weight (${bwUnit})</th><th>Count</th><th></th></tr>
       </thead>
       <tbody></tbody>
     </table>

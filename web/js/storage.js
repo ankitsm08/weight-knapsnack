@@ -213,9 +213,13 @@ const Storage = {
     }
 
     if (Object.keys(bottles).length === 0) {
+      const settings = this.getSettings();
+      const bwUnit = (settings.units || {}).bottleWeight || "g";
+      const factor = bwUnit === "kg" ? 0.001 : bwUnit === "lb" ? 1 / 453.6 : 1;
       const defaultEntries = [[220, 2], [330, 4], [500, 3], [750, 3], [1000, 4], [2000, 3]];
       for (const [w, c] of defaultEntries) {
-        bottles[w] = { count: c, excluded: false };
+        const stored = parseFloat((w * factor).toFixed(3));
+        if (stored > 0) bottles[String(stored)] = { count: c, excluded: false };
       }
     }
 

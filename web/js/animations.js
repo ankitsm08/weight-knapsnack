@@ -132,34 +132,6 @@ async function runPageTransition() {
   overlay.remove();
 }
 
-// Add scroll-triggered reveal animations to elements
-function initScrollAnimations() {
-  const observer = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add("revealed");
-        }
-      });
-    },
-    { threshold: 0.1 },
-  );
-
-  document.querySelectorAll(".card, section").forEach((el) => {
-    el.classList.add("scroll-reveal");
-    observer.observe(el);
-  });
-}
-
-// Initialize scroll animations when DOM is ready
-function initAnimations() {
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", initScrollAnimations);
-  } else {
-    initScrollAnimations();
-  }
-}
-
 // Run page transition - use MutationObserver to catch body as soon as it's added
 function startPageTransition() {
   if (document.body) {
@@ -178,6 +150,3 @@ function startPageTransition() {
 }
 
 startPageTransition();
-
-// Initialize scroll animations on DOM ready
-initAnimations();

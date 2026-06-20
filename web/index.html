@@ -40,25 +40,7 @@
       rel="canonical"
       href="https://ankitsm08.github.io/weight-knapsnack/"
     />
-    <!-- Android only: reads status bar height from Java bridge, sets as CSS var -->
-    <script>
-      document.addEventListener("DOMContentLoaded", function () {
-        if (window.SafeAreaBridge) {
-          document.documentElement.style.setProperty(
-            "--safe-area-inset-top",
-            SafeAreaBridge.getStatusBarHeight() + "px",
-          );
-        }
-      });
-    </script>
     <link rel="icon" type="image/x-icon" href="static/favicon.png" />
-    <link
-      rel="preload"
-      href="fonts/outfit-latin.woff2"
-      as="font"
-      type="font/woff2"
-      crossorigin="anonymous"
-    />
     <link rel="stylesheet" href="css/overlay.css" />
     <link rel="stylesheet" href="css/theme.css" />
     <link rel="stylesheet" href="css/styles.css" />
@@ -85,6 +67,7 @@
       <div class="nav-links">
         <a href="./index.html" class="active">Home</a>
         <a href="./knapsnack.html">Knapsnack</a>
+        <a href="./profiles.html">Profiles</a>
         <a href="./settings.html">Settings</a>
         <a href="./about.html">About</a>
       </div>
@@ -102,6 +85,11 @@
             <i data-lucide="calculator"></i>
             <h3>Calculator</h3>
             <p>Find the optimal bottle combo for your target weight</p>
+          </a>
+          <a href="./profiles.html" class="card dashboard-card">
+            <i data-lucide="user-cog"></i>
+            <h3>Profiles</h3>
+            <p>Create and manage bottle inventories</p>
           </a>
           <a href="./settings.html" class="card dashboard-card">
             <i data-lucide="settings"></i>

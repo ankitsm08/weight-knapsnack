@@ -3,6 +3,12 @@
  */
 
 document.addEventListener("DOMContentLoaded", () => {
+  if (window.SafeAreaBridge) {
+    document.documentElement.style.setProperty(
+      "--safe-area-inset-top",
+      SafeAreaBridge.getStatusBarHeight() + "px",
+    );
+  }
   initMobileMenu();
   initCollapsibles();
   initDynamicYear();

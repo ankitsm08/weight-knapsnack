@@ -1,34 +1,38 @@
 /**
  * Parse weight string to kg (float)
+ * Supports kg, g, lb suffixes with optional space before unit.
+ * Naked number assumed kg.
  * @param {string} inputStr - The string to parse
  * @returns {number} weight in kg
  */
 function parseWeight(inputStr) {
   inputStr = inputStr.toString().toLowerCase().trim();
-  if (inputStr.endsWith("kg")) return parseFloat(inputStr.slice(0, -2));
-  else if (inputStr.endsWith("g"))
-    return parseFloat(inputStr.slice(0, -1)) / 1000;
-  else if (inputStr.endsWith("lb"))
-    return 0.4536 * parseFloat(inputStr.slice(0, -2));
-  else return parseFloat(inputStr);
+  var m = inputStr.match(/^([\d]+(?:\.[\d]+)?)\s*(kg|g|lb)?$/);
+  if (!m) return NaN;
+  var val = parseFloat(m[1]);
+  if (m[2] === "kg") return val;
+  if (m[2] === "g") return val / 1000;
+  if (m[2] === "lb") return val * 0.4536;
+  return val;
 }
 
 /**
  * Parse bag weight string to grams (integer)
+ * Supports kg, g, lb suffixes with optional space before unit.
+ * Empty string returns 0.
  * @param {string} inputStr - The string to parse
  * @returns {number} weight in grams
  */
 function parseBagWeight(inputStr) {
   inputStr = inputStr.toString().toLowerCase().trim();
-  if (inputStr.endsWith("kg"))
-    return Math.round(parseFloat(inputStr.slice(0, -2)) * 1000);
-  else if (inputStr.endsWith("g"))
-    return Math.round(parseFloat(inputStr.slice(0, -1)));
-  else if (inputStr.endsWith("lb"))
-    return Math.round(453.6 * parseFloat(inputStr.slice(0, -2)));
-  else if (inputStr === "")
-    return 0; // default
-  else return Math.round(parseFloat(inputStr));
+  if (inputStr === "") return 0;
+  var m = inputStr.match(/^([\d]+(?:\.[\d]+)?)\s*(kg|g|lb)?$/);
+  if (!m) return NaN;
+  var val = parseFloat(m[1]);
+  if (m[2] === "kg") return Math.round(val * 1000);
+  if (m[2] === "g") return Math.round(val);
+  if (m[2] === "lb") return Math.round(453.6 * val);
+  return Math.round(val);
 }
 
 /**

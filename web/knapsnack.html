@@ -43,25 +43,7 @@
       rel="canonical"
       href="https://ankitsm08.github.io/weight-knapsnack/knapsnack.html"
     />
-    <!-- Android only: reads status bar height from Java bridge, sets as CSS var -->
-    <script>
-      document.addEventListener("DOMContentLoaded", function () {
-        if (window.SafeAreaBridge) {
-          document.documentElement.style.setProperty(
-            "--safe-area-inset-top",
-            SafeAreaBridge.getStatusBarHeight() + "px",
-          );
-        }
-      });
-    </script>
     <link rel="icon" type="image/x-icon" href="static/favicon.png" />
-    <link
-      rel="preload"
-      href="fonts/outfit-latin.woff2"
-      as="font"
-      type="font/woff2"
-      crossorigin="anonymous"
-    />
     <link rel="stylesheet" href="css/overlay.css" />
     <link rel="stylesheet" href="css/theme.css" />
     <link rel="stylesheet" href="css/styles.css" />
@@ -88,6 +70,7 @@
       <div class="nav-links">
         <a href="./index.html">Home</a>
         <a href="./knapsnack.html" class="active">Knapsnack</a>
+        <a href="./profiles.html">Profiles</a>
         <a href="./settings.html">Settings</a>
         <a href="./about.html">About</a>
       </div>
@@ -97,52 +80,27 @@
       <section class="center fade-in">
         <h1>Knapsnack Calculator</h1>
         <p>
-          Enter your bottles, target weight, and bag info to find the best
+          Select a profile, enter your target weight, and find the best bottle
           combo!
         </p>
 
         <form id="knapsnack-form">
-          <!-- Bottles table - always collapsed with hint -->
-          <div class="card collapsible closed">
-            <div
-              class="collapse-header"
-              role="button"
-              tabindex="0"
-              aria-expanded="false"
-            >
-              <label
-                ><i data-lucide="milk"></i> Bottles (weight & count)
-              </label>
-              <span class="collapse-arrow"
-                ><i data-lucide="chevron-down"></i
-              ></span>
+          <!-- Profile selector -->
+          <div class="card profile-selector">
+            <label><i data-lucide="user-cog"></i> Profile:</label>
+            <div class="select-wrapper">
+              <select id="profile-select" aria-label="Select profile"></select>
+              <i data-lucide="chevron-down" class="select-arrow"></i>
             </div>
-            <div class="collapse-body bottle-table">
-              <table id="bottles-table">
-                <thead>
-                  <tr>
-                    <th>Weight (g)</th>
-                    <th>Count</th>
-                    <th></th>
-                  </tr>
-                </thead>
-                <tbody></tbody>
-              </table>
-              <button
-                type="button"
-                id="add-bottle-btn"
-                class="btn btn-small center add-bottle"
-              >
-                <i data-lucide="plus"></i> Add Bottle
-              </button>
-            </div>
+            <a href="./profiles.html">Manage &rarr;</a>
           </div>
 
           <!-- Row 1: Target Weight + Bag Weight -->
           <div class="form-row">
             <div class="card">
               <label for="target_weight"
-                ><i data-lucide="target"></i> Target Weight (kg)
+                ><i data-lucide="target"></i> Target Weight
+                <span class="unit-label">(kg)</span>
                 <span
                   class="info-icon"
                   tabindex="0"
@@ -161,7 +119,9 @@
             </div>
             <div class="card">
               <label for="bag_weight"
-                ><i data-lucide="backpack"></i> Bag Weight (g)
+                ><i data-lucide="backpack"></i> Bag Weight
+                <span class="unit-label">(g)</span>
+
                 <span
                   class="info-icon"
                   tabindex="0"
@@ -174,7 +134,7 @@
                 step="50"
                 id="bag_weight"
                 name="bag_weight"
-                placeholder="Default: 0g"
+                placeholder="e.g. 500g, 1kg"
               />
             </div>
           </div>
@@ -242,6 +202,23 @@
         </form>
 
         <div id="result"></div>
+
+        <div id="history-section" class="card collapsible closed">
+          <div
+            class="collapse-header"
+            role="button"
+            tabindex="0"
+            aria-expanded="false"
+          >
+            <label><i data-lucide="clock"></i> Calculation History (0)</label>
+            <span class="collapse-arrow"
+              ><i data-lucide="chevron-down"></i
+            ></span>
+          </div>
+          <div class="collapse-body">
+            <p class="history-empty">No calculations yet</p>
+          </div>
+        </div>
       </section>
     </main>
 

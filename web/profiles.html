@@ -1,7 +1,6 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <!-- Prevent theme flash: apply stored theme before any CSS loads -->
     <script>
       (function () {
         try {
@@ -24,28 +23,28 @@
     />
     <meta
       name="description"
-      content="Weight Knapsnack Settings - customize theme, units, and manage your data."
+      content="Weight Knapsnack Profiles - create and manage bottle inventories."
     />
-    <meta property="og:title" content="Settings - Weight Knapsnack" />
+    <meta property="og:title" content="Profiles - Weight Knapsnack" />
     <meta
       property="og:description"
-      content="Customize your Weight Knapsnack experience with theme and data settings."
+      content="Manage your bottle profiles for Weight Knapsnack."
     />
     <meta property="og:type" content="website" />
     <meta
       property="og:url"
-      content="https://ankitsm08.github.io/weight-knapsnack/settings.html"
+      content="https://ankitsm08.github.io/weight-knapsnack/profiles.html"
     />
     <link
       rel="canonical"
-      href="https://ankitsm08.github.io/weight-knapsnack/settings.html"
+      href="https://ankitsm08.github.io/weight-knapsnack/profiles.html"
     />
     <link rel="icon" type="image/x-icon" href="static/favicon.png" />
     <link rel="stylesheet" href="css/overlay.css" />
     <link rel="stylesheet" href="css/theme.css" />
     <link rel="stylesheet" href="css/styles.css" />
     <script src="js/animations.js"></script>
-    <title>Settings - Weight Knapsnack</title>
+    <title>Profiles - Weight Knapsnack</title>
   </head>
 
   <body>
@@ -67,51 +66,31 @@
       <div class="nav-links">
         <a href="./index.html">Home</a>
         <a href="./knapsnack.html">Knapsnack</a>
-        <a href="./profiles.html">Profiles</a>
-        <a href="./settings.html" class="active">Settings</a>
+        <a href="./profiles.html" class="active">Profiles</a>
+        <a href="./settings.html">Settings</a>
         <a href="./about.html">About</a>
       </div>
     </nav>
 
     <main>
-      <section class="center">
-        <h1>Settings</h1>
+      <section class="center profile-page">
+        <h1>Manage Profiles</h1>
 
-        <div class="card">
-          <h2 class="h2-icon"><i data-lucide="palette"></i> Theme</h2>
-          <div class="theme-toggle">
-            <button id="oled-mode-btn" class="oled-toggle" aria-pressed="false">
-              <i data-lucide="droplet"></i> OLED
+        <div class="profile-layout">
+          <aside class="profile-sidebar">
+            <div class="select-wrapper">
+              <select id="profile-mobile-select" class="profile-mobile-select" aria-label="Select profile"></select>
+              <i data-lucide="chevron-down" class="select-arrow"></i>
+            </div>
+            <ul id="profile-list" class="profile-list" role="tablist" aria-label="Profiles"></ul>
+            <button type="button" id="new-profile-btn" class="btn btn-small">
+              <i data-lucide="plus"></i> New Profile
             </button>
-            <button
-              class="theme-btn"
-              data-theme-value="dark"
-              aria-label="Dark mode"
-            >
-              <i data-lucide="moon"></i>
-            </button>
-            <button
-              class="theme-btn"
-              data-theme-value="light"
-              aria-label="Light mode"
-            >
-              <i data-lucide="sun"></i>
-            </button>
+          </aside>
+
+          <div id="profile-content" class="profile-content">
+            <p class="text-muted">Select or create a profile to get started.</p>
           </div>
-        </div>
-
-        <div class="card">
-          <h2 class="h2-icon"><i data-lucide="ruler"></i> Units</h2>
-          <p class="text-muted">
-            Per-field unit preferences for target weight and bag weight.
-          </p>
-        </div>
-
-        <div class="card">
-          <h2 class="h2-icon">
-            <i data-lucide="database"></i> Data Management
-          </h2>
-          <p class="text-muted">Export, import, and reset all your data.</p>
         </div>
       </section>
     </main>
@@ -122,7 +101,7 @@
 
     <script src="js/storage.js" defer></script>
     <script src="js/ui.js" defer></script>
-    <script src="js/settings.js" defer></script>
+    <script src="js/profiles.js" defer></script>
     <script src="js/style.js" defer></script>
     <script
       src="js/vendor/lucide.min.js"

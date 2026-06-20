@@ -40,25 +40,7 @@
       rel="canonical"
       href="https://ankitsm08.github.io/weight-knapsnack/about.html"
     />
-    <!-- Android only: reads status bar height from Java bridge, sets as CSS var -->
-    <script>
-      document.addEventListener("DOMContentLoaded", function () {
-        if (window.SafeAreaBridge) {
-          document.documentElement.style.setProperty(
-            "--safe-area-inset-top",
-            SafeAreaBridge.getStatusBarHeight() + "px",
-          );
-        }
-      });
-    </script>
     <link rel="icon" type="image/x-icon" href="static/favicon.png" />
-    <link
-      rel="preload"
-      href="fonts/outfit-latin.woff2"
-      as="font"
-      type="font/woff2"
-      crossorigin="anonymous"
-    />
     <link rel="stylesheet" href="css/overlay.css" />
     <link rel="stylesheet" href="css/theme.css" />
     <link rel="stylesheet" href="css/styles.css" />
@@ -85,6 +67,7 @@
       <div class="nav-links">
         <a href="./index.html">Home</a>
         <a href="./knapsnack.html">Knapsnack</a>
+        <a href="./profiles.html">Profiles</a>
         <a href="./settings.html">Settings</a>
         <a href="./about.html" class="active">About</a>
       </div>
@@ -200,11 +183,9 @@
       </section>
 
       <section class="center fade-in">
-        <a href="./index.html"
-          ><button class="btn">
-            <i data-lucide="house"></i> Back to Home
-          </button></a
-        >
+        <a href="./index.html" class="btn">
+          <i data-lucide="house"></i> Back to Home
+        </a>
         <p class="mt-2 text-muted p-icon">
           Made with <i data-lucide="hand-fist"></i> and a little Indian jugaad
         </p>

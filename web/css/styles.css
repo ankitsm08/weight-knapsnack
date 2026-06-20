@@ -1365,6 +1365,12 @@ ul.feature-list li i[data-lucide] {
   border-color: var(--accent);
 }
 
+.profile-sidebar-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
 .profile-content {
   flex: 1;
   min-width: 0;
@@ -1460,6 +1466,7 @@ ul.feature-list li i[data-lucide] {
   border: 1px solid var(--surface1);
   font-size: 1rem;
   margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
   font-family: inherit;
 }
 
@@ -1687,6 +1694,16 @@ ul.feature-list li i[data-lucide] {
     display: block;
   }
 
+  .profile-sidebar-buttons {
+    flex-direction: row;
+    flex: 1;
+    min-width: 50%;
+  }
+
+  .profile-sidebar-buttons .btn {
+    flex: 1;
+  }
+
   .profile-name-row {
     flex-direction: column;
     align-items: flex-start;
@@ -1716,5 +1733,26 @@ ul.feature-list li i[data-lucide] {
 
   .defaults-grid {
     grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .profile-sidebar {
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .profile-sidebar .select-wrapper,
+  .profile-mobile-select {
+    width: 100%;
+  }
+
+  .profile-sidebar-buttons {
+    width: 100%;
+    flex-direction: row;
+  }
+
+  .profile-sidebar-buttons .btn {
+    flex: 1;
   }
 }

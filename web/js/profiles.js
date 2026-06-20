@@ -22,6 +22,9 @@ function initProfilesPage() {
   document
     .getElementById("new-profile-btn")
     .addEventListener("click", handleCreateProfile);
+  document
+    .getElementById("duplicate-profile-btn")
+    .addEventListener("click", handleDuplicateProfile);
   document.getElementById("profile-list").addEventListener("click", (e) => {
     const li = e.target.closest("[data-profile-id]");
     if (li) selectProfile(li.dataset.profileId);
@@ -152,6 +155,54 @@ async function deleteProfile(id) {
   if (profiles.currentProfileId === id) {
     profiles.currentProfileId = profiles.items[0].id;
   }
+  Storage.saveProfiles(profiles);
+  loadProfileList();
+}
+
+function handleDuplicateProfile() {
+  const profiles = Storage.getProfiles();
+
+  const options = profiles.items
+    .map((p) => `<option value="${p.id}">${escapeHtml(p.name)}</option>`)
+    .join("");
+
+  const currentId = profiles.currentProfileId;
+  const currentName = profiles.items.find((p) => p.id === currentId)?.name || "";
+
+  UI.showModal({
+    title: "Duplicate Profile",
+    body: `<label for="dup-source-profile">Source profile</label>
+<select id="dup-source-profile" class="modal-input">${options}</select>
+<label for="dup-profile-name">New name</label>
+<input type="text" id="dup-profile-name" class="modal-input" value="${escapeHtml(currentName)} - Copy">`,
+    confirmText: "Duplicate",
+    onConfirm: () => {
+      const sourceId = document.getElementById("dup-source-profile")?.value;
+      const name = document.getElementById("dup-profile-name")?.value.trim();
+      if (!sourceId || !name) return;
+      duplicateProfile(sourceId, name);
+    },
+  });
+
+  document.getElementById("dup-source-profile").value = currentId;
+
+  requestAnimationFrame(() => {
+    const input = document.getElementById("dup-profile-name");
+    if (input) { input.focus(); input.select(); }
+  });
+}
+
+function duplicateProfile(sourceId, newName) {
+  const profiles = Storage.getProfiles();
+  if (profiles.items.some((p) => p.name === newName)) {
+    UI.showToast({ message: "A profile with that name already exists", type: "warning" });
+    return;
+  }
+  const source = profiles.items.find((p) => p.id === sourceId);
+  if (!source) return;
+  const id = Storage._generateId();
+  profiles.items.push({ ...JSON.parse(JSON.stringify(source)), id, name: newName });
+  profiles.currentProfileId = id;
   Storage.saveProfiles(profiles);
   loadProfileList();
 }

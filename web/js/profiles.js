@@ -99,6 +99,10 @@ function handleCreateProfile() {
 
 function createProfile(name) {
   const profiles = Storage.getProfiles();
+  if (profiles.items.some((p) => p.name === name)) {
+    UI.showToast({ message: "A profile with that name already exists", type: "warning" });
+    return;
+  }
   const id = Storage._generateId();
   const bwUnit = (Storage.getSettings().units || {}).bottleWeight || "g";
   const factor = bwUnit === "kg" ? 0.001 : bwUnit === "lb" ? 1 / 453.6 : 1;
@@ -128,6 +132,10 @@ function createProfile(name) {
 function renameProfile(id, newName) {
   if (!newName.trim()) return;
   const profiles = Storage.getProfiles();
+  if (profiles.items.some((p) => p.name === newName && p.id !== id)) {
+    UI.showToast({ message: "A profile with that name already exists", type: "warning" });
+    return;
+  }
   const profile = profiles.items.find((p) => p.id === id);
   if (profile) {
     profile.name = newName.trim();
@@ -229,21 +237,22 @@ function renderProfileContent(profile) {
   <h3 class="h3-icon"><i data-lucide="settings"></i> Defaults </h3>
   <div class="defaults-grid">
     <div class="card card-compact">
-      <label for="defaults_bag_weight"><i data-lucide="backpack"></i> Bag Weight <span class="unit-label">(${(Storage.getSettings().units || {}).bagWeight || "g"})</span></label>
+      <label for="defaults_bag_weight"><i data-lucide="backpack"></i> Bag Weight <span class="unit-label">(${(Storage.getSettings().units || {}).bagWeight || "g"})</span><span class="info-icon" tabindex="0" data-tooltip="Weight of your empty backpack. &lt;br&gt; (optional - leave 0) &lt;br&gt; if you only want bottle weights)"><i data-lucide="info"></i></span></label>
       <input type="text" id="defaults_bag_weight" value="${escapeHtml(profile.defaults.bagWeight)}" placeholder="0g">
     </div>
     <div class="card card-compact">
-      <label for="defaults_overshoot_ratio"><i data-lucide="sliders"></i> Overshoot Ratio</label>
+      <label for="defaults_overshoot_ratio"><i data-lucide="sliders"></i> Overshoot Ratio<span class="info-icon" tabindex="0" data-tooltip="How much extra weight is okay? &lt;br&gt; Lower = stricter, &lt;br&gt; Higher = more flexible. &lt;br&gt; (range - 0 to 1.0, default - 0.5)"><i data-lucide="info"></i></span></label>
       <input type="number" step="0.1" id="defaults_overshoot_ratio" value="${profile.defaults.overshootRatio}" placeholder="0.5">
     </div>
     <div class="card card-compact">
-      <label for="defaults_bottle_penalty"><i data-lucide="minus-circle"></i> Bottle Penalty</label>
+      <label for="defaults_bottle_penalty"><i data-lucide="minus-circle"></i> Bottle Penalty<span class="info-icon" tabindex="0" data-tooltip="Prefer fewer bottles? &lt;br&gt; Higher = prefer fewer bottles &lt;br&gt; (default - 50)"><i data-lucide="info"></i></span></label>
       <input type="number" step="10" id="defaults_bottle_penalty" value="${profile.defaults.bottlePenalty}" placeholder="50">
     </div>
     <div class="card card-compact checkbox-cell">
       <label class="checkbox-label">
         <input type="checkbox" id="defaults_allow_overshoot"${profile.defaults.allowOvershoot ? " checked" : ""}>
         <i data-lucide="trending-up"></i> Allow overshoot
+        <span class="info-icon" tabindex="0" data-tooltip="Allow the final weight be slightly more than your target. &lt;br&gt; (default - checked)"><i data-lucide="info"></i></span>
       </label>
     </div>
   </div>
@@ -329,6 +338,7 @@ function renderProfileContent(profile) {
   }
 
   UI.renderIcons();
+  UI.initTooltips();
 }
 
 function startInlineRename(profileId) {

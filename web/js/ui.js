@@ -400,15 +400,26 @@ const UI = {
    * @param {HTMLTableElement} tbody
    * @param {number|string} [weight]
    * @param {number|string} [count]
+   * @param {boolean} [excluded]
    * @returns {HTMLTableRowElement}
    */
-  addTableRow(tbody, weight, count) {
+  addTableRow(tbody, weight, count, excluded = false) {
     const row = document.createElement("tr");
     row.innerHTML = `
+<td><button type="button" class="bottle-toggle${excluded ? "" : " checked"}" data-excluded="${excluded}" aria-label="Toggle include/exclude"><i data-lucide="check"></i></button></td>
 <td><input type="number" step="1" value="${weight ?? ""}" class="bottle-weight" inputmode="numeric"></td>
 <td><input type="number" step="1" value="${count ?? ""}" class="bottle-count" inputmode="numeric"></td>
 <td><button type="button" class="btn-icon btn-remove-row" aria-label="Remove"><i data-lucide="x"></i></button></td>`;
     tbody.appendChild(row);
+
+    const toggle = row.querySelector(".bottle-toggle");
+    toggle.addEventListener("click", () => {
+      const nowExcluded = toggle.dataset.excluded !== "true";
+      toggle.dataset.excluded = String(nowExcluded);
+      toggle.classList.toggle("checked", !nowExcluded);
+      tbody.dispatchEvent(new Event("input", { bubbles: true }));
+    });
+
     this.wrapNumberInput(row.querySelector(".bottle-weight"));
     this.wrapNumberInput(row.querySelector(".bottle-count"));
     this.renderIcons();
@@ -438,11 +449,13 @@ const UI = {
     const bottles = {};
     tbody.querySelectorAll("tr").forEach((row) => {
       const cells = row.querySelectorAll("input");
+      const toggle = row.querySelector(".bottle-toggle");
       const w = parseFloat(cells[0]?.value);
       const c = parseInt(cells[1]?.value, 10);
+      const excluded = toggle ? toggle.dataset.excluded === "true" : false;
       if (w > 0 && c > 0) {
         if (bottles[w]) bottles[w].count += c;
-        else bottles[w] = { count: c, excluded: false };
+        else bottles[w] = { count: c, excluded };
       }
     });
     return bottles;

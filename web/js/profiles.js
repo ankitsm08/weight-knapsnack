@@ -263,7 +263,7 @@ function renderProfileContent(profile) {
   <div class="bottle-table">
     <table id="profiles-bottles-table">
       <thead>
-        <tr><th>Weight (${bwUnit})</th><th>Count</th><th></th></tr>
+        <tr><th></th><th>Weight (${bwUnit})</th><th>Count</th><th></th></tr>
       </thead>
       <tbody></tbody>
     </table>
@@ -276,7 +276,7 @@ function renderProfileContent(profile) {
   const bottleEntries = Object.entries(profile.bottles);
   if (bottleEntries.length > 0) {
     for (const [w, entry] of bottleEntries) {
-      UI.addTableRow(tbody, w, entry.count);
+      UI.addTableRow(tbody, w, entry.count, entry.excluded);
     }
   }
 

@@ -356,6 +356,29 @@ section.profile-page {
   background: rgba(243, 139, 168, 0.1);
 }
 
+.bottle-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  padding: 0;
+  border: 1px solid var(--surface2);
+  border-radius: 6px;
+  background: transparent;
+  color: transparent;
+  cursor: pointer;
+  transition:
+    background 0.1s ease,
+    color 0.2s ease,
+    border-color 0.2s ease;
+}
+.bottle-toggle.checked {
+  background: var(--base);
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
 .btn-small {
   background: var(--accent);
   color: var(--accent-text);
@@ -795,8 +818,10 @@ span.collapse-arrow {
   text-align: center;
 }
 
-.bottle-table th:nth-child(3),
-.bottle-table td:nth-child(3) {
+.bottle-table th:nth-child(1),
+.bottle-table td:nth-child(1),
+.bottle-table th:nth-child(4),
+.bottle-table td:nth-child(4) {
   width: 1%;
   white-space: nowrap;
   padding-left: 0.25rem;

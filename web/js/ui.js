@@ -39,11 +39,13 @@ const UI = {
       const bwU = (settings.units || {}).bottleWeight || "g";
       const gPerBw = bwU === "kg" ? 1000 : bwU === "lb" ? 453.6 : 1;
       const valG = (parseFloat(input.value) || 0) * gPerBw;
-      const stepG = delta < 0 ? this.getStepForMinus(valG) : this.getStepForPlus(valG);
+      const stepG =
+        delta < 0 ? this.getStepForMinus(valG) : this.getStepForPlus(valG);
       return parseFloat((stepG / gPerBw).toFixed(2));
     }
     if (input.id === "target_weight") return 0.5;
-    if (input.id === "bag_weight" || input.id === "defaults_bag_weight") return 50;
+    if (input.id === "bag_weight" || input.id === "defaults_bag_weight")
+      return 50;
     if (input.id === "defaults_overshoot_ratio") return 0.1;
     if (input.id === "defaults_bottle_penalty") return 10;
     if (input.classList.contains("bottle-count")) return 1;
@@ -129,7 +131,9 @@ const UI = {
   renderIcons(options) {
     if (window.lucide) {
       lucide.createIcons(options);
-      document.querySelectorAll('[data-lucide]').forEach(el => el.setAttribute('aria-hidden', 'true'));
+      document
+        .querySelectorAll("[data-lucide]")
+        .forEach((el) => el.setAttribute("aria-hidden", "true"));
     }
   },
 
@@ -274,7 +278,6 @@ const UI = {
 
     const overlay = document.createElement("div");
     overlay.className = "modal-overlay";
-    overlay.id = "modal-overlay";
 
     overlay.innerHTML = `
 <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
@@ -294,26 +297,35 @@ const UI = {
       if (opts.onCancel) opts.onCancel();
     };
 
-    overlay.querySelector("[data-modal-cancel]").addEventListener("click", close);
-    overlay.querySelector("[data-modal-confirm]").addEventListener("click", () => {
-      try {
-        if (opts.onConfirm) opts.onConfirm();
-      } finally {
-        this.closeModal();
-      }
-    });
+    overlay
+      .querySelector("[data-modal-cancel]")
+      .addEventListener("click", close);
+    overlay
+      .querySelector("[data-modal-confirm]")
+      .addEventListener("click", () => {
+        try {
+          if (opts.onConfirm) opts.onConfirm();
+        } finally {
+          this.closeModal();
+        }
+      });
     overlay.addEventListener("click", (e) => {
       if (e.target === overlay) close();
     });
 
-    document.addEventListener("keydown", this._modalKeyHandler = (e) => {
-      if (e.key === "Escape") close();
-    });
+    document.addEventListener(
+      "keydown",
+      (this._modalKeyHandler = (e) => {
+        if (e.key === "Escape") close();
+      }),
+    );
 
     requestAnimationFrame(() => {
       overlay.classList.add("visible");
       this._untrapFocus = trapFocus(overlay);
-      const firstBtn = overlay.querySelector("[data-modal-confirm], [data-modal-cancel]");
+      const firstBtn = overlay.querySelector(
+        "[data-modal-confirm], [data-modal-cancel]",
+      );
       if (firstBtn) firstBtn.focus();
     });
   },
@@ -433,7 +445,10 @@ const UI = {
    */
   removeTableRow(btn, tbody) {
     if (tbody.rows.length <= 1) {
-      this.showToast({ message: "At least one bottle entry is required", type: "warning" });
+      this.showToast({
+        message: "At least one bottle entry is required",
+        type: "warning",
+      });
       return;
     }
     const row = btn.closest("tr");

@@ -39,6 +39,7 @@
       rel="canonical"
       href="https://ankitsm08.github.io/weight-knapsnack/profiles.html"
     />
+    <meta name="theme-color" content="#1e1e2e" />
     <link rel="icon" type="image/x-icon" href="static/favicon.png" />
     <link rel="stylesheet" href="css/overlay.css" />
     <link rel="stylesheet" href="css/theme.css" />
@@ -81,15 +82,28 @@
         <div class="profile-layout">
           <aside class="profile-sidebar">
             <div class="select-wrapper">
-              <select id="profile-mobile-select" class="profile-mobile-select" aria-label="Select profile"></select>
+              <select
+                id="profile-mobile-select"
+                class="profile-mobile-select"
+                aria-label="Select profile"
+              ></select>
               <i data-lucide="chevron-down" class="select-arrow"></i>
             </div>
-            <ul id="profile-list" class="profile-list" role="tablist" aria-label="Profiles"></ul>
+            <ul
+              id="profile-list"
+              class="profile-list"
+              role="tablist"
+              aria-label="Profiles"
+            ></ul>
             <div class="profile-sidebar-buttons">
               <button type="button" id="new-profile-btn" class="btn btn-small">
                 <i data-lucide="plus"></i> New Profile
               </button>
-              <button type="button" id="duplicate-profile-btn" class="btn btn-small">
+              <button
+                type="button"
+                id="duplicate-profile-btn"
+                class="btn btn-small"
+              >
                 <i data-lucide="copy"></i> Duplicate
               </button>
             </div>
@@ -114,7 +128,14 @@
     <script
       src="js/vendor/lucide.min.js"
       defer
-      onload="(self.requestIdleCallback || setTimeout)(function(){lucide.createIcons();document.querySelectorAll('[data-lucide]').forEach(function(e){e.setAttribute('aria-hidden','true')})})"
+      onload="UI.renderIcons()"
     ></script>
+    <div
+      id="a11y-live"
+      class="sr-only"
+      aria-live="polite"
+      aria-atomic="true"
+    ></div>
   </body>
 </html>
+

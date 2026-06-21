@@ -40,6 +40,7 @@
       rel="canonical"
       href="https://ankitsm08.github.io/weight-knapsnack/settings.html"
     />
+    <meta name="theme-color" content="#1e1e2e" />
     <link rel="icon" type="image/x-icon" href="static/favicon.png" />
     <link rel="stylesheet" href="css/overlay.css" />
     <link rel="stylesheet" href="css/theme.css" />
@@ -81,7 +82,11 @@
 
         <div class="card">
           <h2 class="h2-icon"><i data-lucide="palette"></i> Theme</h2>
-          <div class="theme-toggle" role="radiogroup" aria-label="Theme selection">
+          <div
+            class="theme-toggle"
+            role="radiogroup"
+            aria-label="Theme selection"
+          >
             <button id="oled-mode-btn" class="oled-toggle" aria-pressed="false">
               <i data-lucide="droplet"></i> OLED
             </button>
@@ -148,13 +153,25 @@
             <i data-lucide="database"></i> Data Management
           </h2>
           <div class="data-toggle">
-            <button class="data-btn" data-action="export" aria-label="Export settings and profiles">
+            <button
+              class="data-btn"
+              data-action="export"
+              aria-label="Export settings and profiles"
+            >
               <i data-lucide="file-down"></i> Export
             </button>
-            <button class="data-btn" data-action="export-all" aria-label="Export everything including history">
+            <button
+              class="data-btn"
+              data-action="export-all"
+              aria-label="Export everything including history"
+            >
               <i data-lucide="archive"></i> Export All
             </button>
-            <button class="data-btn" data-action="import" aria-label="Import data from a JSON file">
+            <button
+              class="data-btn"
+              data-action="import"
+              aria-label="Import data from a JSON file"
+            >
               <i data-lucide="file-up"></i> Import
             </button>
           </div>
@@ -169,14 +186,20 @@
 
     <script src="js/storage.js" defer></script>
     <script src="js/ui.js" defer></script>
-    <script src="js/export-import.js" defer></script>
     <script src="js/accessibility.js" defer></script>
+    <script src="js/export-import.js" defer></script>
     <script src="js/settings.js" defer></script>
     <script src="js/style.js" defer></script>
     <script
       src="js/vendor/lucide.min.js"
       defer
-      onload="(self.requestIdleCallback || setTimeout)(function(){lucide.createIcons();document.querySelectorAll('[data-lucide]').forEach(function(e){e.setAttribute('aria-hidden','true')})})"
+      onload="UI.renderIcons()"
     ></script>
+    <div
+      id="a11y-live"
+      class="sr-only"
+      aria-live="polite"
+      aria-atomic="true"
+    ></div>
   </body>
 </html>

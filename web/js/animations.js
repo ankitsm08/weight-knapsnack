@@ -91,7 +91,7 @@ async function runPageTransition() {
   const overlay = document.createElement("div");
   overlay.id = "animation-overlay";
   overlay.innerHTML = `
-    <div class="animation-container">
+    <div>
       <h1 id="anim-title" class="anim-title">${titleText}</h1>
     </div>
   `;

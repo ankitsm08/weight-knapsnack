@@ -8,7 +8,9 @@ const KG_TO_LB = 0.4536;
 function fmtNum(num, decimals) {
   const n = Number(num);
   if (isNaN(n)) return String(num);
-  return parseFloat(n.toFixed(decimals === undefined ? 3 : decimals)).toString();
+  return parseFloat(
+    n.toFixed(decimals === undefined ? 3 : decimals),
+  ).toString();
 }
 
 function formatRelativeTime(timestamp) {
@@ -82,11 +84,14 @@ document.addEventListener("DOMContentLoaded", () => {
     const _fmt = (kg, unit) =>
       unit === "lb" ? `${fmtNum(kg / KG_TO_LB)} lb` : `${fmtNum(kg)} kg`;
     const _fmtBag = (kg) =>
-      bUnit === "lb" ? `${fmtNum(kg / KG_TO_LB)} lb`
-        : bUnit === "kg" ? `${fmtNum(kg)} kg`
+      bUnit === "lb"
+        ? `${fmtNum(kg / KG_TO_LB)} lb`
+        : bUnit === "kg"
+          ? `${fmtNum(kg)} kg`
           : `${(kg * 1000).toFixed(0)} g`;
     const _diffText = (diffG) =>
-      diffG === 0 ? "(=)"
+      diffG === 0
+        ? "(=)"
         : tUnit === "lb"
           ? `${diffG > 0 ? "+" : ""}${fmtNum(diffG / (KG_TO_LB * 1000))} lb`
           : `${diffG > 0 ? "+" : ""}${Math.round(diffG)} g`;
@@ -264,15 +269,18 @@ document.addEventListener("DOMContentLoaded", () => {
         const hasExplicit = raw && /(?:kg|g|lb)$/i.test(raw.trim());
         const displayTarget = hasExplicit
           ? raw
-          : fmtNum(raw || entry.inputs.targetWeight) + " " + (eUnit === "lb" ? "lb" : "kg");
+          : fmtNum(raw || entry.inputs.targetWeight) +
+            " " +
+            (eUnit === "lb" ? "lb" : "kg");
 
         const diff = entry.result.total - entry.inputs.targetWeight * 1000;
         const diffClass = diff === 0 ? "match" : diff > 0 ? "over" : "under";
-        const diffText = diff === 0
-          ? "0"
-          : eUnit === "lb"
-            ? `${diff > 0 ? "+" : ""}${fmtNum(diff / (KG_TO_LB * 1000))}`
-            : `${diff > 0 ? "+" : ""}${Math.round(diff)}`;
+        const diffText =
+          diff === 0
+            ? "0"
+            : eUnit === "lb"
+              ? `${diff > 0 ? "+" : ""}${fmtNum(diff / (KG_TO_LB * 1000))}`
+              : `${diff > 0 ? "+" : ""}${Math.round(diff)}`;
         const diffLabel = eUnit === "lb" ? "lb" : "g";
 
         return `<div class="history-entry" data-index="${history.indexOf(entry)}">
@@ -289,7 +297,9 @@ document.addEventListener("DOMContentLoaded", () => {
     const eUnit = entry.inputs.targetUnit || "kg";
     const parts = raw && raw.match(/^([\d.]+)\s*(kg|g|lb)?$/i);
 
-    let num = parts ? parseFloat(parts[1]) : parseFloat(raw || entry.inputs.targetWeight);
+    let num = parts
+      ? parseFloat(parts[1])
+      : parseFloat(raw || entry.inputs.targetWeight);
     if (isNaN(num)) return String(entry.inputs.targetWeight);
 
     // Convert from stored unit to kg
@@ -305,7 +315,15 @@ document.addEventListener("DOMContentLoaded", () => {
     return fmtNum(num);
   }
 
-  function addHistoryEntry(targetWeight, bagWeight, result, options, targetUnit, rawTargetWeight, kgPerBw) {
+  function addHistoryEntry(
+    targetWeight,
+    bagWeight,
+    result,
+    options,
+    targetUnit,
+    rawTargetWeight,
+    kgPerBw,
+  ) {
     const profile = Storage.getCurrentProfile();
     const history = Storage.getHistory();
     history.push({
@@ -342,8 +360,11 @@ document.addEventListener("DOMContentLoaded", () => {
       disableSubmitButton();
 
       const formData = new FormData(form);
-      const units = (Storage.getSettings().units) || {};
-      const targetWeight = parseWeight(formData.get("target_weight"), units.targetWeight);
+      const units = Storage.getSettings().units || {};
+      const targetWeight = parseWeight(
+        formData.get("target_weight"),
+        units.targetWeight,
+      );
 
       const profile = Storage.getCurrentProfile();
       const rawBag = formData.get("bag_weight");
@@ -391,8 +412,7 @@ document.addEventListener("DOMContentLoaded", () => {
       );
 
       const rawMax = formData.get("max_bottles");
-      const maxBottles = parseInt(rawMax && rawMax.trim() ? rawMax : 0, 10,
-      );
+      const maxBottles = parseInt(rawMax && rawMax.trim() ? rawMax : 0, 10);
 
       if (isNaN(overshootRatio) || overshootRatio < 0 || overshootRatio > 1) {
         enableSubmitButton();
@@ -412,7 +432,8 @@ document.addEventListener("DOMContentLoaded", () => {
           try {
             const bwU = units.bottleWeight || "g";
             const kgToBw = bwU === "g" ? 1000 : bwU === "lb" ? 1 / KG_TO_LB : 1;
-            const gToBw = bwU === "g" ? 1 : bwU === "lb" ? 1 / (KG_TO_LB * 1000) : 0.001;
+            const gToBw =
+              bwU === "g" ? 1 : bwU === "lb" ? 1 / (KG_TO_LB * 1000) : 0.001;
             const kgPerBw = bwU === "g" ? 0.001 : bwU === "lb" ? KG_TO_LB : 1;
 
             const result = best_combo_dp(
@@ -442,12 +463,20 @@ document.addEventListener("DOMContentLoaded", () => {
             resultDiv.innerHTML = renderResult(data, units);
             UI.renderIcons();
 
-            addHistoryEntry(targetWeight, bagWeight, result, {
-              allow_overshoot: allowOvershoot,
-              overshoot_ratio: overshootRatio,
-              bottle_penalty: bottlePenalty,
-              max_bottles: maxBottles,
-            }, units.targetWeight, formData.get("target_weight"), kgPerBw);
+            addHistoryEntry(
+              targetWeight,
+              bagWeight,
+              result,
+              {
+                allow_overshoot: allowOvershoot,
+                overshoot_ratio: overshootRatio,
+                bottle_penalty: bottlePenalty,
+                max_bottles: maxBottles,
+              },
+              units.targetWeight,
+              formData.get("target_weight"),
+              kgPerBw,
+            );
 
             requestAnimationFrame(() => {
               setTimeout(() => {
@@ -486,10 +515,11 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // -- Update unit labels --
-  const unitPrefs = (Storage.getSettings().units) || {};
+  const unitPrefs = Storage.getSettings().units || {};
   const targetLabel = document.getElementById("target-unit-label");
   const bagLabel = document.getElementById("bag-unit-label");
-  if (targetLabel) targetLabel.textContent = `(${unitPrefs.targetWeight || "kg"})`;
+  if (targetLabel)
+    targetLabel.textContent = `(${unitPrefs.targetWeight || "kg"})`;
   if (bagLabel) bagLabel.textContent = `(${unitPrefs.bagWeight || "g"})`;
 
   // -- Wrap number inputs --

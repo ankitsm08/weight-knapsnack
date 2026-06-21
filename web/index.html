@@ -40,6 +40,7 @@
       rel="canonical"
       href="https://ankitsm08.github.io/weight-knapsnack/"
     />
+    <meta name="theme-color" content="#1e1e2e" />
     <link rel="icon" type="image/x-icon" href="static/favicon.png" />
     <link rel="stylesheet" href="css/overlay.css" />
     <link rel="stylesheet" href="css/theme.css" />
@@ -78,7 +79,9 @@
     <main id="main-content">
       <section class="center">
         <h1>Weight Knapsnack</h1>
-        <p>Find the optimal bottle combo for your target workout weight.</p>
+        <p>
+          Find the most optimal bottle combo for your target workout weight.
+        </p>
       </section>
 
       <section class="center">
@@ -86,7 +89,7 @@
           <a href="./knapsnack.html" class="card dashboard-card">
             <i data-lucide="calculator"></i>
             <h3>Calculator</h3>
-            <p>Find the optimal bottle combo for your target weight</p>
+            <p>Find the best bottle combination</p>
           </a>
           <a href="./profiles.html" class="card dashboard-card">
             <i data-lucide="user-cog"></i>
@@ -118,7 +121,13 @@
     <script
       src="js/vendor/lucide.min.js"
       defer
-      onload="(self.requestIdleCallback || setTimeout)(function(){lucide.createIcons();document.querySelectorAll('[data-lucide]').forEach(function(e){e.setAttribute('aria-hidden','true')})})"
+      onload="UI.renderIcons()"
     ></script>
+    <div
+      id="a11y-live"
+      class="sr-only"
+      aria-live="polite"
+      aria-atomic="true"
+    ></div>
   </body>
 </html>

@@ -107,14 +107,24 @@ function handleCreateProfile() {
 function createProfile(name) {
   const profiles = Storage.getProfiles();
   if (profiles.items.some((p) => p.name === name)) {
-    UI.showToast({ message: "A profile with that name already exists", type: "warning" });
+    UI.showToast({
+      message: "A profile with that name already exists",
+      type: "warning",
+    });
     return;
   }
   const id = Storage._generateId();
   const bwUnit = (Storage.getSettings().units || {}).bottleWeight || "g";
   const factor = bwUnit === "kg" ? 0.001 : bwUnit === "lb" ? 1 / 453.6 : 1;
   const bottles = {};
-  for (const [w, c] of [[220, 2], [330, 4], [500, 3], [750, 3], [1000, 4], [2000, 3]]) {
+  for (const [w, c] of [
+    [220, 2],
+    [330, 4],
+    [500, 3],
+    [750, 3],
+    [1000, 4],
+    [2000, 3],
+  ]) {
     const stored = parseFloat((w * factor).toFixed(3));
     if (stored > 0) bottles[String(stored)] = { count: c, excluded: false };
   }
@@ -138,7 +148,10 @@ function renameProfile(id, newName) {
   if (!newName.trim()) return;
   const profiles = Storage.getProfiles();
   if (profiles.items.some((p) => p.name === newName && p.id !== id)) {
-    UI.showToast({ message: "A profile with that name already exists", type: "warning" });
+    UI.showToast({
+      message: "A profile with that name already exists",
+      type: "warning",
+    });
     return;
   }
   const profile = profiles.items.find((p) => p.id === id);
@@ -183,7 +196,8 @@ function handleDuplicateProfile() {
     .join("");
 
   const currentId = profiles.currentProfileId;
-  const currentName = profiles.items.find((p) => p.id === currentId)?.name || "";
+  const currentName =
+    profiles.items.find((p) => p.id === currentId)?.name || "";
 
   UI.showModal({
     title: "Duplicate Profile",
@@ -204,20 +218,30 @@ function handleDuplicateProfile() {
 
   requestAnimationFrame(() => {
     const input = document.getElementById("dup-profile-name");
-    if (input) { input.focus(); input.select(); }
+    if (input) {
+      input.focus();
+      input.select();
+    }
   });
 }
 
 function duplicateProfile(sourceId, newName) {
   const profiles = Storage.getProfiles();
   if (profiles.items.some((p) => p.name === newName)) {
-    UI.showToast({ message: "A profile with that name already exists", type: "warning" });
+    UI.showToast({
+      message: "A profile with that name already exists",
+      type: "warning",
+    });
     return;
   }
   const source = profiles.items.find((p) => p.id === sourceId);
   if (!source) return;
   const id = Storage._generateId();
-  profiles.items.push({ ...JSON.parse(JSON.stringify(source)), id, name: newName });
+  profiles.items.push({
+    ...JSON.parse(JSON.stringify(source)),
+    id,
+    name: newName,
+  });
   profiles.currentProfileId = id;
   Storage.saveProfiles(profiles);
   loadProfileList();
@@ -390,9 +414,14 @@ function saveBottleTable() {
 
 function saveDefaults() {
   const bagWeight = document.getElementById("defaults_bag_weight")?.value || "";
-  const _r = parseFloat(document.getElementById("defaults_overshoot_ratio")?.value);
+  const _r = parseFloat(
+    document.getElementById("defaults_overshoot_ratio")?.value,
+  );
   const overshootRatio = Number.isFinite(_r) ? _r : 0.5;
-  const _p = parseInt(document.getElementById("defaults_bottle_penalty")?.value, 10);
+  const _p = parseInt(
+    document.getElementById("defaults_bottle_penalty")?.value,
+    10,
+  );
   const bottlePenalty = Number.isFinite(_p) ? _p : 50;
   const allowOvershoot =
     document.getElementById("defaults_allow_overshoot")?.checked ?? false;

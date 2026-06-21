@@ -43,6 +43,7 @@
       rel="canonical"
       href="https://ankitsm08.github.io/weight-knapsnack/knapsnack.html"
     />
+    <meta name="theme-color" content="#1e1e2e" />
     <link rel="icon" type="image/x-icon" href="static/favicon.png" />
     <link rel="stylesheet" href="css/overlay.css" />
     <link rel="stylesheet" href="css/theme.css" />
@@ -86,7 +87,7 @@
           combo!
         </p>
 
-        <form id="knapsnack-form">
+        <form id="knapsnack-form" novalidate>
           <!-- Profile selector -->
           <div class="card profile-selector">
             <label><i data-lucide="user-cog"></i> Profile:</label>
@@ -112,7 +113,6 @@
               </label>
               <input
                 type="text"
-                step="0.5"
                 id="target_weight"
                 name="target_weight"
                 placeholder="e.g. 11.5 or 20lb"
@@ -133,7 +133,6 @@
               </label>
               <input
                 type="text"
-                step="50"
                 id="bag_weight"
                 name="bag_weight"
                 placeholder="e.g. 500g, 1kg"
@@ -210,7 +209,14 @@
                   ><i data-lucide="info"></i
                 ></span>
               </label>
-              <input type="number" step="1" min="0" id="max_bottles" name="max_bottles" placeholder="0">
+              <input
+                type="number"
+                step="1"
+                min="0"
+                id="max_bottles"
+                name="max_bottles"
+                placeholder="0"
+              />
             </div>
           </div>
 
@@ -218,13 +224,23 @@
             <button type="submit" class="btn big">
               <i data-lucide="calculator"></i> Calculate
             </button>
-            <button type="button" id="clear-overrides-btn" class="btn btn-small">
+            <button
+              type="button"
+              id="clear-overrides-btn"
+              class="btn btn-small"
+            >
               <i data-lucide="rotate-ccw"></i> Reset
             </button>
           </div>
         </form>
 
-        <div id="result" aria-live="polite" aria-atomic="true" role="region" aria-label="Calculation result"></div>
+        <div
+          id="result"
+          aria-live="polite"
+          aria-atomic="true"
+          role="region"
+          aria-label="Calculation result"
+        ></div>
 
         <div id="history-section" class="card collapsible closed">
           <div
@@ -258,7 +274,13 @@
     <script
       src="js/vendor/lucide.min.js"
       defer
-      onload="(self.requestIdleCallback || setTimeout)(function(){lucide.createIcons();document.querySelectorAll('[data-lucide]').forEach(function(e){e.setAttribute('aria-hidden','true')})})"
+      onload="UI.renderIcons()"
     ></script>
+    <div
+      id="a11y-live"
+      class="sr-only"
+      aria-live="polite"
+      aria-atomic="true"
+    ></div>
   </body>
 </html>

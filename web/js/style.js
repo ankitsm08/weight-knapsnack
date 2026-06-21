@@ -97,6 +97,12 @@ function initMobileMenu() {
   links.querySelectorAll("a").forEach((link) => {
     link.addEventListener("click", closeMenu);
   });
+
+  // Close menu when entering mobile breakpoint
+  const mql = window.matchMedia("(max-width: 768px)");
+  mql.addEventListener("change", (e) => {
+    if (e.matches) closeMenu();
+  });
 }
 
 function toggleCollapse(el) {

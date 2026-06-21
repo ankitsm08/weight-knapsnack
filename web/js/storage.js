@@ -141,7 +141,9 @@ const Storage = {
    */
   getCurrentProfile() {
     const profiles = this.getProfiles();
-    return profiles.items.find((p) => p.id === profiles.currentProfileId) || null;
+    return (
+      profiles.items.find((p) => p.id === profiles.currentProfileId) || null
+    );
   },
 
   /** @param {string} id */
@@ -157,7 +159,9 @@ const Storage = {
    */
   updateCurrentProfile(updates) {
     const profiles = this.getProfiles();
-    const idx = profiles.items.findIndex((p) => p.id === profiles.currentProfileId);
+    const idx = profiles.items.findIndex(
+      (p) => p.id === profiles.currentProfileId,
+    );
     if (idx === -1) return;
     profiles.items[idx] = { ...profiles.items[idx], ...updates };
     this.saveProfiles(profiles);
@@ -190,17 +194,25 @@ const Storage = {
   migrateFromOldStorage() {
     if (localStorage.getItem(this.KEYS.PROFILES) !== null) return false;
 
-    const oldBottles = JSON.parse(localStorage.getItem(this.KEYS.BOTTLES) || "{}");
+    const oldBottles = JSON.parse(
+      localStorage.getItem(this.KEYS.BOTTLES) || "{}",
+    );
 
-    const _migrateRatio = parseFloat(localStorage.getItem(this.KEYS.OVERSHOOT_RATIO));
-    const _migratePenalty = parseInt(localStorage.getItem(this.KEYS.BOTTLE_PENALTY), 10);
+    const _migrateRatio = parseFloat(
+      localStorage.getItem(this.KEYS.OVERSHOOT_RATIO),
+    );
+    const _migratePenalty = parseInt(
+      localStorage.getItem(this.KEYS.BOTTLE_PENALTY),
+      10,
+    );
     const _migrateAllow = localStorage.getItem(this.KEYS.ALLOW_OVERSHOOT);
 
     const defaults = {
       bagWeight: localStorage.getItem(this.KEYS.BAG_WEIGHT) || "",
       overshootRatio: Number.isFinite(_migrateRatio) ? _migrateRatio : 0.5,
       bottlePenalty: Number.isFinite(_migratePenalty) ? _migratePenalty : 50,
-      allowOvershoot: _migrateAllow === null ? true : _migrateAllow.toLowerCase() === "true",
+      allowOvershoot:
+        _migrateAllow === null ? true : _migrateAllow.toLowerCase() === "true",
     };
 
     const bottles = {};
@@ -214,7 +226,14 @@ const Storage = {
       const settings = this.getSettings();
       const bwUnit = (settings.units || {}).bottleWeight || "g";
       const factor = bwUnit === "kg" ? 0.001 : bwUnit === "lb" ? 1 / 453.6 : 1;
-      const defaultEntries = [[220, 2], [330, 4], [500, 3], [750, 3], [1000, 4], [2000, 3]];
+      const defaultEntries = [
+        [220, 2],
+        [330, 4],
+        [500, 3],
+        [750, 3],
+        [1000, 4],
+        [2000, 3],
+      ];
       for (const [w, c] of defaultEntries) {
         const stored = parseFloat((w * factor).toFixed(3));
         if (stored > 0) bottles[String(stored)] = { count: c, excluded: false };
@@ -224,12 +243,14 @@ const Storage = {
     const profileId = this._generateId();
     const profilesData = {
       currentProfileId: profileId,
-      items: [{
-        id: profileId,
-        name: "Default",
-        bottles,
-        defaults,
-      }],
+      items: [
+        {
+          id: profileId,
+          name: "Default",
+          bottles,
+          defaults,
+        },
+      ],
     };
 
     localStorage.setItem(this.KEYS.PROFILES, JSON.stringify(profilesData));

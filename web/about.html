@@ -40,6 +40,7 @@
       rel="canonical"
       href="https://ankitsm08.github.io/weight-knapsnack/about.html"
     />
+    <meta name="theme-color" content="#1e1e2e" />
     <link rel="icon" type="image/x-icon" href="static/favicon.png" />
     <link rel="stylesheet" href="css/overlay.css" />
     <link rel="stylesheet" href="css/theme.css" />
@@ -113,16 +114,25 @@
           </h2>
           <ul class="feature-list">
             <li class="card card-list">
-              <i data-lucide="zap"></i> Built for home workout lovers who don't
-              have access to a full gym.
+              <i data-lucide="zap"></i>
+              <span
+                >Built for home workout lovers who don't have access to a full
+                gym.</span
+              >
             </li>
             <li class="card card-list">
-              <i data-lucide="lightbulb"></i> Inspired by classic Indian
-              <i>jugaad</i>, making the best out of what you have.
+              <i data-lucide="lightbulb"></i>
+              <span
+                >Inspired by classic Indian <i>jugaad</i>, making the best out
+                of what you have.</span
+              >
             </li>
             <li class="card card-list">
-              <i data-lucide="backpack"></i> Because sometimes, a bag full of
-              bottles is the only dumbbell you need.
+              <i data-lucide="backpack"></i>
+              <span
+                >Because sometimes, a bag full of bottles is the only dumbbell
+                you need.</span
+              >
             </li>
           </ul>
         </div>
@@ -188,9 +198,6 @@
         <a href="./index.html" class="btn">
           <i data-lucide="house"></i> Back to Home
         </a>
-        <p class="mt-2 text-muted p-icon">
-          Made with <i data-lucide="hand-fist"></i> and a little Indian jugaad
-        </p>
       </section>
     </main>
 
@@ -205,7 +212,13 @@
     <script
       src="js/vendor/lucide.min.js"
       defer
-      onload="(self.requestIdleCallback || setTimeout)(function(){lucide.createIcons();document.querySelectorAll('[data-lucide]').forEach(function(e){e.setAttribute('aria-hidden','true')})})"
+      onload="UI.renderIcons()"
     ></script>
+    <div
+      id="a11y-live"
+      class="sr-only"
+      aria-live="polite"
+      aria-atomic="true"
+    ></div>
   </body>
 </html>

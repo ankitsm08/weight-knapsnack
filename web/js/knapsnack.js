@@ -69,7 +69,7 @@ function best_combo_dp(bottles, target_weight, bag_weight, options = {}) {
     const max_count = bottles[String(w)];
     let new_dp = { ...dp };
 
-    for (const cur_weight_str in dp) {
+    for (const cur_weight_str of Object.keys(dp)) {
       const cur_weight = parseInt(cur_weight_str, 10);
       const { score, numBottles, combo } = dp[cur_weight];
 
@@ -118,7 +118,7 @@ function best_combo_dp(bottles, target_weight, bag_weight, options = {}) {
   let bestUnderTotal = 0;
   let bestOverTotal = 0;
 
-  for (const total_weight_str in dp) {
+  for (const total_weight_str of Object.keys(dp)) {
     const total_weight = parseInt(total_weight_str, 10);
     const { score, numBottles, combo } = dp[total_weight];
 

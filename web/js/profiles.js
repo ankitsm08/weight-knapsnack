@@ -73,7 +73,14 @@ function loadProfileList() {
 
 function selectProfile(id) {
   Storage.setCurrentProfileId(id);
-  loadProfileList();
+  document.querySelectorAll(".profile-list-item").forEach((li) => {
+    const active = li.dataset.profileId === id;
+    li.classList.toggle("active", active);
+    li.setAttribute("aria-selected", active);
+  });
+  document.getElementById("profile-mobile-select").value = id;
+  const current = Storage.getCurrentProfile();
+  if (current) renderProfileContent(current);
 }
 
 function handleCreateProfile() {

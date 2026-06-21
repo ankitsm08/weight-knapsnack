@@ -71,4 +71,21 @@ document.addEventListener("DOMContentLoaded", () => {
       Storage.setSettings(settings);
     });
   });
+
+  // -- Data management --
+  document.querySelectorAll(".data-btn").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      switch (btn.dataset.action) {
+        case "export":
+          DataManager.exportSettings();
+          break;
+        case "export-all":
+          DataManager.exportFull();
+          break;
+        case "import":
+          DataManager.importData();
+          break;
+      }
+    });
+  });
 });

@@ -147,6 +147,17 @@
           <h2 class="h2-icon">
             <i data-lucide="database"></i> Data Management
           </h2>
+          <div class="data-toggle">
+            <button class="data-btn" data-action="export" aria-label="Export settings and profiles">
+              <i data-lucide="file-down"></i> Export
+            </button>
+            <button class="data-btn" data-action="export-all" aria-label="Export everything including history">
+              <i data-lucide="archive"></i> Export All
+            </button>
+            <button class="data-btn" data-action="import" aria-label="Import data from a JSON file">
+              <i data-lucide="file-up"></i> Import
+            </button>
+          </div>
           <p class="text-muted">Export, import, and reset all your data.</p>
         </div>
       </section>
@@ -158,6 +169,7 @@
 
     <script src="js/storage.js" defer></script>
     <script src="js/ui.js" defer></script>
+    <script src="js/export-import.js" defer></script>
     <script src="js/accessibility.js" defer></script>
     <script src="js/settings.js" defer></script>
     <script src="js/style.js" defer></script>

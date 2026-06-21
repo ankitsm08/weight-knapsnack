@@ -1134,6 +1134,43 @@ ul.feature-list li i[data-lucide] {
   cursor: default;
 }
 
+/* == DATA TOGGLE (Export/Import) == */
+.data-toggle {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: center;
+  margin-bottom: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.data-btn {
+  height: 3.5rem;
+  padding: 0 1.125rem;
+  border-radius: 8px;
+  border: 1px solid var(--surface1);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: var(--surface0);
+  color: var(--subtext0);
+  font-family: "Outfit", sans-serif;
+  font-size: 0.9rem;
+  transition: 0.2s ease;
+}
+
+.data-btn:hover {
+  border-color: var(--lavender);
+  color: var(--text);
+  background: var(--surface1);
+}
+
+.data-btn:active {
+  background: var(--accent);
+  color: var(--accent-text);
+  border-color: var(--lavender);
+}
+
 /* Light-mode readability overrides */
 [data-theme="light"] .hint,
 [data-theme="light"] .text-muted {
@@ -1731,7 +1768,7 @@ ul.feature-list li i[data-lucide] {
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
-  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
 }
 
 .units-row {
@@ -1838,6 +1875,18 @@ ul.feature-list li i[data-lucide] {
 
   .form-action-row {
     flex-direction: row-reverse;
+  }
+}
+
+@media (max-width: 768px) {
+  .data-toggle {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .data-btn {
+    width: 100%;
+    justify-content: center;
   }
 }
 

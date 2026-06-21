@@ -127,8 +127,6 @@ function createProfile(name) {
       overshootRatio: 0.5,
       bottlePenalty: 50,
       allowOvershoot: true,
-      maxBottles: null,
-      maxBottlesHard: true,
     },
   });
   profiles.currentProfileId = id;
@@ -398,15 +396,12 @@ function saveDefaults() {
   const bottlePenalty = Number.isFinite(_p) ? _p : 50;
   const allowOvershoot =
     document.getElementById("defaults_allow_overshoot")?.checked ?? false;
-
   Storage.updateCurrentProfile({
     defaults: {
       bagWeight,
       overshootRatio,
       bottlePenalty,
       allowOvershoot,
-      maxBottles: null,
-      maxBottlesHard: true,
     },
   });
 }

@@ -49,6 +49,7 @@ function best_combo_dp(bottles, target_weight, bag_weight, options = {}) {
   const allow_overshoot = options.allow_overshoot !== false;
   const overshoot_ratio = parseFloat(options.overshoot_ratio ?? 0.5);
   const bottle_penalty = parseInt(options.bottle_penalty ?? 50, 10);
+  const max_bottles = parseInt(options.max_bottles ?? 0, 10);
 
   const required_bottle_weight = target_weight - bag_weight;
   const weights = Object.keys(bottles)
@@ -74,6 +75,7 @@ function best_combo_dp(bottles, target_weight, bag_weight, options = {}) {
 
       // For each possible number of bottles for a given weight
       for (let count = 1; count <= max_count; count++) {
+        if (max_bottles > 0 && numBottles + count > max_bottles) continue;
         const new_weight = cur_weight + w * count;
         const diff = new_weight - required_bottle_weight;
 

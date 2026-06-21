@@ -141,9 +141,9 @@
             </div>
           </div>
 
-          <!-- Row 2: Overshoot + Ratio + Penalty -->
-          <div class="form-row form-row-3">
-            <div class="card card-checkbox">
+          <!-- Row 2: Overshoot + Ratio -->
+          <div class="form-row form-row-2">
+            <div class="card card-checkbox card-inline">
               <label for="allow_overshoot">
                 <input
                   type="checkbox"
@@ -160,7 +160,7 @@
                 ></span>
               </label>
             </div>
-            <div class="card">
+            <div class="card card-inline">
               <label for="overshoot_ratio"
                 ><i data-lucide="sliders"></i> Ratio
                 <span
@@ -178,7 +178,11 @@
                 placeholder="0.5"
               />
             </div>
-            <div class="card">
+          </div>
+
+          <!-- Row 3: Penalty + Max Bottles -->
+          <div class="form-row form-row-2">
+            <div class="card card-inline">
               <label for="bottle_penalty"
                 ><i data-lucide="minus-circle"></i> Penalty
                 <span
@@ -196,11 +200,28 @@
                 placeholder="50"
               />
             </div>
+            <div class="card card-inline">
+              <label for="max_bottles"
+                ><i data-lucide="layers"></i> Max Bottles
+                <span
+                  class="info-icon"
+                  tabindex="0"
+                  data-tooltip="Maximum number of bottles allowed. Set to 0 or leave empty to disable."
+                  ><i data-lucide="info"></i
+                ></span>
+              </label>
+              <input type="number" step="1" min="0" id="max_bottles" name="max_bottles" placeholder="0">
+            </div>
           </div>
 
-          <button type="submit" class="btn big center">
-            <i data-lucide="calculator"></i> Calculate
-          </button>
+          <div class="form-action-row">
+            <button type="submit" class="btn big">
+              <i data-lucide="calculator"></i> Calculate
+            </button>
+            <button type="button" id="clear-overrides-btn" class="btn btn-small">
+              <i data-lucide="rotate-ccw"></i> Reset
+            </button>
+          </div>
         </form>
 
         <div id="result" aria-live="polite" aria-atomic="true" role="region" aria-label="Calculation result"></div>

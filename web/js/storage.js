@@ -201,8 +201,6 @@ const Storage = {
       overshootRatio: Number.isFinite(_migrateRatio) ? _migrateRatio : 0.5,
       bottlePenalty: Number.isFinite(_migratePenalty) ? _migratePenalty : 50,
       allowOvershoot: _migrateAllow === null ? true : _migrateAllow.toLowerCase() === "true",
-      maxBottles: null,
-      maxBottlesHard: true,
     };
 
     const bottles = {};

@@ -34,6 +34,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const allowOvershootInput = document.getElementById("allow_overshoot");
   const overshootRatioInput = document.getElementById("overshoot_ratio");
   const bottlePenaltyInput = document.getElementById("bottle_penalty");
+  const maxBottlesInput = document.getElementById("max_bottles");
 
   let isCalculating = false;
   let currentBottles = {};
@@ -186,7 +187,6 @@ document.addEventListener("DOMContentLoaded", () => {
       overshootRatioInput.placeholder = `${profile.defaults.overshootRatio ?? 0.5}`;
     if (bottlePenaltyInput)
       bottlePenaltyInput.placeholder = `${profile.defaults.bottlePenalty ?? 50}`;
-
     // Update profile-select to match
     if (profileSelect) profileSelect.value = profileId;
   }
@@ -225,6 +225,8 @@ document.addEventListener("DOMContentLoaded", () => {
           bottlePenaltyInput.value = entry.inputs.bottlePenalty;
         if (allowOvershootInput)
           allowOvershootInput.checked = entry.inputs.allowOvershoot;
+        if (maxBottlesInput)
+          maxBottlesInput.value = entry.inputs.maxBottles ?? "";
 
         form?.requestSubmit();
       });
@@ -317,8 +319,7 @@ document.addEventListener("DOMContentLoaded", () => {
         overshootRatio: options.overshoot_ratio,
         bottlePenalty: options.bottle_penalty,
         allowOvershoot: options.allow_overshoot,
-        maxBottles: null,
-        maxBottlesHard: true,
+        maxBottles: options.max_bottles || null,
       },
       result: {
         combo: result.combo,
@@ -389,6 +390,10 @@ document.addEventListener("DOMContentLoaded", () => {
         10,
       );
 
+      const rawMax = formData.get("max_bottles");
+      const maxBottles = parseInt(rawMax && rawMax.trim() ? rawMax : 0, 10,
+      );
+
       if (isNaN(overshootRatio) || overshootRatio < 0 || overshootRatio > 1) {
         enableSubmitButton();
         showError("Overshoot ratio must be a number between 0 and 1");
@@ -418,6 +423,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 allow_overshoot: allowOvershoot,
                 overshoot_ratio: overshootRatio,
                 bottle_penalty: bottlePenalty,
+                max_bottles: maxBottles,
               },
             );
 
@@ -440,6 +446,7 @@ document.addEventListener("DOMContentLoaded", () => {
               allow_overshoot: allowOvershoot,
               overshoot_ratio: overshootRatio,
               bottle_penalty: bottlePenalty,
+              max_bottles: maxBottles,
             }, units.targetWeight, formData.get("target_weight"), kgPerBw);
 
             requestAnimationFrame(() => {
@@ -490,6 +497,19 @@ document.addEventListener("DOMContentLoaded", () => {
   if (bagWeightInput) UI.wrapNumberInput(bagWeightInput);
   if (overshootRatioInput) UI.wrapNumberInput(overshootRatioInput);
   if (bottlePenaltyInput) UI.wrapNumberInput(bottlePenaltyInput);
+  if (maxBottlesInput) UI.wrapNumberInput(maxBottlesInput);
+
+  // -- Clear overrides button --
+  const clearBtn = document.getElementById("clear-overrides-btn");
+  if (clearBtn) {
+    clearBtn.addEventListener("click", () => {
+      if (targetWeightInput) targetWeightInput.value = "";
+      if (bagWeightInput) bagWeightInput.value = "";
+      if (overshootRatioInput) overshootRatioInput.value = "";
+      if (bottlePenaltyInput) bottlePenaltyInput.value = "";
+      if (maxBottlesInput) maxBottlesInput.value = "";
+    });
+  }
 
   // -- Render history --
   renderHistory();

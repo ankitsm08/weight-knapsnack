@@ -43,12 +43,14 @@
     <link rel="stylesheet" href="css/overlay.css" />
     <link rel="stylesheet" href="css/theme.css" />
     <link rel="stylesheet" href="css/styles.css" />
+    <link rel="stylesheet" href="css/a11y.css" />
     <script src="js/animations.js"></script>
     <title>Profiles - Weight Knapsnack</title>
   </head>
 
   <body>
-    <nav>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+    <nav aria-label="Main navigation">
       <a href="https://ankitsm08.github.io">
         <div class="logo"><i data-lucide="zap"></i> Ankit Sharma</div>
       </a>
@@ -72,7 +74,7 @@
       </div>
     </nav>
 
-    <main>
+    <main id="main-content">
       <section class="center profile-page">
         <h1>Manage Profiles</h1>
 
@@ -106,12 +108,13 @@
 
     <script src="js/storage.js" defer></script>
     <script src="js/ui.js" defer></script>
+    <script src="js/accessibility.js" defer></script>
     <script src="js/profiles.js" defer></script>
     <script src="js/style.js" defer></script>
     <script
       src="js/vendor/lucide.min.js"
       defer
-      onload="(self.requestIdleCallback || setTimeout)(lucide.createIcons)"
+      onload="(self.requestIdleCallback || setTimeout)(function(){lucide.createIcons();document.querySelectorAll('[data-lucide]').forEach(function(e){e.setAttribute('aria-hidden','true')})})"
     ></script>
   </body>
 </html>

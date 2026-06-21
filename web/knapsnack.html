@@ -47,12 +47,14 @@
     <link rel="stylesheet" href="css/overlay.css" />
     <link rel="stylesheet" href="css/theme.css" />
     <link rel="stylesheet" href="css/styles.css" />
+    <link rel="stylesheet" href="css/a11y.css" />
     <script src="js/animations.js"></script>
     <title>Knapsnack Calculator - Weight Knapsnack</title>
   </head>
 
   <body>
-    <nav>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+    <nav aria-label="Main navigation">
       <a href="https://ankitsm08.github.io">
         <div class="logo"><i data-lucide="zap"></i> Ankit Sharma</div>
       </a>
@@ -76,7 +78,7 @@
       </div>
     </nav>
 
-    <main>
+    <main id="main-content">
       <section class="center fade-in">
         <h1>Knapsnack Calculator</h1>
         <p>
@@ -201,7 +203,7 @@
           </button>
         </form>
 
-        <div id="result"></div>
+        <div id="result" aria-live="polite" aria-atomic="true" role="region" aria-label="Calculation result"></div>
 
         <div id="history-section" class="card collapsible closed">
           <div
@@ -228,13 +230,14 @@
 
     <script src="js/storage.js" defer></script>
     <script src="js/ui.js" defer></script>
+    <script src="js/accessibility.js" defer></script>
     <script src="js/knapsnack.js" defer></script>
     <script src="js/calculator.js" defer></script>
     <script src="js/style.js" defer></script>
     <script
       src="js/vendor/lucide.min.js"
       defer
-      onload="(self.requestIdleCallback || setTimeout)(lucide.createIcons)"
+      onload="(self.requestIdleCallback || setTimeout)(function(){lucide.createIcons();document.querySelectorAll('[data-lucide]').forEach(function(e){e.setAttribute('aria-hidden','true')})})"
     ></script>
   </body>
 </html>

@@ -111,7 +111,7 @@ document.addEventListener("DOMContentLoaded", () => {
       weightDiff === 0 ? "success" : weightDiff > 0 ? "more" : "less";
 
     return `
-<h2 class="center h2-icon"><i data-lucide="check-circle" class="text-success"></i> Results</h2>
+<h2 class="center h2-icon" tabindex="-1"><i data-lucide="check-circle" class="text-success"></i> Results</h2>
 <div class="result-cards">
     <div class="card result-card">
         <h4><i data-lucide="target"></i> Target</h4>
@@ -453,6 +453,8 @@ document.addEventListener("DOMContentLoaded", () => {
                   behavior: "smooth",
                   block: "start",
                 });
+                const resultHeading = resultDiv.querySelector("h2");
+                if (resultHeading) resultHeading.focus();
                 enableSubmitButton();
               }, 300);
             });

@@ -12,6 +12,7 @@ document.addEventListener("DOMContentLoaded", () => {
   themeButtons.forEach((btn) => {
     if (btn.dataset.themeValue === currentTheme) {
       btn.classList.add("active");
+      btn.setAttribute("aria-checked", "true");
     }
   });
 
@@ -27,8 +28,12 @@ document.addEventListener("DOMContentLoaded", () => {
         SafeAreaBridge.setStatusBarStyle(theme === "light");
       settings.theme = theme;
       Storage.setSettings(settings);
-      themeButtons.forEach((b) => b.classList.remove("active"));
+      themeButtons.forEach((b) => {
+        b.classList.remove("active");
+        b.setAttribute("aria-checked", "false");
+      });
       btn.classList.add("active");
+      btn.setAttribute("aria-checked", "true");
     });
   });
 

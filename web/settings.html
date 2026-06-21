@@ -44,12 +44,14 @@
     <link rel="stylesheet" href="css/overlay.css" />
     <link rel="stylesheet" href="css/theme.css" />
     <link rel="stylesheet" href="css/styles.css" />
+    <link rel="stylesheet" href="css/a11y.css" />
     <script src="js/animations.js"></script>
     <title>Settings - Weight Knapsnack</title>
   </head>
 
   <body>
-    <nav>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+    <nav aria-label="Main navigation">
       <a href="https://ankitsm08.github.io">
         <div class="logo"><i data-lucide="zap"></i> Ankit Sharma</div>
       </a>
@@ -73,19 +75,21 @@
       </div>
     </nav>
 
-    <main>
+    <main id="main-content">
       <section class="center">
         <h1>Settings</h1>
 
         <div class="card">
           <h2 class="h2-icon"><i data-lucide="palette"></i> Theme</h2>
-          <div class="theme-toggle">
+          <div class="theme-toggle" role="radiogroup" aria-label="Theme selection">
             <button id="oled-mode-btn" class="oled-toggle" aria-pressed="false">
               <i data-lucide="droplet"></i> OLED
             </button>
             <button
               class="theme-btn"
               data-theme-value="dark"
+              role="radio"
+              aria-checked="false"
               aria-label="Dark mode"
             >
               <i data-lucide="moon"></i>
@@ -93,6 +97,8 @@
             <button
               class="theme-btn"
               data-theme-value="light"
+              role="radio"
+              aria-checked="false"
               aria-label="Light mode"
             >
               <i data-lucide="sun"></i>
@@ -152,12 +158,13 @@
 
     <script src="js/storage.js" defer></script>
     <script src="js/ui.js" defer></script>
+    <script src="js/accessibility.js" defer></script>
     <script src="js/settings.js" defer></script>
     <script src="js/style.js" defer></script>
     <script
       src="js/vendor/lucide.min.js"
       defer
-      onload="(self.requestIdleCallback || setTimeout)(lucide.createIcons)"
+      onload="(self.requestIdleCallback || setTimeout)(function(){lucide.createIcons();document.querySelectorAll('[data-lucide]').forEach(function(e){e.setAttribute('aria-hidden','true')})})"
     ></script>
   </body>
 </html>

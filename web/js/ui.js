@@ -129,6 +129,7 @@ const UI = {
   renderIcons(options) {
     if (window.lucide) {
       lucide.createIcons(options);
+      document.querySelectorAll('[data-lucide]').forEach(el => el.setAttribute('aria-hidden', 'true'));
     }
   },
 
@@ -254,6 +255,8 @@ const UI = {
   // -- Modal system --
 
   _modalOverlay: null,
+  _previousFocus: null,
+  _untrapFocus: null,
 
   /**
    * @param {Object} opts
@@ -267,6 +270,7 @@ const UI = {
    */
   showModal(opts) {
     this.closeModal();
+    this._previousFocus = document.activeElement;
 
     const overlay = document.createElement("div");
     overlay.className = "modal-overlay";
@@ -284,8 +288,6 @@ const UI = {
 
     document.body.appendChild(overlay);
     this._modalOverlay = overlay;
-
-    requestAnimationFrame(() => overlay.classList.add("visible"));
 
     const close = () => {
       this.closeModal();
@@ -308,12 +310,20 @@ const UI = {
       if (e.key === "Escape") close();
     });
 
-    const firstBtn = overlay.querySelector("[data-modal-confirm], [data-modal-cancel]");
-    if (firstBtn) firstBtn.focus();
+    requestAnimationFrame(() => {
+      overlay.classList.add("visible");
+      this._untrapFocus = trapFocus(overlay);
+      const firstBtn = overlay.querySelector("[data-modal-confirm], [data-modal-cancel]");
+      if (firstBtn) firstBtn.focus();
+    });
   },
 
   /** Close the current modal */
   closeModal() {
+    if (this._untrapFocus) {
+      this._untrapFocus();
+      this._untrapFocus = null;
+    }
     if (this._modalOverlay) {
       this._modalOverlay.remove();
       this._modalOverlay = null;
@@ -321,6 +331,10 @@ const UI = {
     if (this._modalKeyHandler) {
       document.removeEventListener("keydown", this._modalKeyHandler);
       this._modalKeyHandler = null;
+    }
+    if (this._previousFocus) {
+      this._previousFocus.focus();
+      this._previousFocus = null;
     }
   },
 
@@ -361,6 +375,8 @@ const UI = {
     if (!this._toastContainer) {
       this._toastContainer = document.createElement("div");
       this._toastContainer.className = "toast-container";
+      this._toastContainer.setAttribute("aria-live", "assertive");
+      this._toastContainer.setAttribute("aria-atomic", "true");
       document.body.appendChild(this._toastContainer);
     }
 

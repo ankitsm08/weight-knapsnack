@@ -23,10 +23,17 @@ const DataManager = {
     return data;
   },
 
-  _triggerDownload(data, type) {
+  async _triggerDownload(data, type) {
     const date = new Date().toISOString().slice(0, 10);
     const filename = `weight-knapsnack-${type === "full" ? "full" : "settings"}-${date}.json`;
     const json = JSON.stringify(data, null, 2);
+
+    if (window.__TAURI__) {
+      const invoke = window.__TAURI__.core?.invoke || window.__TAURI__.invoke;
+      const path = await invoke("export_data", { data: json, filename });
+      return path;
+    }
+
     const blob = new Blob([json], { type: "application/json" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
@@ -104,16 +111,38 @@ const DataManager = {
     }
   },
 
-  exportSettings() {
+  async exportSettings() {
     const data = this._buildEnvelope("settings-profiles");
-    this._triggerDownload(data, "settings");
-    UI.showToast({ message: "Settings exported", type: "success" });
+    try {
+      const path = await this._triggerDownload(data, "settings");
+      if (path) {
+        UI.showToast({
+          message: "Exported to Downloads folder",
+          type: "success",
+        });
+      } else {
+        UI.showToast({ message: "Settings exported", type: "success" });
+      }
+    } catch (err) {
+      UI.showToast({ message: `Export failed: ${err}`, type: "error" });
+    }
   },
 
-  exportFull() {
+  async exportFull() {
     const data = this._buildEnvelope("full");
-    this._triggerDownload(data, "full");
-    UI.showToast({ message: "Full data exported", type: "success" });
+    try {
+      const path = await this._triggerDownload(data, "full");
+      if (path) {
+        UI.showToast({
+          message: "Exported to Downloads folder",
+          type: "success",
+        });
+      } else {
+        UI.showToast({ message: "Full data exported", type: "success" });
+      }
+    } catch (err) {
+      UI.showToast({ message: `Export failed: ${err}`, type: "error" });
+    }
   },
 
   async importData() {
